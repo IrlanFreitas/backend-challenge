@@ -4,15 +4,15 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 
-class Username {
+public class Username {
 	private final String username;
 
-	Username(String username) {
+	public Username(String username) {
 		checkRestrictions(username);
 		this.username = username;
 	}
 
-	String getUsername() {
+	public String getUsername() {
 		return username;
 	}
 

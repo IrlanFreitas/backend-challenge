@@ -4,11 +4,11 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 
-class Password {
+public class Password {
 
 	private final String password;
 
-	Password(String password) {
+	public Password(String password) {
 		checkRestrictions(password);
 
 		this.password = password;
