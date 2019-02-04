@@ -19,7 +19,7 @@ public class LoginService {
 	boolean saveUser(Username username, Password password) {
 		checkIfUserExists(username);
 
-		loginRepository.saveUser(username, password);
+		loginRepository.saveUser(username.getUsername(), password.getPassword());
 
 		return true;
 	}
