@@ -8,33 +8,33 @@ public class UserRequirementsTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenUserNameIsNull() {
-		new Username(null);
+		new User(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenUserNameIsEmpty() {
-		new Username("");
+		new User("");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenPassHasLeftThan5Char() {
-		new Username("1234");
+		new User("1234");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenPassHasMoreThan10Char() {
-		new Username("123456789ab");
+		new User("123456789ab");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenPassHasSpecialCharacters() {
-		new Username("123456-7");
+		new User("123456-7");
 	}
 
 	@Test
 	public void shouldReturnExpectedString() {
 		String expected = "Pepito12";
-		String actual = new Username("Pepito12").getUsername();
+		String actual = new User("Pepito12").getName();
 
 		assertEquals(expected, actual);
 	}

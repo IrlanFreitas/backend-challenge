@@ -1,7 +1,7 @@
 package com.schibsted.spain.friends.legacy;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.Username;
+import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class SignupLegacyController {
 			@RequestParam("username") String username,
 			@RequestHeader("X-Password") String password
 	) {
-		loginService.saveUser(new Username(username), new Password(password));
+		loginService.saveUser(new User(username), new Password(password));
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

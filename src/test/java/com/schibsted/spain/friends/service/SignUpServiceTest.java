@@ -1,8 +1,8 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.Username;
-import com.schibsted.spain.friends.repository.LoginRepository;
+import com.schibsted.spain.friends.model.User;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,66 +17,66 @@ import static org.mockito.Mockito.*;
 public class SignUpServiceTest {
 
 	@Mock
-	private LoginRepository loginRepository;
+	private UsersRepository usersRepository;
 
 	private LoginService loginService;
 
 	@Before
 	public void setUp() {
-		loginService = new LoginService(loginRepository);
+		loginService = new LoginService(usersRepository);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUserExists() {
-		Username existingUser = new Username("Existing");
+		User existingUser = new User("Existing");
 
-		when(loginRepository.userExists(existingUser.getUsername())).thenReturn(true);
+		when(usersRepository.exists(existingUser.getName())).thenReturn(true);
 
 		loginService.saveUser(existingUser, null);
 	}
 
 	@Test
 	public void shouldSaveUserWhenUserDoesntExist() {
-		Username user = new Username("user123");
+		User user = new User("user123");
 		Password password = new Password("12345678ab");
 
-		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+		when(usersRepository.exists(user.getName())).thenReturn(false);
 
 		loginService.saveUser(user, password);
 
-		verify(loginRepository, times(1)).saveUser(user.getUsername(), password.getPassword());
+		verify(usersRepository, times(1)).save(user.getName(), password.getPassword());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenLoginUserDoesntExist() {
-		Username user = new Username("user123");
+		User user = new User("user123");
 		Password password = new Password("12345678ab");
 
-		when(loginRepository.userExists(user.getUsername())).thenReturn(true);
+		when(usersRepository.exists(user.getName())).thenReturn(true);
 
 		loginService.checkLogin(user, password);
 	}
 
 	@Test
 	public void shouldReturnFalseWhenPasswordsDontMatch() {
-		Username user = new Username("user123");
+		User user = new User("user123");
 		Password password = new Password("12345678ab");
 
-		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+		when(usersRepository.exists(user.getName())).thenReturn(false);
 
-		when(loginRepository.getPassword(user.getUsername())).thenReturn("abcd12345");
+		when(usersRepository.getPassword(user.getName())).thenReturn("abcd12345");
 
 		assertFalse(loginService.checkLogin(user, password));
 	}
 
 	@Test
 	public void shouldReturnTrueWhenPasswordsMatch() {
-		Username user = new Username("user123");
+		User user = new User("user123");
 		Password password = new Password("12345678ab");
 
-		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+		when(usersRepository.exists(user.getName())).thenReturn(false);
 
-		when(loginRepository.getPassword(user.getUsername())).thenReturn(password.getPassword());
+		when(usersRepository.getPassword(user.getName())).thenReturn(password.getPassword());
 
 		assertTrue(loginService.checkLogin(user, password));
 	}

@@ -1,34 +1,34 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.Username;
-import com.schibsted.spain.friends.repository.LoginRepository;
+import com.schibsted.spain.friends.model.User;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoginService {
 
-	private final LoginRepository loginRepository;
+	private final UsersRepository usersRepository;
 
 	@Autowired
-	public LoginService(LoginRepository loginRepository) {
-		this.loginRepository = loginRepository;
+	public LoginService(UsersRepository usersRepository) {
+		this.usersRepository = usersRepository;
 	}
 
-	public void saveUser(Username username, Password password) {
-		checkIfUserExists(username);
+	public void saveUser(User user, Password password) {
+		checkIfUserExists(user);
 
-		loginRepository.saveUser(username.getUsername(), password.getPassword());
+		usersRepository.save(user.getName(), password.getPassword());
 	}
 
-	public boolean checkLogin(Username username, Password password) {
-		checkIfUserExists(username);
-		return password.getPassword().equals(loginRepository.getPassword(username.getUsername()));
+	public boolean checkLogin(User user, Password password) {
+		checkIfUserExists(user);
+		return password.getPassword().equals(usersRepository.getPassword(user.getName()));
 	}
 
-	private void checkIfUserExists(Username username) {
-		if (loginRepository.userExists(username.getUsername())) {
+	private void checkIfUserExists(User user) {
+		if (usersRepository.exists(user.getName())) {
 			throw new IllegalArgumentException();
 		}
 	}

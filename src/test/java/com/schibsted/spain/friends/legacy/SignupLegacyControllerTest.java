@@ -1,7 +1,7 @@
 package com.schibsted.spain.friends.legacy;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.Username;
+import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.service.LoginService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class SignupLegacyControllerTest {
 	@MockBean
 	private LoginService loginService;
 
-	private final Username userValid = new Username("userValid");
+	private final User userValid = new User("userValid");
 	private final Password passwordValid = new Password("123456789ab");
 	private static final String PATH = "/signup";
 	private static final String PASS_HEADER = "X-Password";
@@ -36,7 +36,7 @@ public class SignupLegacyControllerTest {
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
 		mockMvc.perform(post(PATH)
 				.header(PASS_HEADER, "123456")
-				.param(USERNAME, userValid.getUsername())
+				.param(USERNAME, userValid.getName())
 		).andExpect(status().is4xxClientError());
 	}
 
@@ -52,7 +52,7 @@ public class SignupLegacyControllerTest {
 	public void expectedStatusOkWhenInputIsOk() throws Exception {
 		mockMvc.perform(post(PATH)
 				.header(PASS_HEADER, passwordValid.getPassword())
-				.param(USERNAME, userValid.getUsername())
+				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 
 		verify(loginService, times(1)).saveUser(userValid, passwordValid);
