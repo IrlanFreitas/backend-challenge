@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.legacy;
 
+import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.Username;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +20,10 @@ public class SignupLegacyControllerTest {
 	private MockMvc mockMvc;
 
 	private final Username userValid = new Username("userValid");
+	private final Password passwordValid = new Password("123456789ab");
 
 	@Test
-	public void expectedBadRequestWhenPassHasLessThan8Char() throws Exception {
+	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
 		String path = "/signup";
 		String passHeader = "X-Password";
 		String username = "username";
@@ -29,6 +31,18 @@ public class SignupLegacyControllerTest {
 		mockMvc.perform(post(path)
 				.header(passHeader, "123456")
 				.param(username, userValid.getUsername())
+		).andExpect(status().is4xxClientError());
+	}
+
+	@Test
+	public void expectedBadRequestWhenUserIsNotOk() throws Exception {
+		String path = "/signup";
+		String passHeader = "X-Password";
+		String username = "username";
+
+		mockMvc.perform(post(path)
+				.header(passHeader, passwordValid.getPassword())
+				.param(username, "qwe")
 		).andExpect(status().is4xxClientError());
 	}
 }
