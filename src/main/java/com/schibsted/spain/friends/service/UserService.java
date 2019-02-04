@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginService {
+public class UserService {
 
 	private final UsersRepository usersRepository;
 
 	@Autowired
-	public LoginService(UsersRepository usersRepository) {
+	public UserService(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 
@@ -22,7 +22,7 @@ public class LoginService {
 		usersRepository.save(user.getName(), password.getPassword());
 	}
 
-	public boolean checkLogin(User user, Password password) {
+	boolean checkLogin(User user, Password password) {
 		checkIfUserExists(user);
 		return password.getPassword().equals(usersRepository.getPassword(user.getName()));
 	}
