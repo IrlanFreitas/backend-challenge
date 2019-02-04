@@ -42,6 +42,6 @@ public class SignUpServiceTest {
 		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
 
 		assertTrue(loginService.saveUser(user, password));
-		verify(loginRepository, times(1)).saveUser(user, password);
+		verify(loginRepository, times(1)).saveUser(user.getUsername(), password.getPassword());
 	}
 }
