@@ -16,12 +16,10 @@ public class LoginService {
 		this.loginRepository = loginRepository;
 	}
 
-	boolean saveUser(Username username, Password password) {
+	public void saveUser(Username username, Password password) {
 		checkIfUserExists(username);
 
 		loginRepository.saveUser(username.getUsername(), password.getPassword());
-
-		return true;
 	}
 
 	public boolean checkLogin(Username username, Password password) {

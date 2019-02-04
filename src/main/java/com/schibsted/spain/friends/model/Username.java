@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.model;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
@@ -16,6 +17,18 @@ public class Username {
 		return username;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Username username1 = (Username) o;
+		return username.equals(username1.username);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username);
+	}
 
 	private void checkRestrictions(String username) {
 		throwExceptionIf(username == null);

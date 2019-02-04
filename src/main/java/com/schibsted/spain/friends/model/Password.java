@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.model;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
@@ -16,6 +17,19 @@ public class Password {
 
 	public String getPassword() {
 		return password;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Password password1 = (Password) o;
+		return password.equals(password1.password);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(password);
 	}
 
 	private void checkRestrictions(String password) {

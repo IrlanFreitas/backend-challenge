@@ -36,13 +36,14 @@ public class SignUpServiceTest {
 	}
 
 	@Test
-	public void shouldReturnTrueWhenUserDoesntExist() {
+	public void shouldSaveUserWhenUserDoesntExist() {
 		Username user = new Username("user123");
 		Password password = new Password("12345678ab");
 
 		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
 
-		assertTrue(loginService.saveUser(user, password));
+		loginService.saveUser(user, password);
+
 		verify(loginRepository, times(1)).saveUser(user.getUsername(), password.getPassword());
 	}
 
