@@ -2,32 +2,14 @@ package com.schibsted.spain.friends.model;
 
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.compile;
+
 class Password {
 
 	private String password;
 
 	Password(String password) {
-		if (password == null) {
-			throw new IllegalArgumentException();
-		}
-
-		if (password.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
-
-		if (password.length() < 8) {
-			throw new IllegalArgumentException();
-		}
-
-		if (password.length() > 12) {
-			throw new IllegalArgumentException();
-		}
-
-		Pattern p = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE);
-
-		if (p.matcher(password).find()) {
-			throw new IllegalArgumentException();
-		}
+		checkRestrictions(password);
 
 		this.password = password;
 	}
@@ -35,4 +17,23 @@ class Password {
 	String getPassword() {
 		return password;
 	}
+
+	private void checkRestrictions(String password) {
+		throwExceptionIf(password == null);
+
+		throwExceptionIf(password.isEmpty());
+
+		throwExceptionIf(password.length() < 8);
+
+		throwExceptionIf(password.length() > 12);
+
+		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(password).find());
+	}
+
+	private void throwExceptionIf(boolean b) {
+		if (b) {
+			throw new IllegalArgumentException();
+		}
+	}
+
 }
