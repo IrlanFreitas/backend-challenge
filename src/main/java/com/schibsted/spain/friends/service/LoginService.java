@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.Username;
 import com.schibsted.spain.friends.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ public class LoginService {
 		this.loginRepository = loginRepository;
 	}
 
-	void saveUser(Username existingUser) {
-		if (loginRepository.userExists(existingUser.getUsername())) {
+	boolean saveUser(Username username, Password password) {
+		if (loginRepository.userExists(username.getUsername())) {
 			throw new IllegalArgumentException();
 		}
+		loginRepository.saveUser(username, password);
+		return true;
 	}
 }

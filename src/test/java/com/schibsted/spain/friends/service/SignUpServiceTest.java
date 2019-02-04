@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.Username;
 import com.schibsted.spain.friends.repository.LoginRepository;
 import org.junit.Before;
@@ -8,7 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SignUpServiceTest {
@@ -29,6 +31,17 @@ public class SignUpServiceTest {
 
 		when(loginRepository.userExists(existingUser.getUsername())).thenReturn(true);
 
-		loginService.saveUser(existingUser);
+		loginService.saveUser(existingUser, null);
+	}
+
+	@Test
+	public void shouldReturnTrueWhenUserDoesntExist() {
+		Username user = new Username("user123");
+		Password password = new Password("12345678ab");
+
+		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+
+		assertTrue(loginService.saveUser(user, password));
+		verify(loginRepository, times(1)).saveUser(user, password);
 	}
 }
