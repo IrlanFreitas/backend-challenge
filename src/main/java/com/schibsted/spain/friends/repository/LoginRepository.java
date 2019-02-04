@@ -12,4 +12,8 @@ public class LoginRepository {
 	public void saveUser(String user, String password) {
 
 	}
+
+	public String getPassword(String username) {
+		return null;
+	}
 }

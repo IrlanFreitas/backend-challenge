@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -45,12 +46,36 @@ public class SignUpServiceTest {
 		verify(loginRepository, times(1)).saveUser(user.getUsername(), password.getPassword());
 	}
 
-	@Test (expected = IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenLoginUserDoesntExist() {
 		Username user = new Username("user123");
 		Password password = new Password("12345678ab");
 
 		when(loginRepository.userExists(user.getUsername())).thenReturn(true);
+
+		loginService.checkLogin(user, password);
+	}
+
+	@Test
+	public void shouldReturnFalseWhenPasswordsDontMatch() {
+		Username user = new Username("user123");
+		Password password = new Password("12345678ab");
+
+		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+
+		when(loginRepository.getPassword(user.getUsername())).thenReturn("abcd12345");
+
+		assertFalse(loginService.checkLogin(user, password));
+	}
+
+	@Test
+	public void shouldReturnTrueWhenPasswordsMatch() {
+		Username user = new Username("user123");
+		Password password = new Password("12345678ab");
+
+		when(loginRepository.userExists(user.getUsername())).thenReturn(false);
+
+		when(loginRepository.getPassword(user.getUsername())).thenReturn(password.getPassword());
 
 		assertTrue(loginService.checkLogin(user, password));
 	}

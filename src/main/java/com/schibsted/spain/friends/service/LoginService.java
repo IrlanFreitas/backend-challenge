@@ -26,8 +26,7 @@ public class LoginService {
 
 	public boolean checkLogin(Username username, Password password) {
 		checkIfUserExists(username);
-
-		return false;
+		return password.getPassword().equals(loginRepository.getPassword(username.getUsername()));
 	}
 
 	private void checkIfUserExists(Username username) {
