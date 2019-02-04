@@ -6,7 +6,7 @@ import static java.util.regex.Pattern.compile;
 
 class Password {
 
-	private String password;
+	private final String password;
 
 	Password(String password) {
 		checkRestrictions(password);
