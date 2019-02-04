@@ -24,6 +24,12 @@ public class LoginService {
 		return true;
 	}
 
+	public boolean checkLogin(Username username, Password password) {
+		checkIfUserExists(username);
+
+		return false;
+	}
+
 	private void checkIfUserExists(Username username) {
 		if (loginRepository.userExists(username.getUsername())) {
 			throw new IllegalArgumentException();

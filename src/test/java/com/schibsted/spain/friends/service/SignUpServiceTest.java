@@ -44,4 +44,14 @@ public class SignUpServiceTest {
 		assertTrue(loginService.saveUser(user, password));
 		verify(loginRepository, times(1)).saveUser(user.getUsername(), password.getPassword());
 	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void shouldThrowExpectedWhenLoginUserDoesntExist() {
+		Username user = new Username("user123");
+		Password password = new Password("12345678ab");
+
+		when(loginRepository.userExists(user.getUsername())).thenReturn(true);
+
+		assertTrue(loginService.checkLogin(user, password));
+	}
 }
