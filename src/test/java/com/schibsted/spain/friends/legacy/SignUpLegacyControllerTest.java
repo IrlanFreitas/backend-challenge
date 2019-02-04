@@ -51,7 +51,7 @@ public class SignUpLegacyControllerTest {
 	@Test
 	public void expectedStatusOkWhenInputIsOk() throws Exception {
 		mockMvc.perform(post(PATH)
-				.header(PASS_HEADER, passwordValid.getPassword())
+				.header(PASS_HEADER, "123456789ab")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 

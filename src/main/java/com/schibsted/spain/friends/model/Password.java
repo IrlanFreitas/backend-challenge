@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
+import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
 public class Password {
 
@@ -12,7 +13,7 @@ public class Password {
 	public Password(String password) {
 		checkRestrictions(password);
 
-		this.password = password;
+		this.password = md5DigestAsHex(password.getBytes());
 	}
 
 	public String getPassword() {
