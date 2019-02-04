@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/signup")
-public class SignupLegacyController {
+public class SignUpLegacyController {
 
 	private final LoginService loginService;
 
 	@Autowired
-	public SignupLegacyController(LoginService loginService) {
+	public SignUpLegacyController(LoginService loginService) {
 		this.loginService = loginService;
 	}
 

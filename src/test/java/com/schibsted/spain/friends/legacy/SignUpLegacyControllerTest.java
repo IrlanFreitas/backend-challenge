@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(SignupLegacyController.class)
-public class SignupLegacyControllerTest {
+@WebMvcTest(SignUpLegacyController.class)
+public class SignUpLegacyControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
