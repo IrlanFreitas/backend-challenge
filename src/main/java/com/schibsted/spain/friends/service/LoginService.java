@@ -17,10 +17,16 @@ public class LoginService {
 	}
 
 	boolean saveUser(Username username, Password password) {
+		checkIfUserExists(username);
+
+		loginRepository.saveUser(username, password);
+
+		return true;
+	}
+
+	private void checkIfUserExists(Username username) {
 		if (loginRepository.userExists(username.getUsername())) {
 			throw new IllegalArgumentException();
 		}
-		loginRepository.saveUser(username, password);
-		return true;
 	}
 }
