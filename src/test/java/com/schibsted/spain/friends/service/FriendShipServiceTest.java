@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.Mockito.when;
@@ -62,7 +62,7 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendList(pepe.getName())).thenReturn(pepesFriends);
+		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -82,8 +82,8 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendList(pepe.getName())).thenReturn(pepesFriends);
-		when(usersRepository.getFriendList(juan.getName())).thenReturn(juanFriends);
+		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.of(juanFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}

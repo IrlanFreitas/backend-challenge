@@ -4,6 +4,7 @@ import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 
+import java.util.Optional;
 import java.util.Set;
 
 class FriendShipService {
@@ -26,9 +27,8 @@ class FriendShipService {
 	}
 
 	private void checkFriendShip(User userFrom, User userTo) {
-		final Set<String> friendList = usersRepository.getFriendList(userFrom.getName());
-		System.out.println(friendList);
-		if (friendList.contains(userTo.getName())) {
+		final Optional<Set<String>> friendList = usersRepository.getFriendShipList(userFrom.getName());
+		if (friendList.isPresent() && friendList.get().contains(userTo.getName())) {
 			throw new IllegalArgumentException();
 		}
 	}

@@ -4,7 +4,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Optional.ofNullable;
 
 @Component
 public class UsersRepository {
@@ -24,7 +27,7 @@ public class UsersRepository {
 		return users.get(username);
 	}
 
-	public Set<String> getFriendList(String username) {
-		return friendShips.get(username);
+	public Optional<Set<String>> getFriendShipList(String username) {
+		return ofNullable(friendShips.get(username));
 	}
 }
