@@ -28,7 +28,7 @@ public class SignUpServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUserExists() {
-		User existingUser = new User("Existing");
+		final User existingUser = new User("Existing");
 
 		when(usersRepository.userExists(existingUser.getName())).thenReturn(true);
 
@@ -37,8 +37,8 @@ public class SignUpServiceTest {
 
 	@Test
 	public void shouldSaveUserWhenUserDoesntExist() {
-		User user = new User("user123");
-		Password password = new Password("12345678ab");
+		final User user = new User("user123");
+		final Password password = new Password("12345678ab");
 
 		when(usersRepository.userExists(user.getName())).thenReturn(false);
 
