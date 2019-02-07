@@ -13,7 +13,7 @@ class FriendShipService {
 	}
 
 	void request(User userFrom, Password password, User userTo) {
-		if (usersRepository.userExists(userFrom.getName())) {
+		if (!usersRepository.userExists(userFrom.getName())) {
 			throw new IllegalArgumentException();
 		}
 	}

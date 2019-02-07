@@ -18,20 +18,21 @@ public class FriendShipServiceTest {
 	private UsersRepository usersRepository;
 
 	private FriendShipService friendShipService;
+	private User notExisting = new User("notExists");
+	private User existingUser = new User("Existing");
+	private Password password = new Password("passWord123");
+
 
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository);
+		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
+		when(usersRepository.userExists(existingUser.getName())).thenReturn(true);
+
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
-		User notExisting = new User("notExisting");
-		Password password = new Password("passWord123");
-		User existingUser = new User("Existing");
-
-		when(usersRepository.userExists(existingUser.getName())).thenReturn(false);
-
-		friendShipService.request(existingUser, password, notExisting);
+		friendShipService.request(notExisting, password, existingUser);
 	}
 }
