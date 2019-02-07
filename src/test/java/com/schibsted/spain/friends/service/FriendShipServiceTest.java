@@ -56,13 +56,13 @@ public class FriendShipServiceTest {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
-		Set<String> pepesFriends = new HashSet<>();
-		pepesFriends.add("Juanito");
+		Set<String> pepeFriendRequest = new HashSet<>();
+		pepeFriendRequest.add("Juanito");
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -72,18 +72,18 @@ public class FriendShipServiceTest {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
-		Set<String> pepesFriends = new HashSet<>();
-		pepesFriends.add("Raquel");
+		Set<String> pepeFriendRequest = new HashSet<>();
+		pepeFriendRequest.add("Raquel");
 
-		Set<String> juanFriends = new HashSet<>();
-		juanFriends.add("Margarita");
-		juanFriends.add("Pepito");
+		Set<String> juanFriendRequest = new HashSet<>();
+		juanFriendRequest.add("Margarita");
+		juanFriendRequest.add("Pepito");
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriendRequest));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -93,25 +93,25 @@ public class FriendShipServiceTest {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
-		Set<String> pepesFriends = new HashSet<>();
-		pepesFriends.add("Raquel");
+		Set<String> pepeFriendRequest = new HashSet<>();
+		pepeFriendRequest.add("Raquel");
 
-		Set<String> juanFriends = new HashSet<>();
-		juanFriends.add("Margarita");
+		Set<String> juanFriendRequest = new HashSet<>();
+		juanFriendRequest.add("Margarita");
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriendRequest));
 
 		friendShipService.request(pepe, password, juan);
 
-		pepesFriends.add(juan.getName());
-		juanFriends.add(pepe.getName());
+		pepeFriendRequest.add(juan.getName());
+		juanFriendRequest.add(pepe.getName());
 
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriends);
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepesFriends);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriendRequest);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeFriendRequest);
 	}
 
 	@Test
@@ -127,12 +127,12 @@ public class FriendShipServiceTest {
 
 		friendShipService.request(pepe, password, juan);
 
-		Set<String> pepesFriends = new HashSet<>();
-		Set<String> juanFriends = new HashSet<>();
-		pepesFriends.add(juan.getName());
-		juanFriends.add(pepe.getName());
+		Set<String> pepeFriendRequest = new HashSet<>();
+		Set<String> juanFriendRequest = new HashSet<>();
+		pepeFriendRequest.add(juan.getName());
+		juanFriendRequest.add(pepe.getName());
 
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriends);
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepesFriends);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriendRequest);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeFriendRequest);
 	}
 }
