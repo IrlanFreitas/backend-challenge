@@ -28,7 +28,7 @@ public class FriendshipLegacyControllerTest {
 
 	private final User userValid = new User("userValid");
 	private final Password password = new Password("123456789ab");
-	private static final String FRIENDSHIP_PATH = "/friendship/";
+	private static final String FRIENDSHIP_PATH = "/friendship/request";
 	private static final String PASS_HEADER = "X-Password";
 	private static final String USERNAME_FROM = "usernameFrom";
 	private static final String USERNAME_TO = "usernameTo";

@@ -25,7 +25,7 @@ public class FriendshipLegacyController {
 		this.friendShipService = friendShipService;
 	}
 
-	@PostMapping("/")
+	@PostMapping("/request")
 	ResponseEntity requestFriendship(
 			@RequestParam("usernameFrom") String usernameFrom,
 			@RequestParam("usernameTo") String usernameTo,
