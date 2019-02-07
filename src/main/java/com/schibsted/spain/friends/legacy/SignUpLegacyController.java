@@ -2,7 +2,7 @@ package com.schibsted.spain.friends.legacy;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.service.UserService;
+import com.schibsted.spain.friends.service.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/signup")
 public class SignUpLegacyController {
 
-	private final UserService userService;
+	private final SignUpService signUpService;
 
 	@Autowired
-	public SignUpLegacyController(UserService userService) {
-		this.userService = userService;
+	public SignUpLegacyController(SignUpService signUpService) {
+		this.signUpService = signUpService;
 	}
 
 	@PostMapping
@@ -24,7 +24,7 @@ public class SignUpLegacyController {
 			@RequestParam("username") String username,
 			@RequestHeader("X-Password") String password
 	) {
-		userService.saveUser(new User(username), new Password(password));
+		signUpService.saveUser(new User(username), new Password(password));
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

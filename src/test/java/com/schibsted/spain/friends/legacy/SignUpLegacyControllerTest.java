@@ -2,7 +2,7 @@ package com.schibsted.spain.friends.legacy;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.service.UserService;
+import com.schibsted.spain.friends.service.SignUpService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class SignUpLegacyControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private UserService userService;
+	private SignUpService signUpService;
 
 	private final User userValid = new User("userValid");
 	private final Password passwordValid = new Password("123456789ab");
@@ -55,6 +55,6 @@ public class SignUpLegacyControllerTest {
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 
-		verify(userService, times(1)).saveUser(userValid, passwordValid);
+		verify(signUpService, times(1)).saveUser(userValid, passwordValid);
 	}
 }

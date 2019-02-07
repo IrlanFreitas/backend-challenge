@@ -19,11 +19,11 @@ public class SignUpServiceTest {
 	@Mock
 	private UsersRepository usersRepository;
 
-	private UserService userService;
+	private SignUpService signUpService;
 
 	@Before
 	public void setUp() {
-		userService = new UserService(usersRepository);
+		signUpService = new SignUpService(usersRepository);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -32,7 +32,7 @@ public class SignUpServiceTest {
 
 		when(usersRepository.exists(existingUser.getName())).thenReturn(true);
 
-		userService.saveUser(existingUser, null);
+		signUpService.saveUser(existingUser, null);
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class SignUpServiceTest {
 
 		when(usersRepository.exists(user.getName())).thenReturn(false);
 
-		userService.saveUser(user, password);
+		signUpService.saveUser(user, password);
 
 		verify(usersRepository, times(1)).save(user.getName(), password.getPassword());
 	}
@@ -54,7 +54,7 @@ public class SignUpServiceTest {
 
 		when(usersRepository.exists(user.getName())).thenReturn(true);
 
-		userService.checkLogin(user, password);
+		signUpService.checkLogin(user, password);
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class SignUpServiceTest {
 
 		when(usersRepository.getPassword(user.getName())).thenReturn("abcd12345");
 
-		assertFalse(userService.checkLogin(user, password));
+		assertFalse(signUpService.checkLogin(user, password));
 	}
 
 	@Test
@@ -78,6 +78,6 @@ public class SignUpServiceTest {
 
 		when(usersRepository.getPassword(user.getName())).thenReturn(password.getPassword());
 
-		assertTrue(userService.checkLogin(user, password));
+		assertTrue(signUpService.checkLogin(user, password));
 	}
 }

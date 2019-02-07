@@ -7,18 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class SignUpService {
 
 	private final UsersRepository usersRepository;
 
 	@Autowired
-	public UserService(UsersRepository usersRepository) {
+	public SignUpService(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 
 	public void saveUser(User user, Password password) {
 		checkIfUserExists(user);
-
 		usersRepository.save(user.getName(), password.getPassword());
 	}
 
