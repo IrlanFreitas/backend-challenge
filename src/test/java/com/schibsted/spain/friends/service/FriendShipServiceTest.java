@@ -28,7 +28,7 @@ public class FriendShipServiceTest {
 		friendShipService = new FriendShipService(usersRepository);
 		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
 		when(usersRepository.userExists(existingUser.getName())).thenReturn(true);
-
+		when(usersRepository.getPassword(existingUser.getName())).thenReturn(password.getPassword());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -39,5 +39,11 @@ public class FriendShipServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenToUserDoesntExists() {
 		friendShipService.request(existingUser, password, notExisting);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExpectedWhenPasswordIsNotCorrect() {
+		Password wrong = new Password("wrongPass");
+		friendShipService.request(existingUser, wrong, existingUser);
 	}
 }

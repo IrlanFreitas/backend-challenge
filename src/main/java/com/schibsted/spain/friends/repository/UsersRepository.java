@@ -17,4 +17,8 @@ public class UsersRepository {
 	public void save(String user, String password) {
 		users.put(user, password);
 	}
+
+	public String getPassword(String username) {
+		return users.get(username);
+	}
 }

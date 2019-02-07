@@ -14,6 +14,13 @@ class FriendShipService {
 
 	void request(User userFrom, Password password, User userTo) {
 		checkIfUsersExist(userFrom, userTo);
+		checkLogin(userFrom, password);
+	}
+
+	private void checkLogin(User userFrom, Password password) {
+		if (!password.getPassword().equals(usersRepository.getPassword(userFrom.getName()))) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	private void checkIfUsersExist(User userFrom, User userTo) {
