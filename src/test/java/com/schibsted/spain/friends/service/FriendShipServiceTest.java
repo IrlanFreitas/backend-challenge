@@ -110,7 +110,29 @@ public class FriendShipServiceTest {
 		pepesFriends.add(juan.getName());
 		juanFriends.add(pepe.getName());
 
-		verify(usersRepository,times(1)).addFriendShip(juan.getName(), juanFriends);
-		verify(usersRepository,times(1)).addFriendShip(pepe.getName(), pepesFriends);
+		verify(usersRepository, times(1)).addFriendShip(juan.getName(), juanFriends);
+		verify(usersRepository, times(1)).addFriendShip(pepe.getName(), pepesFriends);
+	}
+
+	@Test
+	public void shouldWorksWithNoFriendsReturn() {
+		User pepe = new User("Pepito");
+		User juan = new User("Juanito");
+
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.empty());
+		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.empty());
+
+		friendShipService.request(pepe, password, juan);
+
+		Set<String> pepesFriends = new HashSet<>();
+		Set<String> juanFriends = new HashSet<>();
+		pepesFriends.add(juan.getName());
+		juanFriends.add(pepe.getName());
+
+		verify(usersRepository, times(1)).addFriendShip(juan.getName(), juanFriends);
+		verify(usersRepository, times(1)).addFriendShip(pepe.getName(), pepesFriends);
 	}
 }
