@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FriendShipServiceTest {
+public class RequestFriendShipServiceTest {
 
 	@Mock
 	private UsersRepository usersRepository;
@@ -84,27 +84,6 @@ public class FriendShipServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionIfUserHasNoRequest() {
-		RelationShip relationShip = new RelationShip(pepe, juan);
-
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
-
-		friendShipService.accept(pepe, password, juan);
-	}
-
-	@Test
-	public void shouldCallMethodAddAsFriend() {
-		RelationShip relationShip = new RelationShip(pepe, juan);
-
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
-
-		friendShipService.accept(pepe, password, juan);
-
-		verify(usersRepository, times(1)).deleteRequest(relationShip);
-		verify(usersRepository, times(1)).addAsFriends(relationShip);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenRequestAreFriends() {
 		RelationShip relationShip = new RelationShip(pepe, juan);
 
@@ -116,15 +95,4 @@ public class FriendShipServiceTest {
 		verify(usersRepository, times(1)).addAsFriends(relationShip);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldFailWhenAcceptAreFriends() {
-		RelationShip relationShip = new RelationShip(pepe, juan);
-
-		when(usersRepository.getFriends(relationShip)).thenReturn(true);
-
-		friendShipService.accept(pepe, password, juan);
-
-		verify(usersRepository, times(1)).deleteRequest(relationShip);
-		verify(usersRepository, times(1)).addAsFriends(relationShip);
-	}
 }
