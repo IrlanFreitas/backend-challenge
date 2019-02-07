@@ -22,6 +22,8 @@ public class FriendShipServiceTest {
 	private User notExisting = new User("notExists");
 	private User existingUser = new User("Existing");
 	private Password password = new Password("passWord123");
+	private User pepe = new User("Pepito");
+	private User juan = new User("Juanito");
 
 	@Before
 	public void setUp() {
@@ -29,6 +31,9 @@ public class FriendShipServiceTest {
 		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
 		when(usersRepository.userExists(existingUser.getName())).thenReturn(true);
 		when(usersRepository.getPassword(existingUser.getName())).thenReturn(password.getPassword());
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -49,13 +54,8 @@ public class FriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
 		RelationShip relationShip = new RelationShip(pepe, juan);
 
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
 
 		friendShipService.request(pepe, password, juan);
@@ -63,14 +63,8 @@ public class FriendShipServiceTest {
 
 	@Test
 	public void shouldCallAddFriendShipWhenInputIsOK() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
-
 		RelationShip relationShip = new RelationShip(pepe, juan);
 
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
 
 		friendShipService.request(pepe, password, juan);
@@ -80,12 +74,7 @@ public class FriendShipServiceTest {
 
 	@Test
 	public void shouldWorksWithNoFriendsReturn() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
-
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 
 		friendShipService.request(pepe, password, juan);
 
@@ -96,13 +85,8 @@ public class FriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionIfUserHasNoRequest() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
 		RelationShip relationShip = new RelationShip(pepe, juan);
 
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
 
 		friendShipService.accept(pepe, password, juan);
@@ -110,13 +94,8 @@ public class FriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
 		RelationShip relationShip = new RelationShip(pepe, juan);
 
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
 		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
 
 		friendShipService.accept(pepe, password, juan);
