@@ -62,7 +62,7 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -82,8 +82,8 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
-		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.of(juanFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -102,16 +102,16 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
-		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.of(juanFriends));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriends));
 
 		friendShipService.request(pepe, password, juan);
 
 		pepesFriends.add(juan.getName());
 		juanFriends.add(pepe.getName());
 
-		verify(usersRepository, times(1)).addFriendShip(juan.getName(), juanFriends);
-		verify(usersRepository, times(1)).addFriendShip(pepe.getName(), pepesFriends);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriends);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepesFriends);
 	}
 
 	@Test
@@ -122,8 +122,8 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.empty());
-		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.empty());
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.empty());
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.empty());
 
 		friendShipService.request(pepe, password, juan);
 
@@ -132,7 +132,7 @@ public class FriendShipServiceTest {
 		pepesFriends.add(juan.getName());
 		juanFriends.add(pepe.getName());
 
-		verify(usersRepository, times(1)).addFriendShip(juan.getName(), juanFriends);
-		verify(usersRepository, times(1)).addFriendShip(pepe.getName(), pepesFriends);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriends);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepesFriends);
 	}
 }

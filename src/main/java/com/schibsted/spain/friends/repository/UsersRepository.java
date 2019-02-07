@@ -13,7 +13,7 @@ import static java.util.Optional.ofNullable;
 public class UsersRepository {
 
 	private static Map<String, String> users = new HashMap<>();
-	private static Map<String, Set<String>> friendShips = new HashMap<>();
+	private static Map<String, Set<String>> friendShipRequests = new HashMap<>();
 
 	public boolean userExists(String existingUser) {
 		return users.containsKey(existingUser);
@@ -27,11 +27,11 @@ public class UsersRepository {
 		return users.get(username);
 	}
 
-	public Optional<Set<String>> getFriendShipList(String username) {
-		return ofNullable(friendShips.get(username));
+	public Optional<Set<String>> getFriendShipRequests(String username) {
+		return ofNullable(friendShipRequests.get(username));
 	}
 
-	public void addFriendShip(String name, Set<String> friends) {
-		friendShips.put(name, friends);
+	public void addRequest(String name, Set<String> friends) {
+		friendShipRequests.put(name, friends);
 	}
 }

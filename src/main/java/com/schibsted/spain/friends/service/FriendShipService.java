@@ -22,17 +22,17 @@ public class FriendShipService {
 
 	public void request(User userFrom, Password password, User userTo) {
 		checkInputs(userFrom, password, userTo);
-		addFriendShip(userFrom, userTo);
-		addFriendShip(userTo, userFrom);
+		addFriendShipRequest(userFrom, userTo);
+		addFriendShipRequest(userTo, userFrom);
 	}
 
-	private void addFriendShip(User userFrom, User userTo) {
+	private void addFriendShipRequest(User userFrom, User userTo) {
 		Set<String> friends = new HashSet<>();
 
-		usersRepository.getFriendShipList(userFrom.getName()).ifPresent(friends::addAll);
+		usersRepository.getFriendShipRequests(userFrom.getName()).ifPresent(friends::addAll);
 		friends.add(userTo.getName());
 
-		usersRepository.addFriendShip(userFrom.getName(), friends);
+		usersRepository.addRequest(userFrom.getName(), friends);
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
@@ -43,7 +43,7 @@ public class FriendShipService {
 	}
 
 	private void checkFriendShip(User userFrom, User userTo) {
-		final Optional<Set<String>> friendList = usersRepository.getFriendShipList(userFrom.getName());
+		final Optional<Set<String>> friendList = usersRepository.getFriendShipRequests(userFrom.getName());
 		if (friendList.isPresent() && friendList.get().contains(userTo.getName())) {
 			throw new IllegalArgumentException();
 		}
