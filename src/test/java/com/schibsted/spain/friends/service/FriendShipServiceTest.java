@@ -52,7 +52,7 @@ public class FriendShipServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExpectedWhenUsersAreFriends() {
+	public void shouldThrowExpectedWhenUsersAreInRequest() {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
@@ -68,7 +68,7 @@ public class FriendShipServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExpectedWhenUsersAreFriendsInverse() {
+	public void shouldThrowExpectedWhenUsersAreInRequestInverse() {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
