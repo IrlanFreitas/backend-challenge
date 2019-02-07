@@ -40,21 +40,31 @@ public class FriendshipLegacyController {
 	}
 
   @PostMapping("/accept")
-  void acceptFriendship(
+  ResponseEntity acceptFriendship(
       @RequestParam("usernameFrom") String usernameFrom,
       @RequestParam("usernameTo") String usernameTo,
       @RequestHeader("X-Password") String password
   ) {
-    throw new RuntimeException("not implemented yet!");
+	  friendShipService.accept(
+			  new User(usernameFrom),
+			  new Password(password),
+			  new User(usernameTo)
+	  );
+	  return new ResponseEntity(HttpStatus.OK);
   }
 
   @PostMapping("/decline")
-  void declineFriendship(
+  ResponseEntity declineFriendship(
       @RequestParam("usernameFrom") String usernameFrom,
       @RequestParam("usernameTo") String usernameTo,
       @RequestHeader("X-Password") String password
   ) {
-    throw new RuntimeException("not implemented yet!");
+	  friendShipService.decline(
+			  new User(usernameFrom),
+			  new Password(password),
+			  new User(usernameTo)
+	  );
+	  return new ResponseEntity(HttpStatus.OK);
   }
 
   @GetMapping("/list")

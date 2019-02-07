@@ -29,6 +29,8 @@ public class FriendshipLegacyControllerTest {
 	private final User userValid = new User("userValid");
 	private final Password password = new Password("123456789ab");
 	private static final String FRIENDSHIP_PATH = "/friendship/request";
+	private static final String ACCEPT_PATH = "/friendship/accept";
+	private static final String DECLINE_PATH = "/friendship/decline";
 	private static final String PASS_HEADER = "X-Password";
 	private static final String USERNAME_FROM = "usernameFrom";
 	private static final String USERNAME_TO = "usernameTo";
@@ -52,5 +54,29 @@ public class FriendshipLegacyControllerTest {
 
 		verify(friendShipService, times(1))
 				.request(userValid, password, new User("Juanito"));
+	}
+
+	@Test
+	public void expectedOkWhenAcceptAndParamsAreOk() throws Exception {
+		mockMvc.perform(post(ACCEPT_PATH)
+				.header(PASS_HEADER, "123456789ab")
+				.param(USERNAME_FROM, userValid.getName())
+				.param(USERNAME_TO, "Juanito")
+		).andExpect(status().is2xxSuccessful());
+
+		verify(friendShipService, times(1))
+				.accept(userValid, password, new User("Juanito"));
+	}
+
+	@Test
+	public void expectedOkWhenDeclineAndParamsAreOk() throws Exception {
+		mockMvc.perform(post(DECLINE_PATH)
+				.header(PASS_HEADER, "123456789ab")
+				.param(USERNAME_FROM, userValid.getName())
+				.param(USERNAME_TO, "Juanito")
+		).andExpect(status().is2xxSuccessful());
+
+		verify(friendShipService, times(1))
+				.decline(userValid, password, new User("Juanito"));
 	}
 }
