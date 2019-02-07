@@ -13,6 +13,7 @@ public class UsersRepository {
 
 	private static Map<String, String> users = new HashMap<>();
 	private static Set<RelationShip> friendShipRequests = new HashSet<>();
+	private static Set<RelationShip> friends = new HashSet<>();
 
 	public boolean userExists(String existingUser) {
 		return users.containsKey(existingUser);
@@ -32,5 +33,13 @@ public class UsersRepository {
 
 	public void addRequest(RelationShip relationShip) {
 		friendShipRequests.add(relationShip);
+	}
+
+	public void deleteRequest(RelationShip relationShip) {
+		friendShipRequests.remove(relationShip);
+	}
+
+	public void addAsFriends(RelationShip relationShip) {
+		friends.add(relationShip);
 	}
 }
