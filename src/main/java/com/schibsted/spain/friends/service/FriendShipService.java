@@ -3,20 +3,24 @@ package com.schibsted.spain.friends.service;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-class FriendShipService {
+@Service
+public class FriendShipService {
 
 	private UsersRepository usersRepository;
 
+	@Autowired
 	FriendShipService(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 
-	void request(User userFrom, Password password, User userTo) {
+	public void request(User userFrom, Password password, User userTo) {
 		checkInputs(userFrom, password, userTo);
 		addFriendShip(userFrom, userTo);
 		addFriendShip(userTo, userFrom);
