@@ -26,7 +26,7 @@ public class UsersRepository {
 		return users.get(username);
 	}
 
-	public Boolean getFriendShipRequests(RelationShip relationShip) {
+	public boolean getFriendShipRequests(RelationShip relationShip) {
 		return friendShipRequests.contains(relationShip);
 	}
 
