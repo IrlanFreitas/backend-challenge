@@ -77,8 +77,5 @@ public class AcceptFriendShipServiceTest {
 		when(usersRepository.getFriends(relationShip)).thenReturn(true);
 
 		friendShipService.accept(pepe, password, juan);
-
-		verify(usersRepository, times(1)).deleteRequest(relationShip);
-		verify(usersRepository, times(1)).addAsFriends(relationShip);
 	}
 }
