@@ -93,4 +93,35 @@ public class FriendShipServiceTest {
 
 		verify(usersRepository, times(1)).addRequest(relationShip);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExceptionIfUserHasNoRequest() {
+		User pepe = new User("Pepito");
+		User juan = new User("Juanito");
+		RelationShip relationShip = new RelationShip(pepe, juan);
+
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
+
+		friendShipService.accept(pepe, password, juan);
+	}
+
+	@Test
+	public void shouldCallMethodAddAsFriend() {
+		User pepe = new User("Pepito");
+		User juan = new User("Juanito");
+		RelationShip relationShip = new RelationShip(pepe, juan);
+
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
+
+		friendShipService.accept(pepe, password, juan);
+
+		verify(usersRepository, times(1)).deleteRequest(relationShip);
+		verify(usersRepository, times(1)).addAsFriends(relationShip);
+	}
 }

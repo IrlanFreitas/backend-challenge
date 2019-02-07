@@ -22,8 +22,19 @@ public class FriendShipService {
 		addFriendShipRequest(new RelationShip(userFrom, userTo));
 	}
 
+	public void accept(User from, Password password, User to) {
+		checkInputs(from, password, to);
+		acceptFriendShipRequest(new RelationShip(from, to));
+	}
+
+	private void acceptFriendShipRequest(RelationShip relationShip) {
+		checkRequestedBefore(relationShip);
+		usersRepository.deleteRequest(relationShip);
+		usersRepository.addAsFriends(relationShip);
+	}
+
 	private void addFriendShipRequest(RelationShip relationShip) {
-		checkFriendShip(relationShip);
+		checkDontRequestedBefore(relationShip);
 		usersRepository.addRequest(relationShip);
 	}
 
@@ -32,8 +43,14 @@ public class FriendShipService {
 		checkLogin(userFrom, password);
 	}
 
-	private void checkFriendShip(RelationShip relationShip) {
+	private void checkDontRequestedBefore(RelationShip relationShip) {
 		if (usersRepository.getFriendShipRequests(relationShip)) {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	private void checkRequestedBefore(RelationShip relationShip) {
+		if (!usersRepository.getFriendShipRequests(relationShip)) {
 			throw new IllegalArgumentException();
 		}
 	}
