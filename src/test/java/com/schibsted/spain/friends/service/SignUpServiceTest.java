@@ -46,38 +46,4 @@ public class SignUpServiceTest {
 
 		verify(usersRepository, times(1)).save(user.getName(), password.getPassword());
 	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExpectedWhenLoginUserDoesntExist() {
-		User user = new User("user123");
-		Password password = new Password("12345678ab");
-
-		when(usersRepository.exists(user.getName())).thenReturn(true);
-
-		signUpService.checkLogin(user, password);
-	}
-
-	@Test
-	public void shouldReturnFalseWhenPasswordsDontMatch() {
-		User user = new User("user123");
-		Password password = new Password("12345678ab");
-
-		when(usersRepository.exists(user.getName())).thenReturn(false);
-
-		when(usersRepository.getPassword(user.getName())).thenReturn("abcd12345");
-
-		assertFalse(signUpService.checkLogin(user, password));
-	}
-
-	@Test
-	public void shouldReturnTrueWhenPasswordsMatch() {
-		User user = new User("user123");
-		Password password = new Password("12345678ab");
-
-		when(usersRepository.exists(user.getName())).thenReturn(false);
-
-		when(usersRepository.getPassword(user.getName())).thenReturn(password.getPassword());
-
-		assertTrue(signUpService.checkLogin(user, password));
-	}
 }

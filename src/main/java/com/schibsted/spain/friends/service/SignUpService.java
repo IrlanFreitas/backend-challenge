@@ -21,14 +21,9 @@ public class SignUpService {
 		usersRepository.save(user.getName(), password.getPassword());
 	}
 
-	boolean checkLogin(User user, Password password) {
-		checkIfUserExists(user);
-		return password.getPassword().equals(usersRepository.getPassword(user.getName()));
-	}
-
 	private void checkIfUserExists(User user) {
 		if (usersRepository.exists(user.getName())) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Username exists, try with another one.");
 		}
 	}
 }
