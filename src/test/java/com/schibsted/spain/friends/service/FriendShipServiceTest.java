@@ -103,4 +103,28 @@ public class FriendShipServiceTest {
 		verify(usersRepository, times(1)).deleteRequest(relationShip);
 		verify(usersRepository, times(1)).addAsFriends(relationShip);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenRequestAreFriends() {
+		RelationShip relationShip = new RelationShip(pepe, juan);
+
+		when(usersRepository.getFriends(relationShip)).thenReturn(true);
+
+		friendShipService.request(pepe, password, juan);
+
+		verify(usersRepository, times(1)).deleteRequest(relationShip);
+		verify(usersRepository, times(1)).addAsFriends(relationShip);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenAcceptAreFriends() {
+		RelationShip relationShip = new RelationShip(pepe, juan);
+
+		when(usersRepository.getFriends(relationShip)).thenReturn(true);
+
+		friendShipService.accept(pepe, password, juan);
+
+		verify(usersRepository, times(1)).deleteRequest(relationShip);
+		verify(usersRepository, times(1)).addAsFriends(relationShip);
+	}
 }

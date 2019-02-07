@@ -28,12 +28,14 @@ public class FriendShipService {
 	}
 
 	private void acceptFriendShipRequest(RelationShip relationShip) {
+		checkAreFriends(relationShip);
 		checkRequestedBefore(relationShip);
 		usersRepository.deleteRequest(relationShip);
 		usersRepository.addAsFriends(relationShip);
 	}
 
 	private void addFriendShipRequest(RelationShip relationShip) {
+		checkAreFriends(relationShip);
 		checkDontRequestedBefore(relationShip);
 		usersRepository.addRequest(relationShip);
 	}
@@ -51,6 +53,11 @@ public class FriendShipService {
 
 	private void checkRequestedBefore(RelationShip relationShip) {
 		if (!usersRepository.getFriendShipRequests(relationShip)) {
+			throw new IllegalArgumentException();
+		}
+	}
+	private void checkAreFriends(RelationShip relationShip) {
+		if (usersRepository.getFriends(relationShip)) {
 			throw new IllegalArgumentException();
 		}
 	}

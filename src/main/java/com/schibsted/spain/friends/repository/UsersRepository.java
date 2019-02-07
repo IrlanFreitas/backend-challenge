@@ -31,6 +31,10 @@ public class UsersRepository {
 		return friendShipRequests.contains(relationShip);
 	}
 
+	public boolean getFriends(RelationShip relationShip) {
+		return friends.contains(relationShip);
+	}
+
 	public void addRequest(RelationShip relationShip) {
 		friendShipRequests.add(relationShip);
 	}
