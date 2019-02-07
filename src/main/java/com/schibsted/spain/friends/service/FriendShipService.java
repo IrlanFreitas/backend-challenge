@@ -143,7 +143,8 @@ public class FriendShipService {
 		}
 	}
 
-	public void list(User notExist, Object o) {
-		checkIfUsersExist(notExist);
+	public void list(User user, Password password) {
+		checkIfUsersExist(user);
+		checkLogin(user, password);
 	}
 }
