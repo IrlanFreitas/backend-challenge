@@ -59,9 +59,25 @@ public class FriendShipServiceTest {
 		Set<String> pepesFriends = new HashSet<>();
 		pepesFriends.add("Juanito");
 
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.getFriendList(pepe.getName())).thenReturn(pepesFriends);
+
+		friendShipService.request(pepe, password, juan);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExpectedWhenUsersAreFriendsInverse() {
+		User pepe = new User("Pepito");
+		User juan = new User("Juanito");
+
+		Set<String> pepesFriends = new HashSet<>();
+		pepesFriends.add("Raquel");
+
 		Set<String> juanFriends = new HashSet<>();
-		pepesFriends.add("Margarita");
-		pepesFriends.add("Paquito");
+		juanFriends.add("Margarita");
+		juanFriends.add("Pepito");
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);

@@ -21,13 +21,14 @@ class FriendShipService {
 	private void checkInputs(User userFrom, Password password, User userTo) {
 		checkIfUsersExist(userFrom, userTo);
 		checkLogin(userFrom, password);
-		checkFriendShip(userFrom,userTo);
+		checkFriendShip(userFrom, userTo);
+		checkFriendShip(userTo, userFrom);
 	}
 
 	private void checkFriendShip(User userFrom, User userTo) {
 		final Set<String> friendList = usersRepository.getFriendList(userFrom.getName());
-
-		if(friendList.contains(userTo.getName())){
+		System.out.println(friendList);
+		if (friendList.contains(userTo.getName())) {
 			throw new IllegalArgumentException();
 		}
 	}
