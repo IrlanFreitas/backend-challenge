@@ -16,5 +16,8 @@ class FriendShipService {
 		if (!usersRepository.userExists(userFrom.getName())) {
 			throw new IllegalArgumentException();
 		}
+		if (!usersRepository.userExists(userTo.getName())) {
+			throw new IllegalArgumentException();
+		}
 	}
 }

@@ -35,4 +35,9 @@ public class FriendShipServiceTest {
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
 		friendShipService.request(notExisting, password, existingUser);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExpectedWhenToUserDoesntExists() {
+		friendShipService.request(existingUser, password, notExisting);
+	}
 }
