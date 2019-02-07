@@ -13,6 +13,10 @@ class FriendShipService {
 	}
 
 	void request(User userFrom, Password password, User userTo) {
+		checkInputs(userFrom, password, userTo);
+	}
+
+	private void checkInputs(User userFrom, Password password, User userTo) {
 		checkIfUsersExist(userFrom, userTo);
 		checkLogin(userFrom, password);
 	}
