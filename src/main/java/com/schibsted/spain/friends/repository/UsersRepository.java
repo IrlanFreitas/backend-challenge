@@ -30,4 +30,8 @@ public class UsersRepository {
 	public Optional<Set<String>> getFriendShipList(String username) {
 		return ofNullable(friendShips.get(username));
 	}
+
+	public void addFriendShip(String name, Set<String> friends) {
+		friendShips.put(name, friends);
+	}
 }

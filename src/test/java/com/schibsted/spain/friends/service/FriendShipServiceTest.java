@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FriendShipServiceTest {
@@ -86,5 +86,31 @@ public class FriendShipServiceTest {
 		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.of(juanFriends));
 
 		friendShipService.request(pepe, password, juan);
+	}
+
+	@Test
+	public void shouldCallAddFriendShipWhenInputIsOK() {
+		User pepe = new User("Pepito");
+		User juan = new User("Juanito");
+
+		Set<String> pepesFriends = new HashSet<>();
+		pepesFriends.add("Raquel");
+
+		Set<String> juanFriends = new HashSet<>();
+		juanFriends.add("Margarita");
+
+		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
+		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.getFriendShipList(pepe.getName())).thenReturn(Optional.of(pepesFriends));
+		when(usersRepository.getFriendShipList(juan.getName())).thenReturn(Optional.of(juanFriends));
+
+		friendShipService.request(pepe, password, juan);
+
+		pepesFriends.add(juan.getName());
+		juanFriends.add(pepe.getName());
+
+		verify(usersRepository,times(1)).addFriendShip(juan.getName(), juanFriends);
+		verify(usersRepository,times(1)).addFriendShip(pepe.getName(), pepesFriends);
 	}
 }
