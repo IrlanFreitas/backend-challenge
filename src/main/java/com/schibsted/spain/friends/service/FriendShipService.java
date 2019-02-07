@@ -142,4 +142,8 @@ public class FriendShipService {
 			throw new IllegalArgumentException("User " + user + " doesnt exist.");
 		}
 	}
+
+	public void list(User notExist, Object o) {
+		checkIfUsersExist(notExist);
+	}
 }
