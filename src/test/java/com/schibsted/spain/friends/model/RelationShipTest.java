@@ -25,5 +25,4 @@ public class RelationShipTest {
 
 		assertEquals(juanAndPepe, pepeAndJuaj);
 	}
-
 }
