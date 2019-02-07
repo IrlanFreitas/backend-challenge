@@ -23,7 +23,7 @@ public class SignUpService {
 
 	private void checkIfUserExists(User user) {
 		if (usersRepository.userExists(user.getName())) {
-			throw new IllegalArgumentException("Username userExists, try with another one.");
+			throw new IllegalArgumentException("Username exists, try with another one.");
 		}
 	}
 }

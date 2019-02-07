@@ -8,7 +8,7 @@ public class RelationShip {
 
 	public RelationShip(User x, User y) {
 		if (x.equals(y)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Friends are the same user.");
 		}
 		this.x = x;
 		this.y = y;

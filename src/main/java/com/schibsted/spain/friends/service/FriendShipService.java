@@ -51,36 +51,38 @@ public class FriendShipService {
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
-		checkIfUsersExist(userFrom, userTo);
+		checkIfUsersExist(userFrom);
+		checkIfUsersExist(userTo);
 		checkLogin(userFrom, password);
 	}
 
 	private void checkDontRequestedBefore(RelationShip relationShip) {
 		if (usersRepository.getFriendShipRequests(relationShip)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Users have a friendship request.");
 		}
 	}
 
 	private void checkRequestedBefore(RelationShip relationShip) {
 		if (!usersRepository.getFriendShipRequests(relationShip)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Users have no friendship request.");
 		}
 	}
+
 	private void checkAreFriends(RelationShip relationShip) {
 		if (usersRepository.getFriends(relationShip)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Users are friends.");
 		}
 	}
 
 	private void checkLogin(User userFrom, Password password) {
 		if (!password.getPassword().equals(usersRepository.getPassword(userFrom.getName()))) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Password wrong for user " + userFrom);
 		}
 	}
 
-	private void checkIfUsersExist(User userFrom, User userTo) {
-		if (!usersRepository.userExists(userFrom.getName()) || !usersRepository.userExists(userTo.getName())) {
-			throw new IllegalArgumentException();
+	private void checkIfUsersExist(User user) {
+		if (!usersRepository.userExists(user.getName())) {
+			throw new IllegalArgumentException("User " + user + " doesnt exist.");
 		}
 	}
 }

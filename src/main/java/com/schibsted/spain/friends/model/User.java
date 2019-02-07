@@ -31,20 +31,24 @@ public class User {
 	}
 
 	private void checkRestrictions(String name) {
-		throwExceptionIf(name == null);
+		throwExceptionIf(name == null, "Username cant be null.");
 
-		throwExceptionIf(name.isEmpty());
+		throwExceptionIf(name.isEmpty(),
+				"Username cant be empty.");
 
-		throwExceptionIf(name.length() < 5);
+		throwExceptionIf(name.length() < 5,
+				"Username has to be > 8.");
 
-		throwExceptionIf(name.length() > 10);
+		throwExceptionIf(name.length() > 10,
+				"Username has to be < 12.");
 
-		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(name).find());
+		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(name).find(),
+				"Username has to be alphanumeric.");
 	}
 
-	private void throwExceptionIf(boolean b) {
+	private void throwExceptionIf(boolean b, String cause) {
 		if (b) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(cause);
 		}
 	}
 }
