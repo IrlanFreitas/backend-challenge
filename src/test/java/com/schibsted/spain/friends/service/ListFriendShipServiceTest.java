@@ -9,6 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,5 +40,13 @@ public class ListFriendShipServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenPasswordWrong() {
 		friendShipService.list(pepe, new Password("wrongPass"));
+	}
+
+	@Test
+	public void shouldReturnEmptyListWhenHasNoFriends() {
+		List<String> expected = Collections.emptyList();
+		List<String> actual = friendShipService.list(pepe, password);
+
+		assertEquals(expected, actual);
 	}
 }

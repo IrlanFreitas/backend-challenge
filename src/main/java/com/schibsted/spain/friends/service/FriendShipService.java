@@ -6,9 +6,7 @@ import com.schibsted.spain.friends.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class FriendShipService {
@@ -143,8 +141,9 @@ public class FriendShipService {
 		}
 	}
 
-	public void list(User user, Password password) {
+	public List<String> list(User user, Password password) {
 		checkIfUsersExist(user);
 		checkLogin(user, password);
+		return Collections.emptyList();
 	}
 }
