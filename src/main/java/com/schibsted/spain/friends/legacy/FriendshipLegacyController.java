@@ -39,39 +39,39 @@ public class FriendshipLegacyController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-  @PostMapping("/accept")
-  ResponseEntity acceptFriendship(
-      @RequestParam("usernameFrom") String usernameFrom,
-      @RequestParam("usernameTo") String usernameTo,
-      @RequestHeader("X-Password") String password
-  ) {
-	  friendShipService.accept(
-			  new User(usernameFrom),
-			  new Password(password),
-			  new User(usernameTo)
-	  );
-	  return new ResponseEntity(HttpStatus.OK);
-  }
+	@PostMapping("/accept")
+	ResponseEntity acceptFriendship(
+			@RequestParam("usernameFrom") String usernameFrom,
+			@RequestParam("usernameTo") String usernameTo,
+			@RequestHeader("X-Password") String password
+	) {
+		friendShipService.accept(
+				new User(usernameFrom),
+				new Password(password),
+				new User(usernameTo)
+		);
+		return new ResponseEntity(HttpStatus.OK);
+	}
 
-  @PostMapping("/decline")
-  ResponseEntity declineFriendship(
-      @RequestParam("usernameFrom") String usernameFrom,
-      @RequestParam("usernameTo") String usernameTo,
-      @RequestHeader("X-Password") String password
-  ) {
-	  friendShipService.decline(
-			  new User(usernameFrom),
-			  new Password(password),
-			  new User(usernameTo)
-	  );
-	  return new ResponseEntity(HttpStatus.OK);
-  }
+	@PostMapping("/decline")
+	ResponseEntity declineFriendship(
+			@RequestParam("usernameFrom") String usernameFrom,
+			@RequestParam("usernameTo") String usernameTo,
+			@RequestHeader("X-Password") String password
+	) {
+		friendShipService.decline(
+				new User(usernameFrom),
+				new Password(password),
+				new User(usernameTo)
+		);
+		return new ResponseEntity(HttpStatus.OK);
+	}
 
-  @GetMapping("/list")
-  Object listFriends(
-      @RequestParam("username") String username,
-      @RequestHeader("X-Password") String password
-  ) {
-    throw new RuntimeException("not implemented yet!");
-  }
+	@GetMapping("/list")
+	Object listFriends(
+			@RequestParam("username") String username,
+			@RequestHeader("X-Password") String password
+	) {
+		return friendShipService.list(new User(username), new Password(password));
+	}
 }

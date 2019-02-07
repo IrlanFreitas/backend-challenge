@@ -11,8 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +34,7 @@ public class FriendshipLegacyControllerTest {
 	private static final String FRIENDSHIP_PATH = "/friendship/request";
 	private static final String ACCEPT_PATH = "/friendship/accept";
 	private static final String DECLINE_PATH = "/friendship/decline";
+	private static final String LIST_PATH = "/friendship/list";
 	private static final String PASS_HEADER = "X-Password";
 	private static final String USERNAME_FROM = "usernameFrom";
 	private static final String USERNAME_TO = "usernameTo";
@@ -78,5 +82,19 @@ public class FriendshipLegacyControllerTest {
 
 		verify(friendShipService, times(1))
 				.decline(userValid, password, new User("Juanito"));
+	}
+
+	@Test
+	public void expectedOkWhenListAndParamsAreOk() throws Exception {
+		List<String> expected = asList("Pepito", "Juanito");
+		when(friendShipService.list(userValid, password)).thenReturn(expected);
+
+		FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+		List<String> actual = (List<String>) friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
+
+		assertEquals(expected, actual);
+
+		verify(friendShipService, times(1))
+				.list(userValid, password);
 	}
 }
