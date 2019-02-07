@@ -1,19 +1,18 @@
 package com.schibsted.spain.friends.repository;
 
+import com.schibsted.spain.friends.model.RelationShip;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Optional.ofNullable;
 
 @Component
 public class UsersRepository {
 
 	private static Map<String, String> users = new HashMap<>();
-	private static Map<String, Set<String>> friendShipRequests = new HashMap<>();
+	private static Set<RelationShip> friendShipRequests = new HashSet<>();
 
 	public boolean userExists(String existingUser) {
 		return users.containsKey(existingUser);
@@ -27,11 +26,11 @@ public class UsersRepository {
 		return users.get(username);
 	}
 
-	public Optional<Set<String>> getFriendShipRequests(String username) {
-		return ofNullable(friendShipRequests.get(username));
+	public Boolean getFriendShipRequests(RelationShip relationShip) {
+		return friendShipRequests.contains(relationShip);
 	}
 
-	public void addRequest(String name, Set<String> friends) {
-		friendShipRequests.put(name, friends);
+	public void addRequest(RelationShip relationShip) {
+		friendShipRequests.add(relationShip);
 	}
 }

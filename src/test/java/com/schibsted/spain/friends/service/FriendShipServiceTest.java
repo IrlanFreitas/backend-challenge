@@ -1,6 +1,7 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
+import com.schibsted.spain.friends.model.RelationShip;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
@@ -8,10 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -25,7 +22,6 @@ public class FriendShipServiceTest {
 	private User notExisting = new User("notExists");
 	private User existingUser = new User("Existing");
 	private Password password = new Password("passWord123");
-
 
 	@Before
 	public void setUp() {
@@ -55,35 +51,12 @@ public class FriendShipServiceTest {
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
-
-		Set<String> pepeFriendRequest = new HashSet<>();
-		pepeFriendRequest.add("Juanito");
+		RelationShip relationShip = new RelationShip(pepe, juan);
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
-
-		friendShipService.request(pepe, password, juan);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExpectedWhenUsersAreInRequestInverse() {
-		User pepe = new User("Pepito");
-		User juan = new User("Juanito");
-
-		Set<String> pepeFriendRequest = new HashSet<>();
-		pepeFriendRequest.add("Raquel");
-
-		Set<String> juanFriendRequest = new HashSet<>();
-		juanFriendRequest.add("Margarita");
-		juanFriendRequest.add("Pepito");
-
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriendRequest));
+		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -93,25 +66,16 @@ public class FriendShipServiceTest {
 		User pepe = new User("Pepito");
 		User juan = new User("Juanito");
 
-		Set<String> pepeFriendRequest = new HashSet<>();
-		pepeFriendRequest.add("Raquel");
-
-		Set<String> juanFriendRequest = new HashSet<>();
-		juanFriendRequest.add("Margarita");
+		RelationShip relationShip = new RelationShip(pepe, juan);
 
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeFriendRequest));
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanFriendRequest));
+		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
 
 		friendShipService.request(pepe, password, juan);
 
-		pepeFriendRequest.add(juan.getName());
-		juanFriendRequest.add(pepe.getName());
-
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriendRequest);
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeFriendRequest);
+		verify(usersRepository, times(1)).addRequest(relationShip);
 	}
 
 	@Test
@@ -122,17 +86,11 @@ public class FriendShipServiceTest {
 		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
 		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
 		when(usersRepository.userExists(juan.getName())).thenReturn(true);
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.empty());
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.empty());
 
 		friendShipService.request(pepe, password, juan);
 
-		Set<String> pepeFriendRequest = new HashSet<>();
-		Set<String> juanFriendRequest = new HashSet<>();
-		pepeFriendRequest.add(juan.getName());
-		juanFriendRequest.add(pepe.getName());
+		RelationShip relationShip = new RelationShip(pepe, juan);
 
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanFriendRequest);
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeFriendRequest);
+		verify(usersRepository, times(1)).addRequest(relationShip);
 	}
 }

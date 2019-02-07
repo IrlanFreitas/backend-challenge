@@ -1,14 +1,11 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
+import com.schibsted.spain.friends.model.RelationShip;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class FriendShipService {
@@ -22,29 +19,21 @@ public class FriendShipService {
 
 	public void request(User userFrom, Password password, User userTo) {
 		checkInputs(userFrom, password, userTo);
-		addFriendShipRequest(userFrom, userTo);
-		addFriendShipRequest(userTo, userFrom);
+		addFriendShipRequest(new RelationShip(userFrom, userTo));
 	}
 
-	private void addFriendShipRequest(User userFrom, User userTo) {
-		Set<String> friends = new HashSet<>();
-
-		usersRepository.getFriendShipRequests(userFrom.getName()).ifPresent(friends::addAll);
-		friends.add(userTo.getName());
-
-		usersRepository.addRequest(userFrom.getName(), friends);
+	private void addFriendShipRequest(RelationShip relationShip) {
+		checkFriendShip(relationShip);
+		usersRepository.addRequest(relationShip);
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
 		checkIfUsersExist(userFrom, userTo);
 		checkLogin(userFrom, password);
-		checkFriendShip(userFrom, userTo);
-		checkFriendShip(userTo, userFrom);
 	}
 
-	private void checkFriendShip(User userFrom, User userTo) {
-		final Optional<Set<String>> friendList = usersRepository.getFriendShipRequests(userFrom.getName());
-		if (friendList.isPresent() && friendList.get().contains(userTo.getName())) {
+	private void checkFriendShip(RelationShip relationShip) {
+		if (usersRepository.getFriendShipRequests(relationShip)) {
 			throw new IllegalArgumentException();
 		}
 	}
