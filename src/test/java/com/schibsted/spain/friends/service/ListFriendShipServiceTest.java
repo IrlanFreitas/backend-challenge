@@ -9,9 +9,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +44,20 @@ public class ListFriendShipServiceTest {
 
 	@Test
 	public void shouldReturnEmptyListWhenHasNoFriends() {
-		List<String> expected = Collections.emptyList();
+		List<String> expected = emptyList();
+		List<String> actual = friendShipService.list(pepe, password);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldReturnExpectedWhenUserHasFriends() {
+		Set<String> pepeFriends = new HashSet<>();
+		pepeFriends.add("Margarita");
+		pepeFriends.add("Juanito");
+		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of(pepeFriends));
+
+		List<String> expected = Arrays.asList("Margarita", "Juanito");
 		List<String> actual = friendShipService.list(pepe, password);
 
 		assertEquals(expected, actual);

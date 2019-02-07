@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendShipService {
@@ -144,6 +145,9 @@ public class FriendShipService {
 	public List<String> list(User user, Password password) {
 		checkIfUsersExist(user);
 		checkLogin(user, password);
+		if (usersRepository.getFriends(user.getName()).isPresent()) {
+			return new ArrayList<>(usersRepository.getFriends(user.getName()).get());
+		}
 		return Collections.emptyList();
 	}
 }
