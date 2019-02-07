@@ -1,7 +1,6 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.RelationShip;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
@@ -9,6 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -51,40 +54,36 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+		Set<String> pepeRequests = new HashSet<>();
+		pepeRequests.add(juan.getName());
 
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+		Set<String> pepeFriends = new HashSet<>();
+		pepeFriends.add(juan.getName());
 
-		when(usersRepository.getFriends(relationShip)).thenReturn(true);
+		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of(pepeFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test
-	public void shouldCallAddFriendShipWhenInputIsOK() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+	public void shouldWorksWithNoRequestsReturn() {
+		Set<String> pepeRequests = new HashSet<>();
+		pepeRequests.add(juan.getName());
 
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
+		Set<String> juanRequests = new HashSet<>();
+		juanRequests.add(pepe.getName());
 
 		friendShipService.request(pepe, password, juan);
 
-		verify(usersRepository, times(1)).addRequest(relationShip);
-	}
-
-	@Test
-	public void shouldWorksWithNoFriendsReturn() {
-		friendShipService.request(pepe, password, juan);
-
-		final RelationShip relationShip = new RelationShip(pepe, juan);
-
-		verify(usersRepository, times(1)).addRequest(relationShip);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
 	}
 
 }

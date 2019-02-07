@@ -1,7 +1,6 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.RelationShip;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
@@ -9,6 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -51,21 +54,24 @@ public class DeclineFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionIfUserHasNoRequest() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
-
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
-
 		friendShipService.decline(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+		Set<String> juanRequests = new HashSet<>();
+		Set<String> pepeRequests = new HashSet<>();
+		juanRequests.add(pepe.getName());
+		pepeRequests.add(juan.getName());
 
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
 
 		friendShipService.decline(pepe, password, juan);
 
-		verify(usersRepository, times(1)).deleteRequest(relationShip);
+		juanRequests.remove(pepe.getName());
+		verify(usersRepository, times(1)).deleteRequest(juan.getName(), juanRequests);
+		pepeRequests.remove(juan.getName());
+		verify(usersRepository, times(1)).deleteRequest(pepe.getName(), pepeRequests);
 	}
 }

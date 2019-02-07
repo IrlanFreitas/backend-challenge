@@ -1,7 +1,6 @@
 package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
-import com.schibsted.spain.friends.model.RelationShip;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
@@ -10,6 +9,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,31 +55,73 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionIfUserHasNoRequest() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+		friendShipService.accept(pepe, password, juan);
+	}
 
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(false);
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenAreFriends() {
+		Set<String> friends = new HashSet<>();
+		friends.add(pepe.getName());
+
+		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((friends)));
+
+		friendShipService.accept(pepe, password, juan);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenAreFriendsTo() {
+		Set<String> juanFriends = new HashSet<>();
+		juanFriends.add(pepe.getName());
+
+		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of((emptySet())));
+		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((juanFriends)));
+
+		friendShipService.accept(pepe, password, juan);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenThereIsNoRequestFrom() {
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(emptySet()));
+
+		friendShipService.accept(pepe, password, juan);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFailWhenThereIsNoRequestTo() {
+		Set<String> pepeRequest = new HashSet<>();
+		pepeRequest.add(juan.getName());
+
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(emptySet()));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequest));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
+		Set<String> juanFriends = new HashSet<>();
+		Set<String> juanRequests = new HashSet<>();
+		Set<String> pepeFriends = new HashSet<>();
+		Set<String> pepeRequests = new HashSet<>();
+		juanFriends.add("Margarita");
+		juanRequests.add(pepe.getName());
+		pepeRequests.add(juan.getName());
 
-		when(usersRepository.getFriendShipRequests(relationShip)).thenReturn(true);
+		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
+		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
 
-		friendShipService.accept(pepe, password, juan);
-
-		verify(usersRepository, times(1)).deleteRequest(relationShip);
-		verify(usersRepository, times(1)).addAsFriends(relationShip);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldFailWhenAcceptAreFriends() {
-		final RelationShip relationShip = new RelationShip(pepe, juan);
-
-		when(usersRepository.getFriends(relationShip)).thenReturn(true);
+		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((juanFriends)));
+		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of((pepeFriends)));
 
 		friendShipService.accept(pepe, password, juan);
+
+		juanFriends.add(pepe.getName());
+		verify(usersRepository, times(1)).addAsFriends(juan.getName(), juanFriends);
+		pepeFriends.add(juan.getName());
+		verify(usersRepository, times(1)).addAsFriends(pepe.getName(), pepeFriends);
+		juanRequests.remove(pepe.getName());
+		verify(usersRepository, times(1)).deleteRequest(juan.getName(), juanRequests);
+		pepeRequests.remove(juan.getName());
+		verify(usersRepository, times(1)).deleteRequest(pepe.getName(), pepeRequests);
 	}
 }
