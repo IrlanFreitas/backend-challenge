@@ -27,11 +27,21 @@ public class FriendShipService {
 		acceptFriendShipRequest(new RelationShip(from, to));
 	}
 
+	public void decline(User from, Password password, User to) {
+		checkInputs(from, password, to);
+		declineFriendShipRequest(new RelationShip(from, to));
+	}
+
 	private void acceptFriendShipRequest(RelationShip relationShip) {
 		checkAreFriends(relationShip);
 		checkRequestedBefore(relationShip);
 		usersRepository.deleteRequest(relationShip);
 		usersRepository.addAsFriends(relationShip);
+	}
+
+	private void declineFriendShipRequest(RelationShip relationShip) {
+		checkRequestedBefore(relationShip);
+		usersRepository.deleteRequest(relationShip);
 	}
 
 	private void addFriendShipRequest(RelationShip relationShip) {
