@@ -34,7 +34,6 @@ public class FriendshipLegacyControllerTest {
 	private static final String FRIENDSHIP_PATH = "/friendship/request";
 	private static final String ACCEPT_PATH = "/friendship/accept";
 	private static final String DECLINE_PATH = "/friendship/decline";
-	private static final String LIST_PATH = "/friendship/list";
 	private static final String PASS_HEADER = "X-Password";
 	private static final String USERNAME_FROM = "usernameFrom";
 	private static final String USERNAME_TO = "usernameTo";
@@ -85,12 +84,14 @@ public class FriendshipLegacyControllerTest {
 	}
 
 	@Test
-	public void expectedOkWhenListAndParamsAreOk() throws Exception {
-		List<String> expected = asList("Pepito", "Juanito");
+	public void expectedOkWhenListAndParamsAreOk() {
+		FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+
+		final List<String> expected = asList("Pepito", "Juanito");
+
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 
-		FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
-		List<String> actual = (List<String>) friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
+		final Object actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
 
 		assertEquals(expected, actual);
 

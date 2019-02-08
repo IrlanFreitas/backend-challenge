@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 @Service
 public class FriendShipService {
@@ -40,6 +41,15 @@ public class FriendShipService {
 		saveAccept(from, to);
 	}
 
+	public List<String> list(User user, Password password) {
+		checkIfUsersExist(user);
+		checkLogin(user, password);
+		if (usersRepository.getFriends(user.getName()).isPresent()) {
+			return new ArrayList<>(usersRepository.getFriends(user.getName()).get());
+		}
+		return emptyList();
+	}
+
 	private void saveAccept(String from, String to) {
 		updateAccept(from, to);
 		updateAccept(to, from);
@@ -48,13 +58,6 @@ public class FriendShipService {
 	private void updateAccept(String from, String to) {
 		saveDecline(from, to);
 		addAsFriends(from, to);
-	}
-
-	private void addAsFriends(String from, String to) {
-		Set<String> list = new HashSet<>();
-		usersRepository.getFriends(from).ifPresent(list::addAll);
-		list.add(to);
-		usersRepository.addAsFriends(from, list);
 	}
 
 	private void declineFriendShipRequest(String from, String to) {
@@ -68,6 +71,13 @@ public class FriendShipService {
 		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 		list.remove(to);
 		usersRepository.deleteRequest(from, list);
+	}
+
+	private void addAsFriends(String from, String to) {
+		Set<String> list = new HashSet<>();
+		usersRepository.getFriends(from).ifPresent(list::addAll);
+		list.add(to);
+		usersRepository.addAsFriends(from, list);
 	}
 
 	private void requestFriendship(String from, String to) {
@@ -101,13 +111,6 @@ public class FriendShipService {
 		checkDontRequest(to, from);
 	}
 
-	private void checkDontRequest(String from, String to) {
-		final Optional<Set<String>> friendShipRequests = usersRepository.getFriendShipRequests(from);
-		if (friendShipRequests.isPresent() && friendShipRequests.get().contains(to)) {
-			throw new IllegalArgumentException("User has this request yet");
-		}
-	}
-
 	private void throwIfNotRequestExists(String from, String to) {
 		throwIfNotRequest(from, to);
 		throwIfNotRequest(to, from);
@@ -126,7 +129,7 @@ public class FriendShipService {
 
 	private void throwIfNotRequest(String from, String to) {
 		if (!usersRepository.getFriendShipRequests(from).isPresent() || !usersRepository.getFriendShipRequests(from).get().contains(to)) {
-			throw new IllegalArgumentException("There is no friend request.");
+			throw new IllegalArgumentException("There is no friend request");
 		}
 	}
 
@@ -138,16 +141,14 @@ public class FriendShipService {
 
 	private void checkIfUsersExist(User user) {
 		if (!usersRepository.userExists(user.getName())) {
-			throw new IllegalArgumentException("User " + user + " doesnt exist.");
+			throw new IllegalArgumentException("User doesn't exist");
 		}
 	}
 
-	public List<String> list(User user, Password password) {
-		checkIfUsersExist(user);
-		checkLogin(user, password);
-		if (usersRepository.getFriends(user.getName()).isPresent()) {
-			return new ArrayList<>(usersRepository.getFriends(user.getName()).get());
+	private void checkDontRequest(String from, String to) {
+		final Optional<Set<String>> friendShipRequests = usersRepository.getFriendShipRequests(from);
+		if (friendShipRequests.isPresent() && friendShipRequests.get().contains(to)) {
+			throw new IllegalArgumentException("User has this request yet");
 		}
-		return Collections.emptyList();
 	}
 }
