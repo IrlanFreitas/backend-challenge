@@ -66,6 +66,6 @@ public class FriendshipLegacyController {
 			@RequestParam(USERNAME) String username,
 			@RequestHeader(X_PASSWORD) String password
 	) {
-		return friendShipService.list(new User(username), new Password(password));
+		return ResponseEntity.ok(friendShipService.list(new User(username), new Password(password)));
 	}
 }

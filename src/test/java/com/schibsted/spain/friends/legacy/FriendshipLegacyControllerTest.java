@@ -18,6 +18,7 @@ import static java.util.Collections.emptySet;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,6 +107,21 @@ public class FriendshipLegacyControllerTest {
 		final Object actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
 
 		assertEquals(expected, actual);
+
+		verify(friendShipService, times(1))
+				.list(userValid, password);
+	}
+
+	@Test
+	public void expectedOkWhenGetFriendsAndParamsAreOk() throws Exception {
+		final Set<String> expected = emptySet();
+
+		when(friendShipService.list(userValid, password)).thenReturn(expected);
+
+		mockMvc.perform(get(FRIENDSHIP_REQUEST_MAPPING + LIST)
+				.header(X_PASSWORD, "123456789ab")
+				.param(USERNAME, userValid.getName())
+		).andExpect(status().is2xxSuccessful());
 
 		verify(friendShipService, times(1))
 				.list(userValid, password);
