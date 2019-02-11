@@ -18,7 +18,6 @@ public class FriendShipService {
 
 	private UsersRepository usersRepository;
 
-	@Autowired
 	FriendShipService(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}

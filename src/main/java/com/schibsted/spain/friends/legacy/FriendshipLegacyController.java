@@ -3,7 +3,6 @@ package com.schibsted.spain.friends.legacy;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.service.FriendShipService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ public class FriendshipLegacyController {
 
 	private FriendShipService friendShipService;
 
-	@Autowired
 	public FriendshipLegacyController(FriendShipService friendShipService) {
 		this.friendShipService = friendShipService;
 	}
