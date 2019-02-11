@@ -54,7 +54,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		Set<String> pepeRequests = new HashSet<>();
+		final Set<String> pepeRequests = new HashSet<>();
 		pepeRequests.add(juan.getName());
 
 		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
@@ -64,7 +64,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		Set<String> pepeFriends = new HashSet<>();
+		final Set<String> pepeFriends = new HashSet<>();
 		pepeFriends.add(juan.getName());
 
 		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of(pepeFriends));
@@ -74,7 +74,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test
 	public void shouldWorksWithNoRequestsReturn() {
-		Set<String> pepeRequests = new HashSet<>();
+		final Set<String> pepeRequests = new HashSet<>();
 		pepeRequests.add(juan.getName());
 
 		Set<String> juanRequests = new HashSet<>();

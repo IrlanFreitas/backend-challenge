@@ -33,8 +33,8 @@ public class UserRequirementsTest {
 
 	@Test
 	public void shouldReturnExpectedString() {
-		String expected = "Pepito12";
-		String actual = new User("Pepito12").getName();
+		final String expected = "Pepito12";
+		final String actual = new User("Pepito12").getName();
 
 		assertEquals(expected, actual);
 	}

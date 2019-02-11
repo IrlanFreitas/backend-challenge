@@ -11,10 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -86,9 +86,9 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenListAndParamsAreOk() {
-		FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
 
-		final List<String> expected = asList("Pepito", "Juanito");
+		final Set<String> expected = newLinkedHashSet("Pepito", "Juanito");
 
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 
@@ -102,9 +102,9 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedEmptyWhenUserHasNoFriends() {
-		FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
 
-		final List<String> expected = emptyList();
+		final Set<String> expected = emptySet();
 
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 

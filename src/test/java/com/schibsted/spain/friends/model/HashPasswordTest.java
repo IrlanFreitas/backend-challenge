@@ -8,10 +8,10 @@ public class HashPasswordTest {
 
 	@Test
 	public void shouldHashWithMd5Password() {
-		Password password = new Password("12345678");
+		final Password password = new Password("12345678");
 
-		String expected = "25d55ad283aa400af464c76d713c07ad";
-		String actual = password.getPassword();
+		final String expected = "25d55ad283aa400af464c76d713c07ad";
+		final String actual = password.getPassword();
 
 		assertEquals(expected, actual);
 	}

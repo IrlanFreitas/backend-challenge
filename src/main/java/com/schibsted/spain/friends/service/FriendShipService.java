@@ -6,9 +6,12 @@ import com.schibsted.spain.friends.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 
 @Service
 public class FriendShipService {
@@ -41,13 +44,13 @@ public class FriendShipService {
 		saveAccept(from, to);
 	}
 
-	public List<String> list(User user, Password password) {
+	public Set<String> list(User user, Password password) {
 		checkIfUsersExist(user);
 		checkLogin(user, password);
 		if (usersRepository.getFriends(user.getName()).isPresent()) {
-			return new ArrayList<>(usersRepository.getFriends(user.getName()).get());
+			return usersRepository.getFriends(user.getName()).get();
 		}
-		return emptyList();
+		return emptySet();
 	}
 
 	private void saveAccept(String from, String to) {
@@ -74,7 +77,7 @@ public class FriendShipService {
 	}
 
 	private void addAsFriends(String from, String to) {
-		LinkedHashSet<String> list = new LinkedHashSet<>();
+		final LinkedHashSet<String> list = new LinkedHashSet<>();
 		usersRepository.getFriends(from).ifPresent(list::addAll);
 		list.add(to);
 		usersRepository.addAsFriends(from, list);
@@ -92,7 +95,7 @@ public class FriendShipService {
 	}
 
 	private void saveFriendShipSet(String from, String to) {
-		Set<String> list = new HashSet<>();
+		final Set<String> list = new HashSet<>();
 		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 
 		list.add(to);

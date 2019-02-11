@@ -3,6 +3,7 @@ package com.schibsted.spain.friends.service;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
+import org.assertj.core.util.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,10 +61,8 @@ public class DeclineFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		Set<String> juanRequests = new HashSet<>();
-		Set<String> pepeRequests = new HashSet<>();
-		juanRequests.add(pepe.getName());
-		pepeRequests.add(juan.getName());
+		final Set<String> juanRequests = newLinkedHashSet(pepe.getName());
+		final Set<String> pepeRequests = newLinkedHashSet(juan.getName());
 
 		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
 		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));

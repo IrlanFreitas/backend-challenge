@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Collections.emptySet;
+import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,8 +62,7 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenAreFriends() {
-		Set<String> friends = new HashSet<>();
-		friends.add(pepe.getName());
+		final Set<String> friends = newLinkedHashSet(pepe.getName());
 
 		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((friends)));
 
@@ -71,8 +71,7 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenAreFriendsTo() {
-		Set<String> juanFriends = new HashSet<>();
-		juanFriends.add(pepe.getName());
+		final Set<String> juanFriends = newLinkedHashSet(pepe.getName());
 
 		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of((emptySet())));
 		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((juanFriends)));
@@ -89,7 +88,7 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenThereIsNoRequestTo() {
-		Set<String> pepeRequest = new HashSet<>();
+		final Set<String> pepeRequest = new HashSet<>();
 		pepeRequest.add(juan.getName());
 
 		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(emptySet()));
@@ -100,13 +99,10 @@ public class AcceptFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		LinkedHashSet<String> juanFriends = new LinkedHashSet<>();
-		Set<String> juanRequests = new HashSet<>();
-		LinkedHashSet<String> pepeFriends = new LinkedHashSet<>();
-		Set<String> pepeRequests = new HashSet<>();
-		juanFriends.add("Margarita");
-		juanRequests.add(pepe.getName());
-		pepeRequests.add(juan.getName());
+		final LinkedHashSet<String> juanFriends = newLinkedHashSet("Margarita");
+		final Set<String> juanRequests = newLinkedHashSet(pepe.getName());
+		final LinkedHashSet<String> pepeFriends = new LinkedHashSet<>();
+		final Set<String> pepeRequests = newLinkedHashSet(juan.getName());
 
 		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
 		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
