@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.schibsted.spain.friends.legacy.Router.*;
+
 @RestController
-@RequestMapping("/friendship")
+@RequestMapping(FRIENDSHIP_REQUEST_MAPPING)
 public class FriendshipLegacyController {
 
 	private FriendShipService friendShipService;
@@ -19,11 +21,11 @@ public class FriendshipLegacyController {
 		this.friendShipService = friendShipService;
 	}
 
-	@PostMapping("/request")
+	@PostMapping(REQUEST)
 	ResponseEntity requestFriendship(
-			@RequestParam("usernameFrom") String usernameFrom,
-			@RequestParam("usernameTo") String usernameTo,
-			@RequestHeader("X-Password") String password
+			@RequestParam(USERNAME_FROM) String usernameFrom,
+			@RequestParam(USERNAME_TO) String usernameTo,
+			@RequestHeader(X_PASSWORD) String password
 	) {
 		friendShipService.request(
 				new User(usernameFrom),
@@ -33,11 +35,11 @@ public class FriendshipLegacyController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@PostMapping("/accept")
+	@PostMapping(ACCEPT)
 	ResponseEntity acceptFriendship(
-			@RequestParam("usernameFrom") String usernameFrom,
-			@RequestParam("usernameTo") String usernameTo,
-			@RequestHeader("X-Password") String password
+			@RequestParam(USERNAME_FROM) String usernameFrom,
+			@RequestParam(USERNAME_TO) String usernameTo,
+			@RequestHeader(X_PASSWORD) String password
 	) {
 		friendShipService.accept(
 				new User(usernameFrom),
@@ -47,11 +49,11 @@ public class FriendshipLegacyController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@PostMapping("/decline")
+	@PostMapping(DECLINE)
 	ResponseEntity declineFriendship(
-			@RequestParam("usernameFrom") String usernameFrom,
-			@RequestParam("usernameTo") String usernameTo,
-			@RequestHeader("X-Password") String password
+			@RequestParam(USERNAME_FROM) String usernameFrom,
+			@RequestParam(USERNAME_TO) String usernameTo,
+			@RequestHeader(X_PASSWORD) String password
 	) {
 		friendShipService.decline(
 				new User(usernameFrom),
@@ -61,10 +63,10 @@ public class FriendshipLegacyController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@GetMapping("/list")
+	@GetMapping(LIST)
 	Object listFriends(
-			@RequestParam("username") String username,
-			@RequestHeader("X-Password") String password
+			@RequestParam(USERNAME) String username,
+			@RequestHeader(X_PASSWORD) String password
 	) {
 		return friendShipService.list(new User(username), new Password(password));
 	}

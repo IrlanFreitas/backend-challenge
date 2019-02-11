@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.schibsted.spain.friends.legacy.Router.*;
+
 @RestController
-@RequestMapping("/signup")
+@RequestMapping(SIGN_UP_REQUEST_MAPPING)
 public class SignUpLegacyController {
 
 	private final SignUpService signUpService;
@@ -21,8 +23,8 @@ public class SignUpLegacyController {
 
 	@PostMapping
 	ResponseEntity signUp(
-			@RequestParam("username") String username,
-			@RequestHeader("X-Password") String password
+			@RequestParam(USERNAME) String username,
+			@RequestHeader(X_PASSWORD) String password
 	) {
 		signUpService.saveUser(new User(username), new Password(password));
 		return new ResponseEntity(HttpStatus.OK);

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
 
+import static com.schibsted.spain.friends.legacy.Router.*;
 import static java.util.Collections.emptySet;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
@@ -32,17 +33,11 @@ public class FriendshipLegacyControllerTest {
 
 	private final User userValid = new User("userValid");
 	private final Password password = new Password("123456789ab");
-	private static final String FRIENDSHIP_PATH = "/friendship/request";
-	private static final String ACCEPT_PATH = "/friendship/accept";
-	private static final String DECLINE_PATH = "/friendship/decline";
-	private static final String PASS_HEADER = "X-Password";
-	private static final String USERNAME_FROM = "usernameFrom";
-	private static final String USERNAME_TO = "usernameTo";
 
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
-		mockMvc.perform(post(FRIENDSHIP_PATH)
-				.header(PASS_HEADER, "asd")
+		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + REQUEST)
+				.header(X_PASSWORD, "asd")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, userValid.getName())
 		).andExpect(status().is4xxClientError());
@@ -50,8 +45,8 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenParamsAreOk() throws Exception {
-		mockMvc.perform(post(FRIENDSHIP_PATH)
-				.header(PASS_HEADER, "123456789ab")
+		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + REQUEST)
+				.header(X_PASSWORD, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());
@@ -62,8 +57,8 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenAcceptAndParamsAreOk() throws Exception {
-		mockMvc.perform(post(ACCEPT_PATH)
-				.header(PASS_HEADER, "123456789ab")
+		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + ACCEPT)
+				.header(X_PASSWORD, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());
@@ -74,8 +69,8 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenDeclineAndParamsAreOk() throws Exception {
-		mockMvc.perform(post(DECLINE_PATH)
-				.header(PASS_HEADER, "123456789ab")
+		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + DECLINE)
+				.header(X_PASSWORD, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());

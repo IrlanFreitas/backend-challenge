@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.schibsted.spain.friends.legacy.Router.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,30 +29,27 @@ public class SignUpLegacyControllerTest {
 
 	private final User userValid = new User("userValid");
 	private final Password passwordValid = new Password("123456789ab");
-	private static final String PATH = "/signup";
-	private static final String PASS_HEADER = "X-Password";
-	private static final String USERNAME = "username";
 
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
-		mockMvc.perform(post(PATH)
-				.header(PASS_HEADER, "123456")
+		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
+				.header(X_PASSWORD, "123456")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is4xxClientError());
 	}
 
 	@Test
 	public void expectedBadRequestWhenUserIsNotOk() throws Exception {
-		mockMvc.perform(post(PATH)
-				.header(PASS_HEADER, passwordValid.getPassword())
+		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
+				.header(X_PASSWORD, passwordValid.getPassword())
 				.param(USERNAME, "qwe")
 		).andExpect(status().is4xxClientError());
 	}
 
 	@Test
 	public void expectedStatusOkWhenInputIsOk() throws Exception {
-		mockMvc.perform(post(PATH)
-				.header(PASS_HEADER, "123456789ab")
+		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
+				.header(X_PASSWORD, "123456789ab")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 
