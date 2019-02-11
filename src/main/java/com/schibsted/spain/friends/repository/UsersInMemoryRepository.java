@@ -10,4 +10,9 @@ public class UsersInMemoryRepository implements UsersRepo {
 	public void save(String user, String password) {
 		users.put(user, password);
 	}
+
+	@Override
+	public boolean userExists(String existingUser) {
+		return users.containsKey(existingUser);
+	}
 }
