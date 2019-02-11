@@ -15,4 +15,9 @@ public class UsersInMemoryRepository implements UsersRepo {
 	public boolean userExists(String existingUser) {
 		return users.containsKey(existingUser);
 	}
+
+	@Override
+	public String getPassword(String username) {
+		return users.get(username);
+	}
 }
