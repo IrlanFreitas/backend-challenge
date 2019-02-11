@@ -3,9 +3,11 @@ package com.schibsted.spain.friends.repository;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
@@ -15,11 +17,13 @@ public class UsersInMemoryRepositoryTest {
 	private final String password = "123456";
 	private final String user = "user";
 	private final Set<String> userFriendRequests = newSet("requestOne", "requestTwo");
+	private final LinkedHashSet<String> userFriends = newLinkedHashSet("friendOne", "friendTwo");
 
 	@Before
 	public void setUp() {
 		usersRepository.save(user, password);
 		usersRepository.addRequest(user, userFriendRequests);
+		usersRepository.addAsFriends(user, userFriends);
 	}
 
 	@Test
@@ -56,6 +60,22 @@ public class UsersInMemoryRepositoryTest {
 	public void shouldReturnRequestSet() {
 		final Optional<Set> expected = Optional.of(userFriendRequests);
 		final Optional<Set<String>> actual = usersRepository.getFriendShipRequests(user);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldReturnEmptyFriends() {
+		final Optional<LinkedHashSet> expected = Optional.empty();
+		final Optional<Set<String>> actual = usersRepository.getFriends("notExisting");
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldReturnExpectedFriends() {
+		final Optional<LinkedHashSet> expected = Optional.of(userFriends);
+		final Optional<Set<String>> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}

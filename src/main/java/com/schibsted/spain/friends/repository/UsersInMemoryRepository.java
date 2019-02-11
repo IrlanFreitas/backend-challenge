@@ -1,9 +1,6 @@
 package com.schibsted.spain.friends.repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Optional.ofNullable;
@@ -11,6 +8,7 @@ import static java.util.Optional.ofNullable;
 public class UsersInMemoryRepository implements UsersRepo {
 	private static Map<String, String> users = new HashMap<>();
 	private static Map<String, Set<String>> requestList = new ConcurrentHashMap<>();
+	private static Map<String, LinkedHashSet<String>> friendList = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(String user, String password) {
@@ -37,4 +35,13 @@ public class UsersInMemoryRepository implements UsersRepo {
 		return ofNullable(requestList.get(user));
 	}
 
+	@Override
+	public void addAsFriends(String user, LinkedHashSet<String> list) {
+		friendList.put(user, list);
+	}
+
+	@Override
+	public Optional<Set<String>> getFriends(String user) {
+		return ofNullable(friendList.get(user));
+	}
 }
