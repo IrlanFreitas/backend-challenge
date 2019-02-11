@@ -35,7 +35,7 @@ public class SignUpLegacyControllerTest {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
 				.header(X_PASSWORD, "123456")
 				.param(USERNAME, userValid.getName())
-		).andExpect(status().is4xxClientError());
+		).andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class SignUpLegacyControllerTest {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
 				.header(X_PASSWORD, passwordValid.getPassword())
 				.param(USERNAME, "qwe")
-		).andExpect(status().is4xxClientError());
+		).andExpect(status().isBadRequest());
 	}
 
 	@Test

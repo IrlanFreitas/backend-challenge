@@ -40,7 +40,7 @@ public class FriendshipLegacyControllerTest {
 				.header(X_PASSWORD, "asd")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, userValid.getName())
-		).andExpect(status().is4xxClientError());
+		).andExpect(status().isBadRequest());
 	}
 
 	@Test
