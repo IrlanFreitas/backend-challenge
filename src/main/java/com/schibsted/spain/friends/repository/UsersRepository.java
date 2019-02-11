@@ -11,7 +11,7 @@ public class UsersRepository {
 
 	private static Map<String, String> users = new HashMap<>();
 	private static Map<String, Set<String>> requestList = new HashMap<>();
-	private static Map<String, Set<String>> friendList = new HashMap<>();
+	private static Map<String, LinkedHashSet<String>> friendList = new TreeMap<>();
 
 	public boolean userExists(String existingUser) {
 		return users.containsKey(existingUser);
@@ -41,7 +41,7 @@ public class UsersRepository {
 		addRequest(user, list);
 	}
 
-	public void addAsFriends(String user, Set<String> list) {
+	public void addAsFriends(String user, LinkedHashSet<String> list) {
 		friendList.put(user, list);
 	}
 }

@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -99,9 +100,9 @@ public class AcceptFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		Set<String> juanFriends = new HashSet<>();
+		LinkedHashSet<String> juanFriends = new LinkedHashSet<>();
 		Set<String> juanRequests = new HashSet<>();
-		Set<String> pepeFriends = new HashSet<>();
+		LinkedHashSet<String> pepeFriends = new LinkedHashSet<>();
 		Set<String> pepeRequests = new HashSet<>();
 		juanFriends.add("Margarita");
 		juanRequests.add(pepe.getName());

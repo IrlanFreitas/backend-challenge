@@ -74,7 +74,7 @@ public class FriendShipService {
 	}
 
 	private void addAsFriends(String from, String to) {
-		Set<String> list = new HashSet<>();
+		LinkedHashSet<String> list = new LinkedHashSet<>();
 		usersRepository.getFriends(from).ifPresent(list::addAll);
 		list.add(to);
 		usersRepository.addAsFriends(from, list);
