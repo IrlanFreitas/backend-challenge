@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.schibsted.spain.friends.legacy.Router.*;
+import static com.schibsted.spain.friends.configuration.Router.*;
 
 @RestController
 @RequestMapping(SIGN_UP_REQUEST_MAPPING)

@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
 
-import static com.schibsted.spain.friends.legacy.Router.*;
+import static com.schibsted.spain.friends.configuration.Router.*;
 import static java.util.Collections.emptySet;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
