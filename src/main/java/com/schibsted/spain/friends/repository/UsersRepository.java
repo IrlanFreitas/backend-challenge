@@ -1,12 +1,9 @@
 package com.schibsted.spain.friends.repository;
 
-import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 import static java.util.Optional.ofNullable;
 
-@Component
 public class UsersRepository {
 
 	private static Map<String, String> users = new HashMap<>();

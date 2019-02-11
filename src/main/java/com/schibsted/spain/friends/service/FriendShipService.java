@@ -3,8 +3,6 @@ package com.schibsted.spain.friends.service;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -13,12 +11,11 @@ import java.util.Set;
 
 import static java.util.Collections.emptySet;
 
-@Service
 public class FriendShipService {
 
 	private UsersRepository usersRepository;
 
-	FriendShipService(UsersRepository usersRepository) {
+	public FriendShipService(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 
