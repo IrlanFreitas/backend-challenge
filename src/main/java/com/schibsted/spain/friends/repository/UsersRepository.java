@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface UsersRepository {
+
 	void save(String user, String password);
 
 	boolean userExists(String existingUser);
