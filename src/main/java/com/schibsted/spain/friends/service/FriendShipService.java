@@ -2,7 +2,7 @@ package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
+import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -13,9 +13,9 @@ import static java.util.Collections.emptySet;
 
 public class FriendShipService {
 
-	private UsersRepository usersRepository;
+	private UsersInMemoryRepository usersRepository;
 
-	public FriendShipService(UsersRepository usersRepository) {
+	public FriendShipService(UsersInMemoryRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 
@@ -69,7 +69,7 @@ public class FriendShipService {
 		Set<String> list = new HashSet<>();
 		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 		list.remove(to);
-		usersRepository.deleteRequest(from, list);
+		usersRepository.addRequest(from, list);
 	}
 
 	private void addAsFriends(String from, String to) {

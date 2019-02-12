@@ -2,15 +2,13 @@ package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
-import org.assertj.core.util.Sets;
+import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class DeclineFriendShipServiceTest {
 
 	@Mock
-	private UsersRepository usersRepository;
+	private UsersInMemoryRepository usersRepository;
 
 	private FriendShipService friendShipService;
 	private final User notExisting = new User("notExists");
@@ -70,8 +68,8 @@ public class DeclineFriendShipServiceTest {
 		friendShipService.decline(pepe, password, juan);
 
 		juanRequests.remove(pepe.getName());
-		verify(usersRepository, times(1)).deleteRequest(juan.getName(), juanRequests);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
 		pepeRequests.remove(juan.getName());
-		verify(usersRepository, times(1)).deleteRequest(pepe.getName(), pepeRequests);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
 	}
 }

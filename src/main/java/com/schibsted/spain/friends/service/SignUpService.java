@@ -2,13 +2,13 @@ package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
+import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 
 public class SignUpService {
 
-	private final UsersRepository usersRepository;
+	private final UsersInMemoryRepository usersRepository;
 
-	public SignUpService(UsersRepository usersRepository) {
+	public SignUpService(UsersInMemoryRepository usersRepository) {
 		this.usersRepository = usersRepository;
 	}
 

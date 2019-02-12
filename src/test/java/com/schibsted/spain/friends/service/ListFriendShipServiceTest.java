@@ -2,14 +2,13 @@ package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
+import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class ListFriendShipServiceTest {
 
 	@Mock
-	private UsersRepository usersRepository;
+	private UsersInMemoryRepository usersRepository;
 
 	private FriendShipService friendShipService;
 	private final Password password = new Password("passWord123");

@@ -2,7 +2,7 @@ package com.schibsted.spain.friends.service;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
+import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class AcceptFriendShipServiceTest {
 
 	@Mock
-	private UsersRepository usersRepository;
+	private UsersInMemoryRepository usersRepository;
 
 	private FriendShipService friendShipService;
 	private final User notExisting = new User("notExists");
@@ -117,8 +117,8 @@ public class AcceptFriendShipServiceTest {
 		pepeFriends.add(juan.getName());
 		verify(usersRepository, times(1)).addAsFriends(pepe.getName(), pepeFriends);
 		juanRequests.remove(pepe.getName());
-		verify(usersRepository, times(1)).deleteRequest(juan.getName(), juanRequests);
+		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
 		pepeRequests.remove(juan.getName());
-		verify(usersRepository, times(1)).deleteRequest(pepe.getName(), pepeRequests);
+		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
 	}
 }
