@@ -4,7 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public interface UsersRepo {
+public interface UsersRepository {
 	void save(String user, String password);
 
 	boolean userExists(String existingUser);

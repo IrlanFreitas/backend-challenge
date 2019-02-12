@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Optional.ofNullable;
 
-public class UsersInMemoryRepository implements UsersRepo {
+public class UsersInMemoryRepository implements UsersRepository {
 	private static Map<String, String> users = new HashMap<>();
 	private static Map<String, Set<String>> requestList = new ConcurrentHashMap<>();
 	private static Map<String, LinkedHashSet<String>> friendList = new ConcurrentHashMap<>();
