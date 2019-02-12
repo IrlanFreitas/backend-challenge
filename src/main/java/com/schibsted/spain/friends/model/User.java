@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 
-public class User {
+public final class User {
 	private final String name;
 
 	public User(String name) {
