@@ -9,7 +9,7 @@ public class UsersInMemoryRepository implements UsersRepository {
 
 	private final static Map<String, String> users = new HashMap<>();
 	private final static Map<String, Set<String>> requestsMap = new ConcurrentHashMap<>();
-	private final static Map<String, LinkedHashSet<String>> friendsMap = new ConcurrentHashMap<>();
+	private final static Map<String, Set<String>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(String user, String password) {
