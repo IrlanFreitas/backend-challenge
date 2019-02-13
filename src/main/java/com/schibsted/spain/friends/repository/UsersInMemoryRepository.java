@@ -8,8 +8,8 @@ import static java.util.Optional.ofNullable;
 public class UsersInMemoryRepository implements UsersRepository {
 
 	private final static Map<String, String> users = new HashMap<>();
-	private final static Map<String, Set<String>> requestList = new ConcurrentHashMap<>();
-	private final static Map<String, LinkedHashSet<String>> friendList = new ConcurrentHashMap<>();
+	private final static Map<String, Set<String>> requestsMap = new ConcurrentHashMap<>();
+	private final static Map<String, LinkedHashSet<String>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(String user, String password) {
@@ -28,21 +28,21 @@ public class UsersInMemoryRepository implements UsersRepository {
 
 	@Override
 	public void addRequest(String user, Set<String> list) {
-		requestList.put(user, list);
+		requestsMap.put(user, list);
 	}
 
 	@Override
 	public Optional<Set<String>> getFriendShipRequests(String user) {
-		return ofNullable(requestList.get(user));
+		return ofNullable(requestsMap.get(user));
 	}
 
 	@Override
 	public void addAsFriends(String user, LinkedHashSet<String> list) {
-		friendList.put(user, list);
+		friendsMap.put(user, list);
 	}
 
 	@Override
 	public Optional<Set<String>> getFriends(String user) {
-		return ofNullable(friendList.get(user));
+		return ofNullable(friendsMap.get(user));
 	}
 }
