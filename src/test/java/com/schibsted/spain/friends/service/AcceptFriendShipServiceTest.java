@@ -33,10 +33,10 @@ public class AcceptFriendShipServiceTest {
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.userExists(notExisting)).thenReturn(false);
+		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.userExists(juan)).thenReturn(true);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -62,63 +62,63 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenAreFriends() {
-		final Set<String> friends = newLinkedHashSet(pepe.getName());
+		final Set<User> friends = newLinkedHashSet(pepe);
 
-		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((friends)));
+		when(usersRepository.getFriends(juan)).thenReturn(Optional.of((friends)));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenAreFriendsTo() {
-		final Set<String> juanFriends = newLinkedHashSet(pepe.getName());
+		final Set<User> juanFriends = newLinkedHashSet(pepe);
 
-		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of((emptySet())));
-		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((juanFriends)));
+		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of((emptySet())));
+		when(usersRepository.getFriends(juan)).thenReturn(Optional.of((juanFriends)));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenThereIsNoRequestFrom() {
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(emptySet()));
+		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(emptySet()));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenThereIsNoRequestTo() {
-		final Set<String> pepeRequest = new HashSet<>();
-		pepeRequest.add(juan.getName());
+		final Set<User> pepeRequest = new HashSet<>();
+		pepeRequest.add(juan);
 
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(emptySet()));
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequest));
+		when(usersRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(emptySet()));
+		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequest));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final LinkedHashSet<String> juanFriends = newLinkedHashSet("Margarita");
-		final Set<String> juanRequests = newLinkedHashSet(pepe.getName());
-		final LinkedHashSet<String> pepeFriends = new LinkedHashSet<>();
-		final Set<String> pepeRequests = newLinkedHashSet(juan.getName());
+		final LinkedHashSet<User> juanFriends = newLinkedHashSet(new User("Margarita"));
+		final Set<User> juanRequests = newLinkedHashSet(pepe);
+		final LinkedHashSet<User> pepeFriends = new LinkedHashSet<>();
+		final Set<User> pepeRequests = newLinkedHashSet(juan);
 
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
+		when(usersRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(juanRequests));
+		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
 
-		when(usersRepository.getFriends(juan.getName())).thenReturn(Optional.of((juanFriends)));
-		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of((pepeFriends)));
+		when(usersRepository.getFriends(juan)).thenReturn(Optional.of((juanFriends)));
+		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of((pepeFriends)));
 
 		friendShipService.accept(pepe, password, juan);
 
-		juanFriends.add(pepe.getName());
-		verify(usersRepository, times(1)).addAsFriends(juan.getName(), juanFriends);
-		pepeFriends.add(juan.getName());
-		verify(usersRepository, times(1)).addAsFriends(pepe.getName(), pepeFriends);
-		juanRequests.remove(pepe.getName());
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
-		pepeRequests.remove(juan.getName());
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
+		juanFriends.add(pepe);
+		verify(usersRepository, times(1)).addAsFriends(juan, juanFriends);
+		pepeFriends.add(juan);
+		verify(usersRepository, times(1)).addAsFriends(pepe, pepeFriends);
+		juanRequests.remove(pepe);
+		verify(usersRepository, times(1)).addRequest(juan, juanRequests);
+		pepeRequests.remove(juan);
+		verify(usersRepository, times(1)).addRequest(pepe, pepeRequests);
 	}
 }

@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.repository;
 
+import com.schibsted.spain.friends.model.Password;
+import com.schibsted.spain.friends.model.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,10 +16,10 @@ import static org.mockito.internal.util.collections.Sets.newSet;
 public class UsersInMemoryRepositoryTest {
 
 	private final UsersInMemoryRepository usersRepository = new UsersInMemoryRepository();
-	private final String password = "123456";
-	private final String user = "user";
-	private final Set<String> userFriendRequests = newSet("requestOne", "requestTwo");
-	private final LinkedHashSet<String> userFriends = newLinkedHashSet("friendOne", "friendTwo");
+	private final Password password = new Password("12345678");
+	private final User user = new User("userName");
+	private final Set<User> userFriendRequests = newSet(new User("requestOne"), new User("requestTwo"));
+	private final LinkedHashSet<User> userFriends = newLinkedHashSet(new User("friendOne"), new User("friendTwo"));
 
 	@Before
 	public void setUp() {
@@ -28,7 +30,7 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnFalseWhenUserDoesntExist() {
-		assertFalse(usersRepository.userExists("notExisting"));
+		assertFalse(usersRepository.userExists(new User("userUser")));
 	}
 
 	@Test
@@ -38,12 +40,12 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnNullWhenThereIsNoUser() {
-		assertNull(usersRepository.getPassword("notExisting"));
+		assertNull(usersRepository.getPassword(new User("userUser")));
 	}
 
 	@Test
 	public void shouldReturnPasswordTrueWhenUserIsSaved() {
-		final String actual = usersRepository.getPassword(user);
+		final Password actual = usersRepository.getPassword(user);
 
 		assertEquals(password, actual);
 	}
@@ -51,23 +53,23 @@ public class UsersInMemoryRepositoryTest {
 	@Test
 	public void shouldReturnEmpty() {
 		final Optional<Set> expected = Optional.empty();
-		final Optional<Set<String>> actual = usersRepository.getFriendShipRequests("notExisting");
+		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnRequestSet() {
-		final Optional<Set> expected = Optional.of(userFriendRequests);
-		final Optional<Set<String>> actual = usersRepository.getFriendShipRequests(user);
+		final Optional<Set<User>> expected = Optional.of(userFriendRequests);
+		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnEmptyFriends() {
-		final Optional<LinkedHashSet> expected = Optional.empty();
-		final Optional<Set<String>> actual = usersRepository.getFriends("notExisting");
+		final Optional<LinkedHashSet<User>> expected = Optional.empty();
+		final Optional<Set<User>> actual = usersRepository.getFriends(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
@@ -75,29 +77,40 @@ public class UsersInMemoryRepositoryTest {
 	@Test
 	public void shouldReturnExpectedFriends() {
 		final Optional<LinkedHashSet> expected = Optional.of(userFriends);
-		final Optional<Set<String>> actual = usersRepository.getFriends(user);
+		final Optional<Set<User>> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnUpdatedFriends() {
-		final LinkedHashSet<String> userFriends = newLinkedHashSet("friendOne", "friendTwo", "friendThree");
+		final LinkedHashSet<User> userFriends =
+				newLinkedHashSet(
+						new User("friendOne"),
+						new User("friendTwo"),
+						new User("friend3")
+				);
 		usersRepository.addAsFriends(user, userFriends);
 
-		final Optional<Set> expected = Optional.of(userFriends);
-		final Optional<Set<String>> actual = usersRepository.getFriends(user);
+		final Optional<Set<User>> expected = Optional.of(userFriends);
+		final Optional<Set<User>> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnUpdatedFriendsRequests() {
-		final Set<String> userFriendRequests = newSet("requestOne", "requestTwo", "requestThree");
+		final Set<User> userFriendRequests =
+				newSet(
+						new User("userUser"),
+						new User("userTwo"),
+						new User("userThree")
+
+				);
 		usersRepository.addRequest(user, userFriendRequests);
 
-		final Optional<Set<String>> expected = Optional.of(userFriendRequests);
-		final Optional<Set<String>> actual = usersRepository.getFriendShipRequests(user);
+		final Optional<Set<User>> expected = Optional.of(userFriendRequests);
+		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}

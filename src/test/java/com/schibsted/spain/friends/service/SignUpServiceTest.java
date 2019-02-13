@@ -30,7 +30,7 @@ public class SignUpServiceTest {
 	public void shouldThrowExpectedWhenUserExists() {
 		final User existingUser = new User("Existing");
 
-		when(usersRepository.userExists(existingUser.getName())).thenReturn(true);
+		when(usersRepository.userExists(existingUser)).thenReturn(true);
 
 		signUpService.saveUser(existingUser, null);
 	}
@@ -40,10 +40,10 @@ public class SignUpServiceTest {
 		final User user = new User("user123");
 		final Password password = new Password("12345678ab");
 
-		when(usersRepository.userExists(user.getName())).thenReturn(false);
+		when(usersRepository.userExists(user)).thenReturn(false);
 
 		signUpService.saveUser(user, password);
 
-		verify(usersRepository, times(1)).save(user.getName(), password.getPassword());
+		verify(usersRepository, times(1)).save(user, password);
 	}
 }

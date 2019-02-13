@@ -30,10 +30,10 @@ public class RequestFriendShipServiceTest {
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.userExists(notExisting)).thenReturn(false);
+		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.userExists(juan)).thenReturn(true);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -54,36 +54,36 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		final Set<String> pepeRequests = new HashSet<>();
-		pepeRequests.add(juan.getName());
+		final Set<User> pepeRequests = new HashSet<>();
+		pepeRequests.add(juan);
 
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
+		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		final Set<String> pepeFriends = new HashSet<>();
-		pepeFriends.add(juan.getName());
+		final Set<User> pepeFriends = new HashSet<>();
+		pepeFriends.add(juan);
 
-		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of(pepeFriends));
+		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldWorksWithNoRequestsReturn() {
-		final Set<String> pepeRequests = new HashSet<>();
-		pepeRequests.add(juan.getName());
+		final Set<User> pepeRequests = new HashSet<>();
+		pepeRequests.add(juan);
 
-		Set<String> juanRequests = new HashSet<>();
-		juanRequests.add(pepe.getName());
+		Set<User> juanRequests = new HashSet<>();
+		juanRequests.add(pepe);
 
 		friendShipService.request(pepe, password, juan);
 
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
+		verify(usersRepository, times(1)).addRequest(pepe, pepeRequests);
+		verify(usersRepository, times(1)).addRequest(juan, juanRequests);
 	}
 
 }

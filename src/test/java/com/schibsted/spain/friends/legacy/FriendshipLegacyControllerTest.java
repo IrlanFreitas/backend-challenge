@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.schibsted.spain.friends.configuration.Router.*;
-import static java.util.Collections.emptySet;
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -84,7 +86,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedOkWhenListAndParamsAreOk() {
 		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
-		final Set<String> set = newLinkedHashSet("Pepito", "Juanito");
+		final List<String> set = asList("Pepito", "Juanito");
 
 		final ResponseEntity expected = ResponseEntity.ok(set);
 
@@ -101,7 +103,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedEmptyWhenUserHasNoFriends() {
 		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
-		final Set<String> emptySet = emptySet();
+		final List<String> emptySet = emptyList();
 		final ResponseEntity expected = ResponseEntity.ok(emptySet);
 
 		when(friendShipService.list(userValid, password)).thenReturn(emptySet);
@@ -116,7 +118,7 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenGetFriendsAndParamsAreOk() throws Exception {
-		final Set<String> expected = emptySet();
+		final List<String> expected = emptyList();
 
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 

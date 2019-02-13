@@ -4,12 +4,10 @@ import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.util.Collections.emptySet;
+import static java.util.Collections.emptyList;
 
 public class FriendShipService {
 
@@ -21,77 +19,77 @@ public class FriendShipService {
 
 	public void request(User userFrom, Password password, User userTo) {
 		checkInputs(userFrom, password, userTo);
-		requestFriendship(userFrom.getName(), userTo.getName());
+		requestFriendship(userFrom, userTo);
 	}
 
 	public void accept(User from, Password password, User to) {
 		checkInputs(from, password, to);
-		acceptFriendShipRequest(from.getName(), to.getName());
+		acceptFriendShipRequest(from, to);
 	}
 
 	public void decline(User from, Password password, User to) {
 		checkInputs(from, password, to);
-		declineFriendShipRequest(from.getName(), to.getName());
+		declineFriendShipRequest(from, to);
 	}
 
-	private void acceptFriendShipRequest(String from, String to) {
+	private void acceptFriendShipRequest(User from, User to) {
 		throwExceptionIfFriends(from, to);
 		throwIfNotRequestExists(from, to);
 		saveAccept(from, to);
 	}
 
-	public Set<String> list(User user, Password password) {
+	public List<String> list(User user, Password password) {
 		checkIfUsersExist(user);
 		checkLogin(user, password);
-		if (usersRepository.getFriends(user.getName()).isPresent()) {
-			return usersRepository.getFriends(user.getName()).get();
+		if (usersRepository.getFriends(user).isPresent()) {
+			return usersRepository.getFriends(user).get().stream().map(User::getName).collect(Collectors.toList());
 		}
-		return emptySet();
+		return emptyList();
 	}
 
-	private void saveAccept(String from, String to) {
+	private void saveAccept(User from, User to) {
 		updateAccept(from, to);
 		updateAccept(to, from);
 	}
 
-	private void updateAccept(String from, String to) {
+	private void updateAccept(User from, User to) {
 		saveDecline(from, to);
 		addAsFriends(from, to);
 	}
 
-	private void declineFriendShipRequest(String from, String to) {
+	private void declineFriendShipRequest(User from, User to) {
 		throwIfNotRequestExists(from, to);
 		saveDecline(from, to);
 		saveDecline(to, from);
 	}
 
-	private void saveDecline(String from, String to) {
-		Set<String> list = new HashSet<>();
+	private void saveDecline(User from, User to) {
+		Set<User> list = new HashSet<>();
 		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 		list.remove(to);
 		usersRepository.addRequest(from, list);
 	}
 
-	private void addAsFriends(String from, String to) {
-		final LinkedHashSet<String> list = new LinkedHashSet<>();
+	private void addAsFriends(User from, User to) {
+		final LinkedHashSet<User> list = new LinkedHashSet<>();
 		usersRepository.getFriends(from).ifPresent(list::addAll);
 		list.add(to);
 		usersRepository.addAsFriends(from, list);
 	}
 
-	private void requestFriendship(String from, String to) {
+	private void requestFriendship(User from, User to) {
 		throwExceptionIfFriends(from, to);
 		checkDontRequestedBefore(from, to);
 		saveFriendShipRequest(from, to);
 	}
 
-	private void saveFriendShipRequest(String from, String to) {
+	private void saveFriendShipRequest(User from, User to) {
 		saveFriendShipSet(from, to);
 		saveFriendShipSet(to, from);
 	}
 
-	private void saveFriendShipSet(String from, String to) {
-		final Set<String> list = new HashSet<>();
+	private void saveFriendShipSet(User from, User to) {
+		final Set<User> list = new HashSet<>();
 		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 
 		list.add(to);
@@ -105,47 +103,47 @@ public class FriendShipService {
 		checkLogin(userFrom, password);
 	}
 
-	private void checkDontRequestedBefore(String from, String to) {
+	private void checkDontRequestedBefore(User from, User to) {
 		checkDontRequest(from, to);
 		checkDontRequest(to, from);
 	}
 
-	private void throwIfNotRequestExists(String from, String to) {
+	private void throwIfNotRequestExists(User from, User to) {
 		throwIfNotRequest(from, to);
 		throwIfNotRequest(to, from);
 	}
 
-	private void throwExceptionIfFriends(String from, String to) {
+	private void throwExceptionIfFriends(User from, User to) {
 		ifFriendsThrowException(from, to);
 		ifFriendsThrowException(to, from);
 	}
 
-	private void ifFriendsThrowException(String from, String to) {
+	private void ifFriendsThrowException(User from, User to) {
 		if (usersRepository.getFriends(from).isPresent() && usersRepository.getFriends(from).get().contains(to)) {
 			throw new IllegalArgumentException("Users are friends.");
 		}
 	}
 
-	private void throwIfNotRequest(String from, String to) {
+	private void throwIfNotRequest(User from, User to) {
 		if (!usersRepository.getFriendShipRequests(from).isPresent() || !usersRepository.getFriendShipRequests(from).get().contains(to)) {
 			throw new IllegalArgumentException("There is no friend request");
 		}
 	}
 
 	private void checkLogin(User userFrom, Password password) {
-		if (!password.getPassword().equals(usersRepository.getPassword(userFrom.getName()))) {
+		if (!password.equals(usersRepository.getPassword(userFrom))) {
 			throw new IllegalArgumentException("Wrong password");
 		}
 	}
 
 	private void checkIfUsersExist(User user) {
-		if (!usersRepository.userExists(user.getName())) {
+		if (!usersRepository.userExists(user)) {
 			throw new IllegalArgumentException("User doesn't exist");
 		}
 	}
 
-	private void checkDontRequest(String from, String to) {
-		final Optional<Set<String>> friendShipRequests = usersRepository.getFriendShipRequests(from);
+	private void checkDontRequest(User from, User to) {
+		final Optional<Set<User>> friendShipRequests = usersRepository.getFriendShipRequests(from);
 		if (friendShipRequests.isPresent() && friendShipRequests.get().contains(to)) {
 			throw new IllegalArgumentException("User has this request yet");
 		}

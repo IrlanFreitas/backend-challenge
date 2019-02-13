@@ -30,10 +30,10 @@ public class DeclineFriendShipServiceTest {
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.userExists(notExisting.getName())).thenReturn(false);
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
-		when(usersRepository.userExists(juan.getName())).thenReturn(true);
+		when(usersRepository.userExists(notExisting)).thenReturn(false);
+		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.userExists(juan)).thenReturn(true);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -59,17 +59,17 @@ public class DeclineFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final Set<String> juanRequests = newLinkedHashSet(pepe.getName());
-		final Set<String> pepeRequests = newLinkedHashSet(juan.getName());
+		final Set<User> juanRequests = newLinkedHashSet(pepe);
+		final Set<User> pepeRequests = newLinkedHashSet(juan);
 
-		when(usersRepository.getFriendShipRequests(juan.getName())).thenReturn(Optional.of(juanRequests));
-		when(usersRepository.getFriendShipRequests(pepe.getName())).thenReturn(Optional.of(pepeRequests));
+		when(usersRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(juanRequests));
+		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
 
 		friendShipService.decline(pepe, password, juan);
 
-		juanRequests.remove(pepe.getName());
-		verify(usersRepository, times(1)).addRequest(juan.getName(), juanRequests);
-		pepeRequests.remove(juan.getName());
-		verify(usersRepository, times(1)).addRequest(pepe.getName(), pepeRequests);
+		juanRequests.remove(pepe);
+		verify(usersRepository, times(1)).addRequest(juan, juanRequests);
+		pepeRequests.remove(juan);
+		verify(usersRepository, times(1)).addRequest(pepe, pepeRequests);
 	}
 }

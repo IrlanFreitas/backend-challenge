@@ -9,10 +9,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Collections.emptySet;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -30,8 +32,8 @@ public class ListFriendShipServiceTest {
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.getPassword(pepe.getName())).thenReturn(password.getPassword());
-		when(usersRepository.userExists(pepe.getName())).thenReturn(true);
+		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -46,19 +48,23 @@ public class ListFriendShipServiceTest {
 
 	@Test
 	public void shouldReturnEmptyListWhenHasNoFriends() {
-		final Set<String> expected = emptySet();
-		final Set<String> actual = friendShipService.list(pepe, password);
+		final List<String> expected = emptyList();
+		final List<String> actual = friendShipService.list(pepe, password);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnExpectedWhenUserHasFriends() {
-		final Set<String> pepeFriends = newLinkedHashSet("Margarita", "Juanito");
-		when(usersRepository.getFriends(pepe.getName())).thenReturn(Optional.of(pepeFriends));
+		final Set<User> pepeFriends =
+				newLinkedHashSet(
+						new User("Margarita"),
+						new User("Juanito")
+				);
+		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
 
-		final Set<String> expected = newLinkedHashSet("Margarita", "Juanito");
-		final Set<String> actual = friendShipService.list(pepe, password);
+		final List<String> expected = Arrays.asList("Margarita", "Juanito");
+		final List<String> actual = friendShipService.list(pepe, password);
 
 		assertEquals(expected, actual);
 	}

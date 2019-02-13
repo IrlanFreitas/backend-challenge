@@ -14,11 +14,11 @@ public class SignUpService {
 
 	public void saveUser(User user, Password password) {
 		checkIfUserExists(user);
-		usersRepository.save(user.getName(), password.getPassword());
+		usersRepository.save(user, password);
 	}
 
 	private void checkIfUserExists(User user) {
-		if (usersRepository.userExists(user.getName())) {
+		if (usersRepository.userExists(user)) {
 			throw new IllegalArgumentException("Username exists, try with another one.");
 		}
 	}
