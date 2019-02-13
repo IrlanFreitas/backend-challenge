@@ -79,4 +79,26 @@ public class UsersInMemoryRepositoryTest {
 
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	public void shouldReturnUpdatedFriends() {
+		final LinkedHashSet<String> userFriends = newLinkedHashSet("friendOne", "friendTwo", "friendThree");
+		usersRepository.addAsFriends(user, userFriends);
+
+		final Optional<Set> expected = Optional.of(userFriends);
+		final Optional<Set<String>> actual = usersRepository.getFriends(user);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldReturnUpdatedFriendsRequests() {
+		final Set<String> userFriendRequests = newSet("requestOne", "requestTwo", "requestThree");
+		usersRepository.addRequest(user, userFriendRequests);
+
+		final Optional<Set<String>> expected = Optional.of(userFriendRequests);
+		final Optional<Set<String>> actual = usersRepository.getFriendShipRequests(user);
+
+		assertEquals(expected, actual);
+	}
 }
