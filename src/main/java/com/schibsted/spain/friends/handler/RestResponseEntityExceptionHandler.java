@@ -25,7 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	}
 
 	@ExceptionHandler(value = {NotFoundException.class})
-	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
+	protected ResponseEntity<Object> returnNotFound(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(
 				ex,
 				ex.toString(),
