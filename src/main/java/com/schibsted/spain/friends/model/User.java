@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.model;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -48,7 +50,7 @@ public final class User {
 
 	private void throwExceptionIf(boolean b, String cause) {
 		if (b) {
-			throw new IllegalArgumentException(cause);
+			throw new BadRequestException(cause);
 		}
 	}
 }
