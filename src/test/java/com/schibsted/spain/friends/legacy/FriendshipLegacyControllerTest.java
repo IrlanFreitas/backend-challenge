@@ -13,12 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.schibsted.spain.friends.configuration.Router.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-import static org.assertj.core.util.Sets.newLinkedHashSet;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
