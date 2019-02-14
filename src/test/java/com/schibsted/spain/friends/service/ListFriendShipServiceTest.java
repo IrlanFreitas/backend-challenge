@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
+import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
@@ -36,12 +38,12 @@ public class ListFriendShipServiceTest {
 		when(usersRepository.userExists(pepe)).thenReturn(true);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenNotExistingUser() {
 		friendShipService.list(new User("NotExist"), password);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenPasswordWrong() {
 		friendShipService.list(pepe, new Password("wrongPass"));
 	}

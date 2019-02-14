@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
+import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
@@ -36,23 +38,23 @@ public class RequestFriendShipServiceTest {
 		when(usersRepository.userExists(juan)).thenReturn(true);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
 		friendShipService.request(notExisting, password, pepe);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenToUserDoesntExists() {
 		friendShipService.request(pepe, password, notExisting);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenPasswordIsNotCorrect() {
 		final Password wrong = new Password("wrongPass");
 		friendShipService.request(pepe, wrong, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
 		final Set<User> pepeRequests = new HashSet<>();
 		pepeRequests.add(juan);
@@ -62,7 +64,7 @@ public class RequestFriendShipServiceTest {
 		friendShipService.request(pepe, password, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestAreFriends() {
 		final Set<User> pepeFriends = new HashSet<>();
 		pepeFriends.add(juan);

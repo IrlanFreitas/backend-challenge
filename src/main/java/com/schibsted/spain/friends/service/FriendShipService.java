@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
+import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersRepository;
@@ -120,32 +122,32 @@ public class FriendShipService {
 
 	private void ifFriendsThrowException(User from, User to) {
 		if (usersRepository.getFriends(from).isPresent() && usersRepository.getFriends(from).get().contains(to)) {
-			throw new IllegalArgumentException("Users are friends.");
+			throw new BadRequestException("Users are friends.");
 		}
 	}
 
 	private void throwIfNotRequest(User from, User to) {
 		if (!usersRepository.getFriendShipRequests(from).isPresent() || !usersRepository.getFriendShipRequests(from).get().contains(to)) {
-			throw new IllegalArgumentException("There is no friend request");
+			throw new NotFoundException("There is no friend request");
 		}
 	}
 
 	private void checkLogin(User userFrom, Password password) {
 		if (!password.equals(usersRepository.getPassword(userFrom))) {
-			throw new IllegalArgumentException("Wrong password");
+			throw new BadRequestException("Wrong password");
 		}
 	}
 
 	private void checkIfUsersExist(User user) {
 		if (!usersRepository.userExists(user)) {
-			throw new IllegalArgumentException("User doesn't exist");
+			throw new NotFoundException("User doesn't exist");
 		}
 	}
 
 	private void checkDontRequest(User from, User to) {
 		final Optional<Set<User>> friendShipRequests = usersRepository.getFriendShipRequests(from);
 		if (friendShipRequests.isPresent() && friendShipRequests.get().contains(to)) {
-			throw new IllegalArgumentException("User has this request yet");
+			throw new BadRequestException("User has this request yet");
 		}
 	}
 }

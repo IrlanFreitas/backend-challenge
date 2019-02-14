@@ -1,5 +1,6 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
@@ -26,7 +27,7 @@ public class SignUpServiceTest {
 		signUpService = new SignUpService(usersRepository);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUserExists() {
 		final User existingUser = new User("Existing");
 

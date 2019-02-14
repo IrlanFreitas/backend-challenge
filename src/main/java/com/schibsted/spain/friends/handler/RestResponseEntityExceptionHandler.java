@@ -1,6 +1,7 @@
 package com.schibsted.spain.friends.handler;
 
 import com.schibsted.spain.friends.exceptions.BadRequestException;
+import com.schibsted.spain.friends.exceptions.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		);
 	}
 
-	@ExceptionHandler(value = {IllegalArgumentException.class})
+	@ExceptionHandler(value = {NotFoundException.class})
 	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(
 				ex,
 				ex.toString(),
 				new HttpHeaders(),
-				HttpStatus.BAD_REQUEST,
+				HttpStatus.NOT_FOUND,
 				request
 		);
 	}

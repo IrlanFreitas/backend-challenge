@@ -1,5 +1,7 @@
 package com.schibsted.spain.friends.service;
 
+import com.schibsted.spain.friends.exceptions.BadRequestException;
+import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
@@ -39,28 +41,28 @@ public class AcceptFriendShipServiceTest {
 		when(usersRepository.userExists(juan)).thenReturn(true);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
 		friendShipService.accept(notExisting, password, pepe);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenToUserDoesntExists() {
 		friendShipService.accept(pepe, password, notExisting);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenPasswordIsNotCorrect() {
 		final Password wrong = new Password("wrongPass");
 		friendShipService.accept(pepe, wrong, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldThrowExceptionIfUserHasNoRequest() {
 		friendShipService.accept(pepe, password, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriends() {
 		final Set<User> friends = newLinkedHashSet(pepe);
 
@@ -69,7 +71,7 @@ public class AcceptFriendShipServiceTest {
 		friendShipService.accept(pepe, password, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriendsTo() {
 		final Set<User> juanFriends = newLinkedHashSet(pepe);
 
@@ -79,14 +81,14 @@ public class AcceptFriendShipServiceTest {
 		friendShipService.accept(pepe, password, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenThereIsNoRequestFrom() {
 		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(emptySet()));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenThereIsNoRequestTo() {
 		final Set<User> pepeRequest = new HashSet<>();
 		pepeRequest.add(juan);
