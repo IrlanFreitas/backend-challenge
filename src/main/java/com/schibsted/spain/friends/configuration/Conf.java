@@ -15,37 +15,37 @@ import org.springframework.context.annotation.Configuration;
 public class Conf {
 
 	@Bean
-	public FriendsRepository friendsRepository() {
+	public UsersInMemoryRepository usersInMemoryRepository() {
 		return new UsersInMemoryRepository();
 	}
 
 	@Bean
-	public PasswordsRepository passwordsRepository() {
-		return new UsersInMemoryRepository();
+	public SignUpService signUpService(
+			PasswordsRepository passwordsRepository
+	) {
+		return new SignUpService(passwordsRepository);
 	}
 
 	@Bean
-	public RequestsRepository requestsRepository() {
-		return new UsersInMemoryRepository();
+	public FriendShipService friendShipService(
+			PasswordsRepository passwordsRepository,
+			FriendsRepository friendsRepository,
+			RequestsRepository requestsRepository
+	) {
+		return new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
 	}
 
 	@Bean
-	public SignUpService signUpService() {
-		return new SignUpService(passwordsRepository());
+	public SignUpLegacyController signUpLegacyController(
+			SignUpService signUpService
+	) {
+		return new SignUpLegacyController(signUpService);
 	}
 
 	@Bean
-	public FriendShipService friendShipService() {
-		return new FriendShipService(passwordsRepository(), friendsRepository(), requestsRepository());
-	}
-
-	@Bean
-	public SignUpLegacyController signUpLegacyController() {
-		return new SignUpLegacyController(signUpService());
-	}
-
-	@Bean
-	public FriendshipLegacyController friendshipLegacyController() {
-		return new FriendshipLegacyController(friendShipService());
+	public FriendshipLegacyController friendshipLegacyController(
+			FriendShipService friendShipService
+	) {
+		return new FriendshipLegacyController(friendShipService);
 	}
 }

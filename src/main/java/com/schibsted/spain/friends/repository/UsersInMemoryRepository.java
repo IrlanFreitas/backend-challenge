@@ -10,9 +10,9 @@ import static java.util.Optional.ofNullable;
 
 public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepository, RequestsRepository {
 
-	private final static Map<User, Password> users = new HashMap<>();
-	private final static Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
-	private final static Map<User, Set<User>> friendsMap = new ConcurrentHashMap<>();
+	private final Map<User, Password> users = new HashMap<>();
+	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
+	private final Map<User, Set<User>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(User user, Password password) {
