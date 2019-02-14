@@ -4,7 +4,9 @@ import com.schibsted.spain.friends.exceptions.BadRequestException;
 import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersRepository;
+import com.schibsted.spain.friends.repository.FriendsRepository;
+import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.RequestsRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,10 +15,18 @@ import static java.util.Collections.emptyList;
 
 public class FriendShipService {
 
-	private UsersRepository usersRepository;
+	private PasswordsRepository passwordsRepository;
+	private FriendsRepository friendsRepository;
+	private RequestsRepository requestsRepository;
 
-	public FriendShipService(UsersRepository usersRepository) {
-		this.usersRepository = usersRepository;
+	public FriendShipService(
+			PasswordsRepository passwordsRepository,
+			FriendsRepository friendsRepository,
+			RequestsRepository requestsRepository
+	) {
+		this.passwordsRepository = passwordsRepository;
+		this.friendsRepository = friendsRepository;
+		this.requestsRepository = requestsRepository;
 	}
 
 	public void request(User userFrom, Password password, User userTo) {
@@ -43,8 +53,8 @@ public class FriendShipService {
 	public List<String> list(User user, Password password) {
 		checkIfUsersExist(user);
 		checkLogin(user, password);
-		if (usersRepository.getFriends(user).isPresent()) {
-			return usersRepository.getFriends(user).get().stream().map(User::getName).collect(Collectors.toList());
+		if (friendsRepository.getFriends(user).isPresent()) {
+			return friendsRepository.getFriends(user).get().stream().map(User::getName).collect(Collectors.toList());
 		}
 		return emptyList();
 	}
@@ -67,16 +77,16 @@ public class FriendShipService {
 
 	private void saveDecline(User from, User to) {
 		Set<User> list = new HashSet<>();
-		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
+		requestsRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 		list.remove(to);
-		usersRepository.addRequest(from, list);
+		requestsRepository.addRequest(from, list);
 	}
 
 	private void addAsFriends(User from, User to) {
 		final LinkedHashSet<User> list = new LinkedHashSet<>();
-		usersRepository.getFriends(from).ifPresent(list::addAll);
+		friendsRepository.getFriends(from).ifPresent(list::addAll);
 		list.add(to);
-		usersRepository.addAsFriends(from, list);
+		friendsRepository.addAsFriends(from, list);
 	}
 
 	private void requestFriendship(User from, User to) {
@@ -92,11 +102,11 @@ public class FriendShipService {
 
 	private void saveFriendShipSet(User from, User to) {
 		final Set<User> list = new HashSet<>();
-		usersRepository.getFriendShipRequests(from).ifPresent(list::addAll);
+		requestsRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 
 		list.add(to);
 
-		usersRepository.addRequest(from, list);
+		requestsRepository.addRequest(from, list);
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
@@ -121,31 +131,31 @@ public class FriendShipService {
 	}
 
 	private void ifFriendsThrowException(User from, User to) {
-		if (usersRepository.getFriends(from).isPresent() && usersRepository.getFriends(from).get().contains(to)) {
+		if (friendsRepository.getFriends(from).isPresent() && friendsRepository.getFriends(from).get().contains(to)) {
 			throw new BadRequestException("Users are friends.");
 		}
 	}
 
 	private void throwIfNotRequest(User from, User to) {
-		if (!usersRepository.getFriendShipRequests(from).isPresent() || !usersRepository.getFriendShipRequests(from).get().contains(to)) {
+		if (!requestsRepository.getFriendShipRequests(from).isPresent() || !requestsRepository.getFriendShipRequests(from).get().contains(to)) {
 			throw new NotFoundException("There is no friend request");
 		}
 	}
 
 	private void checkLogin(User userFrom, Password password) {
-		if (!password.equals(usersRepository.getPassword(userFrom))) {
+		if (!password.equals(passwordsRepository.getPassword(userFrom))) {
 			throw new BadRequestException("Wrong password");
 		}
 	}
 
 	private void checkIfUsersExist(User user) {
-		if (!usersRepository.userExists(user)) {
+		if (!passwordsRepository.userExists(user)) {
 			throw new NotFoundException("User doesn't exist");
 		}
 	}
 
 	private void checkDontRequest(User from, User to) {
-		final Optional<Set<User>> friendShipRequests = usersRepository.getFriendShipRequests(from);
+		final Optional<Set<User>> friendShipRequests = requestsRepository.getFriendShipRequests(from);
 		if (friendShipRequests.isPresent() && friendShipRequests.get().contains(to)) {
 			throw new BadRequestException("User has this request yet");
 		}

@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Optional.ofNullable;
 
-public class UsersInMemoryRepository implements UsersRepository {
+public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepository, RequestsRepository {
 
 	private final static Map<User, Password> users = new HashMap<>();
 	private final static Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();

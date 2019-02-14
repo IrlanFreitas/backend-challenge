@@ -4,7 +4,9 @@ import com.schibsted.spain.friends.exceptions.BadRequestException;
 import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
+import com.schibsted.spain.friends.repository.FriendsRepository;
+import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.RequestsRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +23,13 @@ import static org.mockito.Mockito.*;
 public class RequestFriendShipServiceTest {
 
 	@Mock
-	private UsersInMemoryRepository usersRepository;
+	private PasswordsRepository passwordsRepository;
+
+	@Mock
+	private FriendsRepository friendsRepository;
+
+	@Mock
+	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
 	private final User notExisting = new User("notExists");
@@ -31,11 +39,11 @@ public class RequestFriendShipServiceTest {
 
 	@Before
 	public void setUp() {
-		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.userExists(notExisting)).thenReturn(false);
-		when(usersRepository.getPassword(pepe)).thenReturn(password);
-		when(usersRepository.userExists(pepe)).thenReturn(true);
-		when(usersRepository.userExists(juan)).thenReturn(true);
+		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
+		when(passwordsRepository.userExists(notExisting)).thenReturn(false);
+		when(passwordsRepository.getPassword(pepe)).thenReturn(password);
+		when(passwordsRepository.userExists(pepe)).thenReturn(true);
+		when(passwordsRepository.userExists(juan)).thenReturn(true);
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -59,7 +67,7 @@ public class RequestFriendShipServiceTest {
 		final Set<User> pepeRequests = new HashSet<>();
 		pepeRequests.add(juan);
 
-		when(usersRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -69,7 +77,7 @@ public class RequestFriendShipServiceTest {
 		final Set<User> pepeFriends = new HashSet<>();
 		pepeFriends.add(juan);
 
-		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
+		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
 
 		friendShipService.request(pepe, password, juan);
 	}
@@ -84,8 +92,8 @@ public class RequestFriendShipServiceTest {
 
 		friendShipService.request(pepe, password, juan);
 
-		verify(usersRepository, times(1)).addRequest(pepe, pepeRequests);
-		verify(usersRepository, times(1)).addRequest(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 	}
 
 }

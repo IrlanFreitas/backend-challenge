@@ -4,7 +4,9 @@ import com.schibsted.spain.friends.exceptions.BadRequestException;
 import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
-import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
+import com.schibsted.spain.friends.repository.FriendsRepository;
+import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.RequestsRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,13 @@ import static org.mockito.Mockito.when;
 public class ListFriendShipServiceTest {
 
 	@Mock
-	private UsersInMemoryRepository usersRepository;
+	private PasswordsRepository passwordsRepository;
+
+	@Mock
+	private FriendsRepository friendsRepository;
+
+	@Mock
+	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
 	private final Password password = new Password("passWord123");
@@ -33,9 +41,9 @@ public class ListFriendShipServiceTest {
 
 	@Before
 	public void setUp() {
-		friendShipService = new FriendShipService(usersRepository);
-		when(usersRepository.getPassword(pepe)).thenReturn(password);
-		when(usersRepository.userExists(pepe)).thenReturn(true);
+		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
+		when(passwordsRepository.getPassword(pepe)).thenReturn(password);
+		when(passwordsRepository.userExists(pepe)).thenReturn(true);
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -63,7 +71,7 @@ public class ListFriendShipServiceTest {
 						new User("Margarita"),
 						new User("Juanito")
 				);
-		when(usersRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
+		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
 
 		final List<String> expected = Arrays.asList("Margarita", "Juanito");
 		final List<String> actual = friendShipService.list(pepe, password);
