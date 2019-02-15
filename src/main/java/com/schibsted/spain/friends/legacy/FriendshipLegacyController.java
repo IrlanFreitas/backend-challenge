@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import static com.schibsted.spain.friends.configuration.Router.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@RestController
 @RequestMapping(FRIENDSHIP_REQUEST_MAPPING)
 public class FriendshipLegacyController {
 
