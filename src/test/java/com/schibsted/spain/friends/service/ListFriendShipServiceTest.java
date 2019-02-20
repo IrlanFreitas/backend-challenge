@@ -13,14 +13,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -65,15 +65,33 @@ public class ListFriendShipServiceTest {
 	}
 
 	@Test
-	public void shouldReturnExpectedWhenUserHasFriends() {
-		final Set<User> pepeFriends =
+	public void shouldFailWhenThereIsNoOrder() {
+		final LinkedHashSet<User> pepeFriends =
 				newLinkedHashSet(
 						new User("Margarita"),
 						new User("Juanito")
 				);
-		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
 
-		final List<String> expected = Arrays.asList("Margarita", "Juanito");
+		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
+
+		final List<String> expected = asList("Juanito", "Margarita");
+		final List<String> actual = friendShipService.list(pepe, password);
+
+		assertNotEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldReturnExpectedWhenUserHasFriends() {
+		final LinkedHashSet<User> pepeFriends =
+				newLinkedHashSet(
+						new User("Margarita"),
+						new User("Juanito")
+				);
+
+		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
+
+
+		final List<String> expected = asList("Margarita", "Juanito");
 		final List<String> actual = friendShipService.list(pepe, password);
 
 		assertEquals(expected, actual);

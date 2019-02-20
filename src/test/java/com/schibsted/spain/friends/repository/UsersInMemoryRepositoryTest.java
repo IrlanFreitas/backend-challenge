@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.util.Sets.newHashSet;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
@@ -52,32 +52,32 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnEmpty() {
-		final Optional<Set> expected = Optional.empty();
-		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(new User("userUser"));
+		final Set expected = newHashSet();
+		final Set<User> actual = usersRepository.getFriendShipRequests(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnRequestSet() {
-		final Optional<Set<User>> expected = Optional.of(userFriendRequests);
-		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(user);
+		final Set<User> expected = userFriendRequests;
+		final Set<User> actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnEmptyFriends() {
-		final Optional<LinkedHashSet<User>> expected = Optional.empty();
-		final Optional<Set<User>> actual = usersRepository.getFriends(new User("userUser"));
+		final LinkedHashSet<User> expected = newLinkedHashSet();
+		final Set<User> actual = usersRepository.getFriends(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnExpectedFriends() {
-		final Optional<LinkedHashSet> expected = Optional.of(userFriends);
-		final Optional<Set<User>> actual = usersRepository.getFriends(user);
+		final LinkedHashSet expected = userFriends;
+		final Set<User> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
@@ -92,8 +92,8 @@ public class UsersInMemoryRepositoryTest {
 				);
 		usersRepository.addAsFriends(user, userFriends);
 
-		final Optional<Set<User>> expected = Optional.of(userFriends);
-		final Optional<Set<User>> actual = usersRepository.getFriends(user);
+		final Set<User> expected = userFriends;
+		final Set<User> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
@@ -109,8 +109,8 @@ public class UsersInMemoryRepositoryTest {
 				);
 		usersRepository.addRequest(user, userFriendRequests);
 
-		final Optional<Set<User>> expected = Optional.of(userFriendRequests);
-		final Optional<Set<User>> actual = usersRepository.getFriendShipRequests(user);
+		final Set<User> expected = userFriendRequests;
+		final Set<User> actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}

@@ -13,11 +13,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.util.collections.Sets.newSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RequestFriendShipServiceTest {
@@ -64,31 +65,26 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		final Set<User> pepeRequests = new HashSet<>();
-		pepeRequests.add(juan);
+		final Set<User> pepeRequests = newSet(juan);
 
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		final Set<User> pepeFriends = new HashSet<>();
-		pepeFriends.add(juan);
+		final LinkedHashSet<User> pepeFriends = newLinkedHashSet(juan);
 
-		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of(pepeFriends));
+		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
 		friendShipService.request(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldWorksWithNoRequestsReturn() {
-		final Set<User> pepeRequests = new HashSet<>();
-		pepeRequests.add(juan);
-
-		Set<User> juanRequests = new HashSet<>();
-		juanRequests.add(pepe);
+		final Set<User> pepeRequests = newSet(juan);
+		final Set<User> juanRequests = newSet(pepe);
 
 		friendShipService.request(pepe, password, juan);
 

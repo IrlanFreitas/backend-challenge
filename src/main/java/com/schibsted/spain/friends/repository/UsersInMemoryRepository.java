@@ -6,13 +6,11 @@ import com.schibsted.spain.friends.model.User;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Optional.ofNullable;
-
 public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepository, RequestsRepository {
 
 	private final Map<User, Password> users = new HashMap<>();
 	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
-	private final Map<User, Set<User>> friendsMap = new ConcurrentHashMap<>();
+	private final Map<User, LinkedHashSet<User>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(User user, Password password) {
@@ -35,8 +33,11 @@ public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepo
 	}
 
 	@Override
-	public Optional<Set<User>> getFriendShipRequests(User user) {
-		return ofNullable(requestsMap.get(user));
+	public Set<User> getFriendShipRequests(User user) {
+		if (requestsMap.containsKey(user)) {
+			return requestsMap.get(user);
+		}
+		return new HashSet<>();
 	}
 
 	@Override
@@ -45,7 +46,10 @@ public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepo
 	}
 
 	@Override
-	public Optional<Set<User>> getFriends(User user) {
-		return ofNullable(friendsMap.get(user));
+	public LinkedHashSet<User> getFriends(User user) {
+		if (friendsMap.containsKey(user)) {
+			return friendsMap.get(user);
+		}
+		return new LinkedHashSet<>();
 	}
 }

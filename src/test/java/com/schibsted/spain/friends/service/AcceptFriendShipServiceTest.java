@@ -13,14 +13,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Collections.emptySet;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.util.collections.Sets.newSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AcceptFriendShipServiceTest {
@@ -72,37 +71,36 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriends() {
-		final Set<User> friends = newLinkedHashSet(pepe);
+		final LinkedHashSet<User> friends = newLinkedHashSet(pepe);
 
-		when(friendsRepository.getFriends(juan)).thenReturn(Optional.of((friends)));
+		when(friendsRepository.getFriends(juan)).thenReturn(friends);
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriendsTo() {
-		final Set<User> juanFriends = newLinkedHashSet(pepe);
+		final LinkedHashSet<User> juanFriends = newLinkedHashSet(pepe);
 
-		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of((emptySet())));
-		when(friendsRepository.getFriends(juan)).thenReturn(Optional.of((juanFriends)));
+		when(friendsRepository.getFriends(pepe)).thenReturn(new LinkedHashSet<>());
+		when(friendsRepository.getFriends(juan)).thenReturn(juanFriends);
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenThereIsNoRequestFrom() {
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(emptySet()));
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(emptySet());
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenThereIsNoRequestTo() {
-		final Set<User> pepeRequest = new HashSet<>();
-		pepeRequest.add(juan);
+		final Set<User> pepeRequest = newSet(juan);
 
-		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(emptySet()));
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequest));
+		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(emptySet());
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequest);
 
 		friendShipService.accept(pepe, password, juan);
 	}
@@ -110,25 +108,27 @@ public class AcceptFriendShipServiceTest {
 	@Test
 	public void shouldCallMethodAddAsFriend() {
 		final LinkedHashSet<User> juanFriends = newLinkedHashSet(new User("Margarita"));
-		final Set<User> juanRequests = newLinkedHashSet(pepe);
+		final Set<User> juanRequests = newSet(pepe);
 		final LinkedHashSet<User> pepeFriends = new LinkedHashSet<>();
-		final Set<User> pepeRequests = newLinkedHashSet(juan);
+		final Set<User> pepeRequests = newSet(juan);
 
-		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(juanRequests));
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
+		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(juanRequests);
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
-		when(friendsRepository.getFriends(juan)).thenReturn(Optional.of((juanFriends)));
-		when(friendsRepository.getFriends(pepe)).thenReturn(Optional.of((pepeFriends)));
+		when(friendsRepository.getFriends(juan)).thenReturn(juanFriends);
+		when(friendsRepository.getFriends(pepe)).thenReturn((pepeFriends));
 
 		friendShipService.accept(pepe, password, juan);
 
 		juanFriends.add(pepe);
-		verify(friendsRepository, times(1)).addAsFriends(juan, juanFriends);
 		pepeFriends.add(juan);
-		verify(friendsRepository, times(1)).addAsFriends(pepe, pepeFriends);
 		juanRequests.remove(pepe);
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 		pepeRequests.remove(juan);
+
+		verify(friendsRepository, times(1)).addAsFriends(juan, juanFriends);
+		verify(friendsRepository, times(1)).addAsFriends(pepe, pepeFriends);
+
+		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
 	}
 }

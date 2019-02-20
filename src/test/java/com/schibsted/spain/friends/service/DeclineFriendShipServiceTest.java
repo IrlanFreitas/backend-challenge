@@ -13,11 +13,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Optional;
 import java.util.Set;
 
-import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
+import static org.mockito.internal.util.collections.Sets.newSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeclineFriendShipServiceTest {
@@ -32,8 +31,8 @@ public class DeclineFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
-	private final User notExisting = new User("notExists");
 	private final Password password = new Password("passWord123");
+	private final User notExisting = new User("notExists");
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
 
@@ -69,17 +68,18 @@ public class DeclineFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final Set<User> juanRequests = newLinkedHashSet(pepe);
-		final Set<User> pepeRequests = newLinkedHashSet(juan);
+		final Set<User> juanRequests = newSet(pepe);
+		final Set<User> pepeRequests = newSet(juan);
 
-		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(Optional.of(juanRequests));
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(Optional.of(pepeRequests));
+		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(juanRequests);
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
 		friendShipService.decline(pepe, password, juan);
 
 		juanRequests.remove(pepe);
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 		pepeRequests.remove(juan);
+
+		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
 	}
 }
