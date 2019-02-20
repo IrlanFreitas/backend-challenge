@@ -41,13 +41,13 @@ public class FriendShipService {
 
 	public void decline(User from, Password password, User to) {
 		checkInputs(from, password, to);
-		declineFriendShipRequest(from, to);
+		declineRequest(from, to);
 	}
 
 	private void acceptFriendShipRequest(User from, User to) {
-		throwExceptionIfFriends(from, to);
-		throwIfNotRequestExists(from, to);
-		saveAccept(from, to);
+		checkArentFriends(from, to);
+		checkRequestExists(from, to);
+		saveAsFriends(from, to);
 	}
 
 	public List<String> list(User user, Password password) {
@@ -59,30 +59,30 @@ public class FriendShipService {
 		return emptyList();
 	}
 
-	private void saveAccept(User from, User to) {
+	private synchronized void saveAsFriends(User from, User to) {
 		updateAccept(from, to);
 		updateAccept(to, from);
 	}
 
 	private void updateAccept(User from, User to) {
-		saveDecline(from, to);
-		addAsFriends(from, to);
+		deleteRequest(from, to);
+		updateFriend(from, to);
 	}
 
-	private void declineFriendShipRequest(User from, User to) {
-		throwIfNotRequestExists(from, to);
-		saveDecline(from, to);
-		saveDecline(to, from);
+	private synchronized void declineRequest(User from, User to) {
+		checkRequestExists(from, to);
+		deleteRequest(from, to);
+		deleteRequest(to, from);
 	}
 
-	private void saveDecline(User from, User to) {
+	private void deleteRequest(User from, User to) {
 		Set<User> list = new HashSet<>();
 		requestsRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 		list.remove(to);
 		requestsRepository.addRequest(from, list);
 	}
 
-	private void addAsFriends(User from, User to) {
+	private void updateFriend(User from, User to) {
 		final LinkedHashSet<User> list = new LinkedHashSet<>();
 		friendsRepository.getFriends(from).ifPresent(list::addAll);
 		list.add(to);
@@ -90,17 +90,17 @@ public class FriendShipService {
 	}
 
 	private void requestFriendship(User from, User to) {
-		throwExceptionIfFriends(from, to);
+		checkArentFriends(from, to);
 		checkDontRequestedBefore(from, to);
-		saveFriendShipRequest(from, to);
+		saveRequests(from, to);
 	}
 
-	private void saveFriendShipRequest(User from, User to) {
-		saveFriendShipSet(from, to);
-		saveFriendShipSet(to, from);
+	private synchronized void saveRequests(User from, User to) {
+		addRequest(from, to);
+		addRequest(to, from);
 	}
 
-	private void saveFriendShipSet(User from, User to) {
+	private void addRequest(User from, User to) {
 		final Set<User> list = new HashSet<>();
 		requestsRepository.getFriendShipRequests(from).ifPresent(list::addAll);
 
@@ -120,17 +120,17 @@ public class FriendShipService {
 		checkDontRequest(to, from);
 	}
 
-	private void throwIfNotRequestExists(User from, User to) {
+	private void checkRequestExists(User from, User to) {
 		throwIfNotRequest(from, to);
 		throwIfNotRequest(to, from);
 	}
 
-	private void throwExceptionIfFriends(User from, User to) {
-		ifFriendsThrowException(from, to);
-		ifFriendsThrowException(to, from);
+	private void checkArentFriends(User from, User to) {
+		checkUserContainsInFriendList(from, to);
+		checkUserContainsInFriendList(to, from);
 	}
 
-	private void ifFriendsThrowException(User from, User to) {
+	private void checkUserContainsInFriendList(User from, User to) {
 		if (friendsRepository.getFriends(from).isPresent() && friendsRepository.getFriends(from).get().contains(to)) {
 			throw new BadRequestException("Users are friends.");
 		}
