@@ -10,6 +10,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -18,11 +21,17 @@ public class SignUpServiceTest {
 	@Mock
 	private UsersInMemoryRepository usersRepository;
 
+	@Mock
+	private UsersInMemoryRepository friendShipRepository;
+
+	@Mock
+	private UsersInMemoryRepository requestRepository;
+
 	private SignUpService signUpService;
 
 	@Before
 	public void setUp() {
-		signUpService = new SignUpService(usersRepository);
+		signUpService = new SignUpService(usersRepository, friendShipRepository, requestRepository);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -44,5 +53,7 @@ public class SignUpServiceTest {
 		signUpService.saveUser(user, password);
 
 		verify(usersRepository, times(1)).save(user, password);
+		verify(requestRepository, times(1)).addRequest(user, new HashSet<>());
+		verify(friendShipRepository, times(1)).addAsFriends(user, new LinkedHashSet<>());
 	}
 }

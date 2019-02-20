@@ -21,9 +21,11 @@ public class Conf {
 
 	@Bean
 	public SignUpService signUpService(
-			PasswordsRepository passwordsRepository
+			PasswordsRepository passwordsRepository,
+			FriendsRepository friendsRepository,
+			RequestsRepository requestsRepository
 	) {
-		return new SignUpService(passwordsRepository);
+		return new SignUpService(passwordsRepository, friendsRepository, requestsRepository);
 	}
 
 	@Bean
