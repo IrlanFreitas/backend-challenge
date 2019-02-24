@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public class FriendShipService {
 
-	private PasswordsRepository passwordsRepository;
-	private FriendsRepository friendsRepository;
-	private RequestsRepository requestsRepository;
+	private final PasswordsRepository passwordsRepository;
+	private final FriendsRepository friendsRepository;
+	private final RequestsRepository requestsRepository;
 
 	public FriendShipService(
 			PasswordsRepository passwordsRepository,

@@ -19,6 +19,25 @@ public final class User {
 		return name;
 	}
 
+	private void checkRestrictions(String name) {
+		throwExceptionIf(name == null, "Username cant be null.");
+
+		throwExceptionIf(name.trim().isEmpty(), "Username cant be empty.");
+
+		throwExceptionIf(name.length() < 5, "Username has to be > 8.");
+
+		throwExceptionIf(name.length() > 10, "Username has to be < 12.");
+
+		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(name).find(),
+				"Username has to be alphanumeric.");
+	}
+
+	private void throwExceptionIf(boolean condition, String cause) {
+		if (condition) {
+			throw new BadRequestException(cause);
+		}
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -30,27 +49,5 @@ public final class User {
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
-	}
-
-	private void checkRestrictions(String name) {
-		throwExceptionIf(name == null, "Username cant be null.");
-
-		throwExceptionIf(name.isEmpty(),
-				"Username cant be empty.");
-
-		throwExceptionIf(name.length() < 5,
-				"Username has to be > 8.");
-
-		throwExceptionIf(name.length() > 10,
-				"Username has to be < 12.");
-
-		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(name).find(),
-				"Username has to be alphanumeric.");
-	}
-
-	private void throwExceptionIf(boolean b, String cause) {
-		if (b) {
-			throw new BadRequestException(cause);
-		}
 	}
 }

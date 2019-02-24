@@ -22,6 +22,25 @@ public final class Password {
 		return password;
 	}
 
+	private void checkRestrictions(String password) {
+		throwExceptionIf(password == null, "Password cant be null.");
+
+		throwExceptionIf(password.trim().isEmpty(), "Password cant be empty.");
+
+		throwExceptionIf(password.length() < 8, "Password has to be > 8.");
+
+		throwExceptionIf(password.length() > 12, "Password has to be < 12.");
+
+		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(password).find(),
+				"Password has to be alphanumeric.");
+	}
+
+	private void throwExceptionIf(boolean condition, String cause) {
+		if (condition) {
+			throw new BadRequestException(cause);
+		}
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -35,25 +54,4 @@ public final class Password {
 		return Objects.hash(password);
 	}
 
-	private void checkRestrictions(String password) {
-		throwExceptionIf(password == null, "Password cant be null.");
-
-		throwExceptionIf(password.isEmpty(),
-				"Password cant be empty.");
-
-		throwExceptionIf(password.length() < 8,
-				"Password has to be > 8.");
-
-		throwExceptionIf(password.length() > 12,
-				"Password has to be < 12.");
-
-		throwExceptionIf(compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE).matcher(password).find(),
-				"Password has to be alphanumeric.");
-	}
-
-	private void throwExceptionIf(boolean b, String cause) {
-		if (b) {
-			throw new BadRequestException(cause);
-		}
-	}
 }
