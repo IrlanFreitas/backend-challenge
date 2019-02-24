@@ -5,7 +5,7 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static org.mockito.internal.util.collections.Sets.newSet;
 public class AcceptFriendShipServiceTest {
 
 	@Mock
-	private PasswordsRepository passwordsRepository;
+	private UsersRepository usersRepository;
 
 	@Mock
 	private FriendsRepository friendsRepository;
@@ -41,11 +41,11 @@ public class AcceptFriendShipServiceTest {
 
 	@Before
 	public void setUp() {
-		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
-		when(passwordsRepository.userExists(notExisting)).thenReturn(false);
-		when(passwordsRepository.getPassword(pepe)).thenReturn(password);
-		when(passwordsRepository.userExists(pepe)).thenReturn(true);
-		when(passwordsRepository.userExists(juan)).thenReturn(true);
+		friendShipService = new FriendShipService(usersRepository, friendsRepository, requestsRepository);
+		when(usersRepository.userExists(notExisting)).thenReturn(false);
+		when(usersRepository.userExists(juan)).thenReturn(true);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.getPassword(pepe)).thenReturn(password);
 	}
 
 	@Test(expected = NotFoundException.class)

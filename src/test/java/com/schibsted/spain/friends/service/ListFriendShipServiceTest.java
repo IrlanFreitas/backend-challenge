@@ -5,7 +5,7 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 public class ListFriendShipServiceTest {
 
 	@Mock
-	private PasswordsRepository passwordsRepository;
+	private UsersRepository usersRepository;
 
 	@Mock
 	private FriendsRepository friendsRepository;
@@ -41,16 +41,16 @@ public class ListFriendShipServiceTest {
 
 	@Before
 	public void setUp() {
-		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
-		when(passwordsRepository.getPassword(pepe)).thenReturn(pepePassword);
-		when(passwordsRepository.userExists(pepe)).thenReturn(true);
+		friendShipService = new FriendShipService(usersRepository, friendsRepository, requestsRepository);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.getPassword(pepe)).thenReturn(pepePassword);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenNotExistingUser() {
 		final User notExist = new User("NotExist");
 
-		when(passwordsRepository.userExists(notExist)).thenReturn(false);
+		when(usersRepository.userExists(notExist)).thenReturn(false);
 
 		friendShipService.list(notExist, pepePassword);
 	}

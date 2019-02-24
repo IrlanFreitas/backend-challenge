@@ -5,7 +5,7 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ import static org.mockito.internal.util.collections.Sets.newSet;
 public class RequestFriendShipServiceTest {
 
 	@Mock
-	private PasswordsRepository passwordsRepository;
+	private UsersRepository usersRepository;
 
 	@Mock
 	private FriendsRepository friendsRepository;
@@ -36,25 +36,25 @@ public class RequestFriendShipServiceTest {
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
 	private final User notExisting = new User("notExists");
-	private final Password pepePasword = new Password("passWord123");
+	private final Password pepePassword = new Password("passWord123");
 
 	@Before
 	public void setUp() {
-		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
-		when(passwordsRepository.userExists(notExisting)).thenReturn(false);
-		when(passwordsRepository.getPassword(pepe)).thenReturn(pepePasword);
-		when(passwordsRepository.userExists(pepe)).thenReturn(true);
-		when(passwordsRepository.userExists(juan)).thenReturn(true);
+		friendShipService = new FriendShipService(usersRepository, friendsRepository, requestsRepository);
+		when(usersRepository.userExists(notExisting)).thenReturn(false);
+		when(usersRepository.userExists(juan)).thenReturn(true);
+		when(usersRepository.userExists(pepe)).thenReturn(true);
+		when(usersRepository.getPassword(pepe)).thenReturn(pepePassword);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
-		friendShipService.request(notExisting, pepePasword, pepe);
+		friendShipService.request(notExisting, pepePassword, pepe);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenToUserDoesntExists() {
-		friendShipService.request(pepe, pepePasword, notExisting);
+		friendShipService.request(pepe, pepePassword, notExisting);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -65,7 +65,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestToHimself() {
-		friendShipService.request(pepe, pepePasword, pepe);
+		friendShipService.request(pepe, pepePassword, pepe);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -74,7 +74,7 @@ public class RequestFriendShipServiceTest {
 
 		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
-		friendShipService.request(pepe, pepePasword, juan);
+		friendShipService.request(pepe, pepePassword, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -83,7 +83,7 @@ public class RequestFriendShipServiceTest {
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
-		friendShipService.request(pepe, pepePasword, juan);
+		friendShipService.request(pepe, pepePassword, juan);
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class RequestFriendShipServiceTest {
 		final Set<User> pepeRequests = newSet(juan);
 		final Set<User> juanRequests = newSet(pepe);
 
-		friendShipService.request(pepe, pepePasword, juan);
+		friendShipService.request(pepe, pepePassword, juan);
 
 		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
 		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);

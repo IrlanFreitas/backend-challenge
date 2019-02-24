@@ -6,7 +6,7 @@ import com.schibsted.spain.friends.model.User;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UsersInMemoryRepository implements FriendsRepository, PasswordsRepository, RequestsRepository {
+public class UsersInMemoryRepository implements FriendsRepository, UsersRepository, RequestsRepository {
 
 	private final Map<User, Password> users = new HashMap<>();
 	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();

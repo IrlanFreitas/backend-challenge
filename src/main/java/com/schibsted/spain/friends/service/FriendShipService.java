@@ -5,7 +5,7 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
 
 import java.util.LinkedHashSet;
@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 
 public class FriendShipService {
 
-	private final PasswordsRepository passwordsRepository;
+	private final UsersRepository usersRepository;
 	private final FriendsRepository friendsRepository;
 	private final RequestsRepository requestsRepository;
 
 	public FriendShipService(
-			PasswordsRepository passwordsRepository,
+			UsersRepository usersRepository,
 			FriendsRepository friendsRepository,
 			RequestsRepository requestsRepository
 	) {
-		this.passwordsRepository = passwordsRepository;
+		this.usersRepository = usersRepository;
 		this.friendsRepository = friendsRepository;
 		this.requestsRepository = requestsRepository;
 	}
@@ -152,13 +152,13 @@ public class FriendShipService {
 	}
 
 	private void checkLogin(User userFrom, Password password) {
-		if (!password.equals(passwordsRepository.getPassword(userFrom))) {
+		if (!password.equals(usersRepository.getPassword(userFrom))) {
 			throw new BadRequestException("Wrong password.");
 		}
 	}
 
 	private void checkIfUsersExist(User user) {
-		if (!passwordsRepository.userExists(user)) {
+		if (!usersRepository.userExists(user)) {
 			throw new NotFoundException("User doesn't exist.");
 		}
 	}

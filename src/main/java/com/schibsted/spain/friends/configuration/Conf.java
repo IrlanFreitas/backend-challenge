@@ -3,7 +3,7 @@ package com.schibsted.spain.friends.configuration;
 import com.schibsted.spain.friends.legacy.FriendshipLegacyController;
 import com.schibsted.spain.friends.legacy.SignUpLegacyController;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.PasswordsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
 import com.schibsted.spain.friends.repository.UsersInMemoryRepository;
 import com.schibsted.spain.friends.service.FriendShipService;
@@ -21,20 +21,20 @@ public class Conf {
 
 	@Bean
 	public SignUpService signUpService(
-			PasswordsRepository passwordsRepository,
+			UsersRepository usersRepository,
 			FriendsRepository friendsRepository,
 			RequestsRepository requestsRepository
 	) {
-		return new SignUpService(passwordsRepository, friendsRepository, requestsRepository);
+		return new SignUpService(usersRepository, friendsRepository, requestsRepository);
 	}
 
 	@Bean
 	public FriendShipService friendShipService(
-			PasswordsRepository passwordsRepository,
+			UsersRepository usersRepository,
 			FriendsRepository friendsRepository,
 			RequestsRepository requestsRepository
 	) {
-		return new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
+		return new FriendShipService(usersRepository, friendsRepository, requestsRepository);
 	}
 
 	@Bean
