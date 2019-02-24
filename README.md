@@ -9,9 +9,9 @@ Router: I decided to save endpoints and param names in a router class, I think i
 we want to change one of them.
 Conf: For beans injections.
 
-🕹 Controller/legacy
+🕹 Controller
 
-I didnt change this package because legacy, there we have endpoints and just call to each service.
+Controller was the past legacy package, there we have endpoints and just call to each service.
 If everything is ok, they will response with an OK code.
 
 ⚖️ Service
