@@ -98,6 +98,7 @@ public class FriendShipService {
 	}
 
 	private void requestFriendship(User from, User to) {
+		checkUserNotSameRequested(from, to);
 		checkArentFriends(from, to);
 		checkDontRequestedBefore(from, to);
 
@@ -166,6 +167,12 @@ public class FriendShipService {
 		final Set<User> friendShipRequests = requestsRepository.getFriendShipRequests(from);
 		if (friendShipRequests.contains(to)) {
 			throw new BadRequestException("User has this request yet.");
+		}
+	}
+
+	private void checkUserNotSameRequested(User from, User to) {
+		if(from.equals(to)){
+			throw new BadRequestException("Can't request himself.");
 		}
 	}
 }

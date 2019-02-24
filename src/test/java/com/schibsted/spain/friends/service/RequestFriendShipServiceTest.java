@@ -64,6 +64,11 @@ public class RequestFriendShipServiceTest {
 	}
 
 	@Test(expected = BadRequestException.class)
+	public void shouldFailWhenRequestToHimself() {
+		friendShipService.request(pepe, password, pepe);
+	}
+
+	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
 		final Set<User> pepeRequests = newSet(juan);
 

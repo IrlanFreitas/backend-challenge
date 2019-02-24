@@ -77,6 +77,8 @@ given_request "POST -H X-Password:j12345679 $service/friendship/request?username
 response_status_code_should_be 4..
 given_request "POST -H X-Password:j12345678 $service/friendship/request?usernameFrom=johndoe&usernameTo=samantha"
 response_status_code_should_be 4..
+given_request "POST -H X-Password:j12345678 $service/friendship/request?usernameFrom=johndoe&usernameTo=johndoe"
+response_status_code_should_be 4..
 
 given_request "POST -H X-Password:j12345678 $service/friendship/request?usernameFrom=johndoe&usernameTo=roseanne"
 response_status_code_should_be 2..
