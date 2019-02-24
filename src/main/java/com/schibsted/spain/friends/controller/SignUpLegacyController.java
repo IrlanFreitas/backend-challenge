@@ -1,4 +1,4 @@
-package com.schibsted.spain.friends.legacy;
+package com.schibsted.spain.friends.controller;
 
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;

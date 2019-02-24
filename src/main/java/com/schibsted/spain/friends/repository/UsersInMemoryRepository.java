@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UsersInMemoryRepository implements FriendsRepository, UsersRepository, RequestsRepository {
 
-	private final Map<User, Password> users = new HashMap<>();
+	private final Map<User, Password> users = new ConcurrentHashMap<>();
 	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
 	private final Map<User, LinkedHashSet<User>> friendsMap = new ConcurrentHashMap<>();
 
