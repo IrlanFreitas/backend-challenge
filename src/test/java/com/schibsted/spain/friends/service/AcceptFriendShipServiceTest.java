@@ -34,10 +34,10 @@ public class AcceptFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
-	private final User notExisting = new User("notExists");
-	private final Password password = new Password("passWord123");
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
+	private final User notExisting = new User("notExists");
+	private final Password password = new Password("passWord123");
 
 	@Before
 	public void setUp() {

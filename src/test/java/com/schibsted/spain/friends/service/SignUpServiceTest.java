@@ -36,11 +36,11 @@ public class SignUpServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUserExists() {
-		final User existingUser = new User("Existing");
+		final User user = new User("Existing");
 
-		when(usersRepository.userExists(existingUser)).thenReturn(true);
+		when(usersRepository.userExists(user)).thenReturn(true);
 
-		signUpService.saveUser(existingUser, null);
+		signUpService.saveUser(user, null);
 	}
 
 	@Test

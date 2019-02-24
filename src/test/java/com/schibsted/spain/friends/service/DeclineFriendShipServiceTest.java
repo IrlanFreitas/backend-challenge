@@ -31,10 +31,10 @@ public class DeclineFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
-	private final Password password = new Password("passWord123");
-	private final User notExisting = new User("notExists");
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
+	private final User notExisting = new User("notExists");
+	private final Password password = new Password("passWord123");
 
 	@Before
 	public void setUp() {
@@ -57,8 +57,7 @@ public class DeclineFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenPasswordIsNotCorrect() {
-		final Password wrong = new Password("wrongPass");
-		friendShipService.decline(pepe, wrong, juan);
+		friendShipService.decline(pepe, new Password("wrongPass"), juan);
 	}
 
 	@Test(expected = NotFoundException.class)

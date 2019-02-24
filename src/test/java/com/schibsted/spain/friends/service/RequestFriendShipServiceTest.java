@@ -33,28 +33,28 @@ public class RequestFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
-	private final User notExisting = new User("notExists");
-	private final Password password = new Password("passWord123");
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
+	private final User notExisting = new User("notExists");
+	private final Password pepePasword = new Password("passWord123");
 
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
 		when(passwordsRepository.userExists(notExisting)).thenReturn(false);
-		when(passwordsRepository.getPassword(pepe)).thenReturn(password);
+		when(passwordsRepository.getPassword(pepe)).thenReturn(pepePasword);
 		when(passwordsRepository.userExists(pepe)).thenReturn(true);
 		when(passwordsRepository.userExists(juan)).thenReturn(true);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenFromUserDoesntExists() {
-		friendShipService.request(notExisting, password, pepe);
+		friendShipService.request(notExisting, pepePasword, pepe);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldThrowExpectedWhenToUserDoesntExists() {
-		friendShipService.request(pepe, password, notExisting);
+		friendShipService.request(pepe, pepePasword, notExisting);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -65,7 +65,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestToHimself() {
-		friendShipService.request(pepe, password, pepe);
+		friendShipService.request(pepe, pepePasword, pepe);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -74,7 +74,7 @@ public class RequestFriendShipServiceTest {
 
 		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
-		friendShipService.request(pepe, password, juan);
+		friendShipService.request(pepe, pepePasword, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -83,7 +83,7 @@ public class RequestFriendShipServiceTest {
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
-		friendShipService.request(pepe, password, juan);
+		friendShipService.request(pepe, pepePasword, juan);
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class RequestFriendShipServiceTest {
 		final Set<User> pepeRequests = newSet(juan);
 		final Set<User> juanRequests = newSet(pepe);
 
-		friendShipService.request(pepe, password, juan);
+		friendShipService.request(pepe, pepePasword, juan);
 
 		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
 		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);

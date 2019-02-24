@@ -16,8 +16,8 @@ import static org.mockito.internal.util.collections.Sets.newSet;
 public class UsersInMemoryRepositoryTest {
 
 	private final UsersInMemoryRepository usersRepository = new UsersInMemoryRepository();
-	private final Password password = new Password("12345678");
 	private final User user = new User("userName");
+	private final Password password = new Password("12345678");
 	private final Set<User> userFriendRequests = newSet(new User("requestOne"), new User("requestTwo"));
 	private final LinkedHashSet<User> userFriends = newLinkedHashSet(new User("friendOne"), new User("friendTwo"));
 

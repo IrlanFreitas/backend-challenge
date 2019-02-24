@@ -36,19 +36,23 @@ public class ListFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
-	private final Password password = new Password("passWord123");
 	private final User pepe = new User("Pepito");
+	private final Password pepePassword = new Password("passWord123");
 
 	@Before
 	public void setUp() {
 		friendShipService = new FriendShipService(passwordsRepository, friendsRepository, requestsRepository);
-		when(passwordsRepository.getPassword(pepe)).thenReturn(password);
+		when(passwordsRepository.getPassword(pepe)).thenReturn(pepePassword);
 		when(passwordsRepository.userExists(pepe)).thenReturn(true);
 	}
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenNotExistingUser() {
-		friendShipService.list(new User("NotExist"), password);
+		final User notExist = new User("NotExist");
+
+		when(passwordsRepository.userExists(notExist)).thenReturn(false);
+
+		friendShipService.list(notExist, pepePassword);
 	}
 
 	@Test(expected = BadRequestException.class)
@@ -58,8 +62,10 @@ public class ListFriendShipServiceTest {
 
 	@Test
 	public void shouldReturnEmptyListWhenHasNoFriends() {
+		when(friendsRepository.getFriends(pepe)).thenReturn(newLinkedHashSet());
+
 		final List<String> expected = emptyList();
-		final List<String> actual = friendShipService.list(pepe, password);
+		final List<String> actual = friendShipService.list(pepe, pepePassword);
 
 		assertEquals(expected, actual);
 	}
@@ -75,7 +81,7 @@ public class ListFriendShipServiceTest {
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
 		final List<String> expected = asList("Juanito", "Margarita");
-		final List<String> actual = friendShipService.list(pepe, password);
+		final List<String> actual = friendShipService.list(pepe, pepePassword);
 
 		assertNotEquals(expected, actual);
 	}
@@ -90,9 +96,8 @@ public class ListFriendShipServiceTest {
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
-
 		final List<String> expected = asList("Margarita", "Juanito");
-		final List<String> actual = friendShipService.list(pepe, password);
+		final List<String> actual = friendShipService.list(pepe, pepePassword);
 
 		assertEquals(expected, actual);
 	}
