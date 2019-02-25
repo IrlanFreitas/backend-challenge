@@ -24,7 +24,7 @@ public class SignUpService {
 		this.requestsRepository = requestsRepository;
 	}
 
-	public void saveUser(User user, Password password) {
+	public synchronized void saveUser(User user, Password password) {
 		checkIfUserExists(user);
 		usersRepository.save(user, password);
 		friendsRepository.addAsFriends(user, new LinkedHashSet<>());
