@@ -48,7 +48,7 @@ public class FriendShipService {
 	}
 
 	private void acceptFriendShipRequest(User from, User to) {
-		checkArentFriends(from, to);
+		checkAreNotFriends(from, to);
 		checkRequestExists(from, to);
 
 		saveAsFriends(from, to);
@@ -99,7 +99,7 @@ public class FriendShipService {
 
 	private void requestFriendship(User from, User to) {
 		checkUserNotSameRequested(from, to);
-		checkArentFriends(from, to);
+		checkAreNotFriends(from, to);
 		checkDontRequestedBefore(from, to);
 
 		saveRequests(from, to);
@@ -134,7 +134,7 @@ public class FriendShipService {
 		throwIfNotRequest(to, from);
 	}
 
-	private void checkArentFriends(User from, User to) {
+	private void checkAreNotFriends(User from, User to) {
 		checkUserContainsInFriendList(from, to);
 		checkUserContainsInFriendList(to, from);
 	}
