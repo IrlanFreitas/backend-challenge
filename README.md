@@ -38,7 +38,7 @@ NotFoundExceptions for not existing resources
 
 They listen for custom exceptions and they will response with the http code and a explanation of the error.
 
-# 📸 Model
+# 📸 Model
 
 I've decided to split passwords from users, Im not sure if this is the correct way but I think for friends
 relationships we dont need passwords and it would be a security problem, so:
