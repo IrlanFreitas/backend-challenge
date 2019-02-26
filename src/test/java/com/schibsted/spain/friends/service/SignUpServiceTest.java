@@ -36,7 +36,7 @@ public class SignUpServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUserExists() {
-		final User user = new User("Existing");
+		final var user = new User("Existing");
 
 		when(usersRepository.userExists(user)).thenReturn(true);
 
@@ -45,8 +45,8 @@ public class SignUpServiceTest {
 
 	@Test
 	public void shouldSaveUserWhenUserDoesntExist() {
-		final User user = new User("user123");
-		final Password password = new Password("12345678ab");
+		final var user = new User("user123");
+		final var password = new Password("12345678ab");
 
 		when(usersRepository.userExists(user)).thenReturn(false);
 

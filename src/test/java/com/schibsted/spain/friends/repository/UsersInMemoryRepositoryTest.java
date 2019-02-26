@@ -45,46 +45,46 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnPasswordTrueWhenUserIsSaved() {
-		final Password actual = usersRepository.getPassword(user);
+		final var actual = usersRepository.getPassword(user);
 
 		assertEquals(password, actual);
 	}
 
 	@Test
 	public void shouldReturnEmpty() {
-		final Set expected = newHashSet();
-		final Set<User> actual = usersRepository.getFriendShipRequests(new User("userUser"));
+		final var expected = newHashSet();
+		final var actual = usersRepository.getFriendShipRequests(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnRequestSet() {
-		final Set<User> expected = userFriendRequests;
-		final Set<User> actual = usersRepository.getFriendShipRequests(user);
+		final var expected = userFriendRequests;
+		final var actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnEmptyFriends() {
-		final LinkedHashSet<User> expected = newLinkedHashSet();
-		final Set<User> actual = usersRepository.getFriends(new User("userUser"));
+		final var expected = newLinkedHashSet();
+		final var actual = usersRepository.getFriends(new User("userUser"));
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnExpectedFriends() {
-		final LinkedHashSet expected = userFriends;
-		final Set<User> actual = usersRepository.getFriends(user);
+		final var expected = userFriends;
+		final var actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnUpdatedFriends() {
-		final LinkedHashSet<User> userFriends =
+		final var userFriends =
 				newLinkedHashSet(
 						new User("friendOne"),
 						new User("friendTwo"),
@@ -92,15 +92,15 @@ public class UsersInMemoryRepositoryTest {
 				);
 		usersRepository.addAsFriends(user, userFriends);
 
-		final Set<User> expected = userFriends;
-		final Set<User> actual = usersRepository.getFriends(user);
+		final var expected = userFriends;
+		final var actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnUpdatedFriendsRequests() {
-		final Set<User> userFriendRequests =
+		final var userFriendRequests =
 				newSet(
 						new User("userUser"),
 						new User("userTwo"),
@@ -109,8 +109,8 @@ public class UsersInMemoryRepositoryTest {
 				);
 		usersRepository.addRequest(user, userFriendRequests);
 
-		final Set<User> expected = userFriendRequests;
-		final Set<User> actual = usersRepository.getFriendShipRequests(user);
+		final var expected = userFriendRequests;
+		final var actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);
 	}

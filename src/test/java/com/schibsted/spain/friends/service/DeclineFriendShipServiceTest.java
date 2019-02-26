@@ -67,8 +67,8 @@ public class DeclineFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final Set<User> juanRequests = newSet(pepe);
-		final Set<User> pepeRequests = newSet(juan);
+		final var juanRequests = newSet(pepe);
+		final var pepeRequests = newSet(juan);
 
 		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(juanRequests);
 		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);

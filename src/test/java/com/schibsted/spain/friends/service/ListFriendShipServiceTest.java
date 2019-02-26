@@ -48,7 +48,7 @@ public class ListFriendShipServiceTest {
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenNotExistingUser() {
-		final User notExist = new User("NotExist");
+		final var notExist = new User("NotExist");
 
 		when(usersRepository.userExists(notExist)).thenReturn(false);
 
@@ -64,15 +64,15 @@ public class ListFriendShipServiceTest {
 	public void shouldReturnEmptyListWhenHasNoFriends() {
 		when(friendsRepository.getFriends(pepe)).thenReturn(newLinkedHashSet());
 
-		final List<String> expected = emptyList();
-		final List<String> actual = friendShipService.list(pepe, pepePassword);
+		final var expected = emptyList();
+		final var actual = friendShipService.list(pepe, pepePassword);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldFailWhenThereIsNoOrder() {
-		final LinkedHashSet<User> pepeFriends =
+		final var pepeFriends =
 				newLinkedHashSet(
 						new User("Margarita"),
 						new User("Juanito")
@@ -80,15 +80,15 @@ public class ListFriendShipServiceTest {
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
-		final List<String> expected = asList("Juanito", "Margarita");
-		final List<String> actual = friendShipService.list(pepe, pepePassword);
+		final var expected = asList("Juanito", "Margarita");
+		final var actual = friendShipService.list(pepe, pepePassword);
 
 		assertNotEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnExpectedWhenUserHasFriends() {
-		final LinkedHashSet<User> pepeFriends =
+		final var pepeFriends =
 				newLinkedHashSet(
 						new User("Margarita"),
 						new User("Juanito")
@@ -96,8 +96,8 @@ public class ListFriendShipServiceTest {
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
-		final List<String> expected = asList("Margarita", "Juanito");
-		final List<String> actual = friendShipService.list(pepe, pepePassword);
+		final var expected = asList("Margarita", "Juanito");
+		final var actual = friendShipService.list(pepe, pepePassword);
 
 		assertEquals(expected, actual);
 	}

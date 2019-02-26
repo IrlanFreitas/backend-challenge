@@ -5,16 +5,13 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
@@ -59,7 +56,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenPasswordIsNotCorrect() {
-		final Password wrong = new Password("wrongPass");
+		final var wrong = new Password("wrongPass");
 		friendShipService.request(pepe, wrong, juan);
 	}
 
@@ -70,7 +67,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		final Set<User> pepeRequests = newSet(juan);
+		final var pepeRequests = newSet(juan);
 
 		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
 
@@ -79,7 +76,7 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		final LinkedHashSet<User> pepeFriends = newLinkedHashSet(juan);
+		final var pepeFriends = newLinkedHashSet(juan);
 
 		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
 
@@ -88,8 +85,8 @@ public class RequestFriendShipServiceTest {
 
 	@Test
 	public void shouldWorksWithNoRequestsReturn() {
-		final Set<User> pepeRequests = newSet(juan);
-		final Set<User> juanRequests = newSet(pepe);
+		final var pepeRequests = newSet(juan);
+		final var juanRequests = newSet(pepe);
 
 		friendShipService.request(pepe, pepePassword, juan);
 

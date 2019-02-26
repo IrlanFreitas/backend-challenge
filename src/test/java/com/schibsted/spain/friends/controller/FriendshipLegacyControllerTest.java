@@ -13,11 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static com.schibsted.spain.friends.configuration.Router.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -85,14 +84,14 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenListAndParamsAreOk() {
-		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
-		final List<String> set = asList("Pepito", "Juanito");
+		final var friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+		final var set = asList("Pepito", "Juanito");
 
-		final ResponseEntity expected = ResponseEntity.ok(set);
+		final var expected = ResponseEntity.ok(set);
 
 		when(friendShipService.list(userValid, password)).thenReturn(set);
 
-		final Object actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
+		final var actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
 
 		assertEquals(expected, actual);
 
@@ -102,13 +101,13 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedEmptyWhenUserHasNoFriends() {
-		final FriendshipLegacyController friendshipLegacyController = new FriendshipLegacyController(friendShipService);
-		final List<String> emptySet = emptyList();
-		final ResponseEntity expected = ResponseEntity.ok(emptySet);
+		final var friendshipLegacyController = new FriendshipLegacyController(friendShipService);
+		final var emptySet = new ArrayList<String>();
+		final var expected = ResponseEntity.ok(emptySet);
 
 		when(friendShipService.list(userValid, password)).thenReturn(emptySet);
 
-		final Object actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
+		final var actual = friendshipLegacyController.listFriends(userValid.getName(), "123456789ab");
 
 		assertEquals(expected, actual);
 
@@ -118,7 +117,7 @@ public class FriendshipLegacyControllerTest {
 
 	@Test
 	public void expectedOkWhenGetFriendsAndParamsAreOk() throws Exception {
-		final List<String> expected = emptyList();
+		final var expected = new ArrayList<String>();
 
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 

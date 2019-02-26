@@ -34,8 +34,8 @@ public class UserRequirementsTest {
 
 	@Test
 	public void shouldReturnExpectedString() {
-		final String expected = "Pepito12";
-		final String actual = new User("Pepito12").getName();
+		final var expected = "Pepito12";
+		final var actual = new User("Pepito12").getName();
 
 		assertEquals(expected, actual);
 	}
