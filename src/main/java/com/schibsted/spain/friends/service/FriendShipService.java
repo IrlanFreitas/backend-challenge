@@ -82,7 +82,7 @@ public class FriendShipService {
 	}
 
 	private void deleteRequest(User from, User to) {
-		final Set<User> requests = requestsRepository.getFriendShipRequests(from);
+		final var requests = requestsRepository.getFriendShipRequests(from);
 
 		requests.remove(to);
 
@@ -90,7 +90,7 @@ public class FriendShipService {
 	}
 
 	private void updateFriend(User from, User to) {
-		final LinkedHashSet<User> friends = friendsRepository.getFriends(from);
+		final var friends = friendsRepository.getFriends(from);
 
 		friends.add(to);
 
@@ -111,7 +111,7 @@ public class FriendShipService {
 	}
 
 	private void addRequest(User from, User to) {
-		final Set<User> list = requestsRepository.getFriendShipRequests(from);
+		final var list = requestsRepository.getFriendShipRequests(from);
 
 		list.add(to);
 
@@ -164,7 +164,7 @@ public class FriendShipService {
 	}
 
 	private void checkDontRequest(User from, User to) {
-		final Set<User> friendShipRequests = requestsRepository.getFriendShipRequests(from);
+		final var friendShipRequests = requestsRepository.getFriendShipRequests(from);
 		if (friendShipRequests.contains(to)) {
 			throw new BadRequestException("User has this request yet.");
 		}
