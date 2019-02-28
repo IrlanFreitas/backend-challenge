@@ -30,7 +30,6 @@ public class SignUpLegacyControllerTest {
 	private SignUpService signUpService;
 
 	private final User userValid = new User("userValid");
-	private final Password passwordValid = new Password("123456789ab");
 
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
@@ -43,18 +42,20 @@ public class SignUpLegacyControllerTest {
 	@Test
 	public void expectedBadRequestWhenUserIsNotOk() throws Exception {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
-				.header(X_PASS, passwordValid.getValue())
+				.header(X_PASS, "12345678")
 				.param(USERNAME, "qwe")
 		).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void expectedStatusOkWhenInputIsOk() throws Exception {
+		final String value = "123456789ab";
+
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
-				.header(X_PASS, "123456789ab")
+				.header(X_PASS, value)
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 
-		verify(signUpService, times(1)).saveUser(userValid, passwordValid);
+		verify(signUpService, times(1)).saveUser(userValid, new Password(value));
 	}
 }
