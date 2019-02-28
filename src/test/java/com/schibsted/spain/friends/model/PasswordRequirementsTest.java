@@ -43,7 +43,7 @@ public class PasswordRequirementsTest {
 
 		assertEquals(expected, actual);
 	}
-	
+
 	 *
 	 */
 }
