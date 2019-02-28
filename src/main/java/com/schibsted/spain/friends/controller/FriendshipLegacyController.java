@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class FriendshipLegacyController {
 
 	private final FriendShipService friendShipService;
-	private final Logger LOGGER = LoggerFactory.getLogger(FriendshipLegacyController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FriendshipLegacyController.class);
 
 	public FriendshipLegacyController(FriendShipService friendShipService) {
 		this.friendShipService = friendShipService;
@@ -25,7 +25,7 @@ public class FriendshipLegacyController {
 	ResponseEntity requestFriendship(
 			@RequestParam(USERNAME_FROM) String usernameFrom,
 			@RequestParam(USERNAME_TO) String usernameTo,
-			@RequestHeader(X_PASSWORD) String password
+			@RequestHeader(X_PASS) String password
 	) {
 		LOGGER.info("Received friendShip request from {} to {}", usernameFrom, usernameTo);
 
@@ -42,7 +42,7 @@ public class FriendshipLegacyController {
 	ResponseEntity acceptFriendship(
 			@RequestParam(USERNAME_FROM) String usernameFrom,
 			@RequestParam(USERNAME_TO) String usernameTo,
-			@RequestHeader(X_PASSWORD) String password
+			@RequestHeader(X_PASS) String password
 	) {
 		LOGGER.info("Received friendShip accept from {} to {}.", usernameFrom, usernameTo);
 
@@ -59,7 +59,7 @@ public class FriendshipLegacyController {
 	ResponseEntity declineFriendship(
 			@RequestParam(USERNAME_FROM) String usernameFrom,
 			@RequestParam(USERNAME_TO) String usernameTo,
-			@RequestHeader(X_PASSWORD) String password
+			@RequestHeader(X_PASS) String password
 	) {
 		LOGGER.info("Received friendShip delete from {} to {}.", usernameFrom, usernameTo);
 
@@ -74,7 +74,7 @@ public class FriendshipLegacyController {
 	@GetMapping(LIST)
 	Object listFriends(
 			@RequestParam(USERNAME) String username,
-			@RequestHeader(X_PASSWORD) String password
+			@RequestHeader(X_PASS) String password
 	) {
 		LOGGER.info("Received friends list from {}.", username);
 

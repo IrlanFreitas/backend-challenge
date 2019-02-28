@@ -36,6 +36,7 @@ public class ListFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
+
 	private final User pepe = new User("Pepito");
 	private final Password pepePassword = new Password("passWord123");
 

@@ -5,8 +5,8 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -29,10 +29,10 @@ public class FriendShipService {
 		this.requestsRepository = requestsRepository;
 	}
 
-	public void request(User userFrom, Password password, User userTo) {
-		checkInputs(userFrom, password, userTo);
+	public void request(User from, Password password, User to) {
+		checkInputs(from, password, to);
 
-		requestFriendship(userFrom, userTo);
+		requestFriendship(from, to);
 	}
 
 	public void accept(User from, Password password, User to) {
@@ -69,9 +69,9 @@ public class FriendShipService {
 		updateAccept(to, from);
 	}
 
-	private void updateAccept(User from, User to) {
-		deleteRequest(from, to);
-		updateFriend(from, to);
+	private void updateAccept(User user, User friend) {
+		deleteRequest(user, friend);
+		updateFriend(user, friend);
 	}
 
 	private synchronized void declineRequest(User from, User to) {
@@ -81,12 +81,12 @@ public class FriendShipService {
 		deleteRequest(to, from);
 	}
 
-	private void deleteRequest(User from, User to) {
-		final Set<User> requests = requestsRepository.getFriendShipRequests(from);
+	private void deleteRequest(User user, User request) {
+		final Set<User> requests = requestsRepository.getFriendShipRequests(user);
 
-		requests.remove(to);
+		requests.remove(request);
 
-		requestsRepository.addRequest(from, requests);
+		requestsRepository.addRequest(user, requests);
 	}
 
 	private void updateFriend(User from, User to) {
@@ -110,12 +110,12 @@ public class FriendShipService {
 		addRequest(to, from);
 	}
 
-	private void addRequest(User from, User to) {
-		final Set<User> list = requestsRepository.getFriendShipRequests(from);
+	private void addRequest(User user, User request) {
+		final Set<User> list = requestsRepository.getFriendShipRequests(user);
 
-		list.add(to);
+		list.add(request);
 
-		requestsRepository.addRequest(from, list);
+		requestsRepository.addRequest(user, list);
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
@@ -130,8 +130,8 @@ public class FriendShipService {
 	}
 
 	private void checkRequestExists(User from, User to) {
-		throwIfNotRequest(from, to);
-		throwIfNotRequest(to, from);
+		checkRequest(from, to);
+		checkRequest(to, from);
 	}
 
 	private void checkAreNotFriends(User from, User to) {
@@ -139,20 +139,20 @@ public class FriendShipService {
 		checkUserContainsInFriendList(to, from);
 	}
 
-	private void checkUserContainsInFriendList(User from, User to) {
-		if (friendsRepository.getFriends(from).contains(to)) {
+	private void checkUserContainsInFriendList(User user, User friend) {
+		if (friendsRepository.getFriends(user).contains(friend)) {
 			throw new BadRequestException("Users are friends.");
 		}
 	}
 
-	private void throwIfNotRequest(User from, User to) {
-		if (!requestsRepository.getFriendShipRequests(from).contains(to)) {
+	private void checkRequest(User user, User request) {
+		if (!requestsRepository.getFriendShipRequests(user).contains(request)) {
 			throw new NotFoundException("There is no friend request.");
 		}
 	}
 
-	private void checkLogin(User userFrom, Password password) {
-		if (!password.equals(usersRepository.getPassword(userFrom))) {
+	private void checkLogin(User user, Password password) {
+		if (!password.equals(usersRepository.getPassword(user))) {
 			throw new BadRequestException("Wrong password.");
 		}
 	}
@@ -163,15 +163,14 @@ public class FriendShipService {
 		}
 	}
 
-	private void checkDontRequest(User from, User to) {
-		final Set<User> friendShipRequests = requestsRepository.getFriendShipRequests(from);
-		if (friendShipRequests.contains(to)) {
+	private void checkDontRequest(User user, User request) {
+		if (requestsRepository.getFriendShipRequests(user).contains(request)) {
 			throw new BadRequestException("User has this request yet.");
 		}
 	}
 
-	private void checkUserNotSameRequested(User from, User to) {
-		if(from.equals(to)){
+	private void checkUserNotSameRequested(User user, User request) {
+		if (user.equals(request)) {
 			throw new BadRequestException("Can't request himself.");
 		}
 	}
