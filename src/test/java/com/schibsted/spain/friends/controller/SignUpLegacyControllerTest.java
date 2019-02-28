@@ -35,7 +35,7 @@ public class SignUpLegacyControllerTest {
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
-				.header(X_PASSWORD, "123456")
+				.header(X_PASS, "123456")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().isBadRequest());
 	}
@@ -43,7 +43,7 @@ public class SignUpLegacyControllerTest {
 	@Test
 	public void expectedBadRequestWhenUserIsNotOk() throws Exception {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
-				.header(X_PASSWORD, passwordValid.getPassword())
+				.header(X_PASS, passwordValid.getValue())
 				.param(USERNAME, "qwe")
 		).andExpect(status().isBadRequest());
 	}
@@ -51,7 +51,7 @@ public class SignUpLegacyControllerTest {
 	@Test
 	public void expectedStatusOkWhenInputIsOk() throws Exception {
 		mockMvc.perform(post(SIGN_UP_REQUEST_MAPPING)
-				.header(X_PASSWORD, "123456789ab")
+				.header(X_PASS, "123456789ab")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 
