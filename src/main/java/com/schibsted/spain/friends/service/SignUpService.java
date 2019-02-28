@@ -4,8 +4,8 @@ import com.schibsted.spain.friends.exceptions.BadRequestException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

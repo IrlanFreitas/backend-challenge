@@ -3,7 +3,10 @@ package com.schibsted.spain.friends.repository;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UsersInMemoryRepository implements FriendsRepository, UsersRepository, RequestsRepository {

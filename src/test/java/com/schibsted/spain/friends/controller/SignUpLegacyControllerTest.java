@@ -23,13 +23,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class SignUpLegacyControllerTest {
 
+	private final User userValid = new User("userValid");
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private SignUpService signUpService;
-
-	private final User userValid = new User("userValid");
 
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {

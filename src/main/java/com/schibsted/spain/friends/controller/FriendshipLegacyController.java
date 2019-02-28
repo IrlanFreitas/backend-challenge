@@ -13,9 +13,9 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RequestMapping(FRIENDSHIP_REQUEST_MAPPING)
 public class FriendshipLegacyController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FriendshipLegacyController.class);
 
 	private final FriendShipService friendShipService;
-	private static final Logger LOGGER = LoggerFactory.getLogger(FriendshipLegacyController.class);
 
 	public FriendshipLegacyController(FriendShipService friendShipService) {
 		this.friendShipService = friendShipService;

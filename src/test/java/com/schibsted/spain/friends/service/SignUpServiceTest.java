@@ -18,6 +18,8 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class SignUpServiceTest {
 
+	private SignUpService signUpService;
+
 	@Mock
 	private UsersInMemoryRepository usersRepository;
 
@@ -26,9 +28,7 @@ public class SignUpServiceTest {
 
 	@Mock
 	private UsersInMemoryRepository requestRepository;
-
-	private SignUpService signUpService;
-
+	
 	@Before
 	public void setUp() {
 		signUpService = new SignUpService(usersRepository, friendShipRepository, requestRepository);

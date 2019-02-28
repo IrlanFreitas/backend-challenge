@@ -29,14 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class FriendshipLegacyControllerTest {
 
+	private final User userValid = new User("userValid");
+	private final Password password = new Password("123456789ab");
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private FriendShipService friendShipService;
-
-	private final User userValid = new User("userValid");
-	private final Password password = new Password("123456789ab");
 
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {

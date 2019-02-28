@@ -26,6 +26,11 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ListFriendShipServiceTest {
 
+	private final User pepe = new User("Pepito");
+	private final Password pepePassword = new Password("passWord123");
+
+	private FriendShipService friendShipService;
+
 	@Mock
 	private UsersRepository usersRepository;
 
@@ -34,11 +39,6 @@ public class ListFriendShipServiceTest {
 
 	@Mock
 	private RequestsRepository requestsRepository;
-
-	private FriendShipService friendShipService;
-
-	private final User pepe = new User("Pepito");
-	private final Password pepePassword = new Password("passWord123");
 
 	@Before
 	public void setUp() {
