@@ -39,5 +39,4 @@ public class UserRequirementsTest {
 
 		assertEquals(expected, actual);
 	}
-
 }
