@@ -29,5 +29,4 @@ public class PasswordRequirementsTest {
 	public void shouldFailWhenPassHasSpecialCharacters() {
 		new Password("123456-789");
 	}
-
 }
