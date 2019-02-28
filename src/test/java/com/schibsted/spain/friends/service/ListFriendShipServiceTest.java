@@ -5,8 +5,8 @@ import com.schibsted.spain.friends.exceptions.NotFoundException;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 import com.schibsted.spain.friends.repository.FriendsRepository;
-import com.schibsted.spain.friends.repository.UsersRepository;
 import com.schibsted.spain.friends.repository.RequestsRepository;
+import com.schibsted.spain.friends.repository.UsersRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +26,11 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ListFriendShipServiceTest {
 
+	private final User pepe = new User("Pepito");
+	private final Password pepePassword = new Password("passWord123");
+
+	private FriendShipService friendShipService;
+
 	@Mock
 	private UsersRepository usersRepository;
 
@@ -34,11 +39,6 @@ public class ListFriendShipServiceTest {
 
 	@Mock
 	private RequestsRepository requestsRepository;
-
-	private FriendShipService friendShipService;
-
-	private final User pepe = new User("Pepito");
-	private final Password pepePassword = new Password("passWord123");
 
 	@Before
 	public void setUp() {

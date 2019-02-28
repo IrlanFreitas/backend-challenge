@@ -30,20 +30,16 @@ public class PasswordRequirementsTest {
 		new Password("123456-789");
 	}
 
-	/*
-	 * I made this test to try the hash, we do not need the getter so I deleted it but I keep this test as ignored.
+//	Just for the challenge purpose, code commented is Evil.
+//	I made this test to try the hash but we don't need the getter, so deleted it and kept this test commented.
 
-	@Test
+	/*@Test
 	public void shouldHashWithMd5Password() {
 		final Password password = new Password("12345678");
 
 		final String expected = "25d55ad283aa400af464c76d713c07ad";
 		final String actual = password.getValue();
-		final String actual = "";
 
 		assertEquals(expected, actual);
-	}
-
-	 *
-	 */
+	}*/
 }
