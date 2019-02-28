@@ -10,16 +10,12 @@ import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
 public final class Password {
 
-	private final String password;
+	private final String value;
 
-	public Password(String password) {
-		checkRestrictions(password);
+	public Password(String value) {
+		checkRestrictions(value);
 
-		this.password = md5DigestAsHex(password.getBytes());
-	}
-
-	public String getPassword() {
-		return password;
+		this.value = md5DigestAsHex(value.getBytes());
 	}
 
 	private void checkRestrictions(String password) {
@@ -46,12 +42,11 @@ public final class Password {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Password password1 = (Password) o;
-		return password.equals(password1.password);
+		return value.equals(password1.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(password);
+		return Objects.hash(value);
 	}
-
 }

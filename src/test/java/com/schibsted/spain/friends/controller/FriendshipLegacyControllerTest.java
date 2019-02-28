@@ -40,7 +40,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedBadRequestWhenPassIsNotOk() throws Exception {
 		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + REQUEST)
-				.header(X_PASSWORD, "asd")
+				.header(X_PASS, "asd")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, userValid.getName())
 		).andExpect(status().isBadRequest());
@@ -49,7 +49,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedOkWhenParamsAreOk() throws Exception {
 		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + REQUEST)
-				.header(X_PASSWORD, "123456789ab")
+				.header(X_PASS, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());
@@ -61,7 +61,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedOkWhenAcceptAndParamsAreOk() throws Exception {
 		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + ACCEPT)
-				.header(X_PASSWORD, "123456789ab")
+				.header(X_PASS, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());
@@ -73,7 +73,7 @@ public class FriendshipLegacyControllerTest {
 	@Test
 	public void expectedOkWhenDeclineAndParamsAreOk() throws Exception {
 		mockMvc.perform(post(FRIENDSHIP_REQUEST_MAPPING + DECLINE)
-				.header(X_PASSWORD, "123456789ab")
+				.header(X_PASS, "123456789ab")
 				.param(USERNAME_FROM, userValid.getName())
 				.param(USERNAME_TO, "Juanito")
 		).andExpect(status().is2xxSuccessful());
@@ -122,7 +122,7 @@ public class FriendshipLegacyControllerTest {
 		when(friendShipService.list(userValid, password)).thenReturn(expected);
 
 		mockMvc.perform(get(FRIENDSHIP_REQUEST_MAPPING + LIST)
-				.header(X_PASSWORD, "123456789ab")
+				.header(X_PASS, "123456789ab")
 				.param(USERNAME, userValid.getName())
 		).andExpect(status().is2xxSuccessful());
 

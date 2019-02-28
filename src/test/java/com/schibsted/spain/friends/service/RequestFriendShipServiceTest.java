@@ -30,6 +30,7 @@ public class RequestFriendShipServiceTest {
 	private RequestsRepository requestsRepository;
 
 	private FriendShipService friendShipService;
+
 	private final User pepe = new User("Pepito");
 	private final User juan = new User("Juanito");
 	private final User notExisting = new User("notExists");
@@ -93,5 +94,4 @@ public class RequestFriendShipServiceTest {
 		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
 		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
 	}
-
 }

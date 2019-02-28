@@ -1,11 +1,13 @@
-I've applied MVC as pattern for design the API and TDD for develop the code.
+Challenge is very nice, its a good example for improve and show object oriented design, clean code, SOLID and testing/TDD.
+
 There is a short explanation of my decisions and thoughts about the code.
 
 # 📝 Test
 
-End to end tests provided by the legacy team are awesome! I've just add a missing one: check send a request to himself
-Anyway, I've use TDD so now we have unit tests (using junit library) for every method and other classes mocked, so 
-corner cases are included.
+End to end tests provided by the legacy team are awesome! I've just added a missing one: an user who check send a request
+to him/herself.
+Anyway, I've thought in all the edge cases and applied TDD with unit tests (using junit library) so all code is tested. 
+Dependencies are mocked with mockito library.
 
 # ⚙️ Configuration
 
@@ -31,8 +33,8 @@ incorrect (bad request) also they will save if everything is okay.
 
 I dont want to throw existing exceptions so I've decided to have a couple of custom exceptions, they
 extend runtime exception so I can throw them whenever.
-BadRequestException for wrong inputs
-NotFoundExceptions for not existing resources
+- BadRequestException for wrong inputs
+- NotFoundExceptions for not existing resources
 
 # 🤲 Handler
 

@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class SignUpLegacyController {
 
 	private final SignUpService signUpService;
-	private final Logger LOGGER = LoggerFactory.getLogger(SignUpLegacyController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SignUpLegacyController.class);
 
 	public SignUpLegacyController(SignUpService signUpService) {
 		this.signUpService = signUpService;
@@ -24,7 +24,7 @@ public class SignUpLegacyController {
 	@PostMapping
 	ResponseEntity signUp(
 			@RequestParam(USERNAME) String username,
-			@RequestHeader(X_PASSWORD) String password
+			@RequestHeader(X_PASS) String password
 	) {
 		LOGGER.info("Received sing up from user {}", username);
 
