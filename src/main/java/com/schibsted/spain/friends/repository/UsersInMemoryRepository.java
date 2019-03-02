@@ -37,10 +37,7 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 
 	@Override
 	public Set<User> getFriendShipRequests(User user) {
-		if (requestsMap.containsKey(user)) {
-			return requestsMap.get(user);
-		}
-		return new HashSet<>();
+		return requestsMap.containsKey(user) ? requestsMap.get(user) : new HashSet<>();
 	}
 
 	@Override
@@ -50,9 +47,6 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 
 	@Override
 	public LinkedHashSet<User> getFriends(User user) {
-		if (friendsMap.containsKey(user)) {
-			return friendsMap.get(user);
-		}
-		return new LinkedHashSet<>();
+		return friendsMap.containsKey(user) ? friendsMap.get(user) : new LinkedHashSet<>();
 	}
 }
