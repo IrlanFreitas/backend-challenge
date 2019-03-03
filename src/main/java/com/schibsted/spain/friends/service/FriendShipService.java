@@ -86,15 +86,15 @@ public class FriendShipService {
 
 		requests.remove(request);
 
-		requestsRepository.addRequest(user, requests);
+		requestsRepository.addRequests(user, requests);
 	}
 
 	private void updateFriend(User from, User to) {
-		final LinkedHashSet<User> friends = friendsRepository.getFriends(from);
+		final Set<User> friends = friendsRepository.getFriends(from);
 
 		friends.add(to);
 
-		friendsRepository.addAsFriends(from, friends);
+		friendsRepository.addFriends(from, (LinkedHashSet<User>) friends);
 	}
 
 	private void requestFriendship(User from, User to) {
@@ -115,7 +115,7 @@ public class FriendShipService {
 
 		list.add(request);
 
-		requestsRepository.addRequest(user, list);
+		requestsRepository.addRequests(user, list);
 	}
 
 	private void checkInputs(User userFrom, Password password, User userTo) {
@@ -152,9 +152,16 @@ public class FriendShipService {
 	}
 
 	private void checkLogin(User user, Password password) {
-		if (!password.equals(usersRepository.getPassword(user))) {
+		if (!passwordCorrect(user, password)) {
 			throw new BadRequestException("Wrong password.");
 		}
+	}
+
+	private boolean passwordCorrect(User user, Password password) {
+		return usersRepository
+				.getPassword(user)
+				.map(password::equals)
+				.orElse(false);
 	}
 
 	private void checkIfUsersExist(User user) {

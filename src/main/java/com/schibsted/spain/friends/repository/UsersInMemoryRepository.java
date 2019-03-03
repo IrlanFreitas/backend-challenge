@@ -3,17 +3,16 @@ package com.schibsted.spain.friends.repository;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Optional.ofNullable;
 
 public class UsersInMemoryRepository implements FriendsRepository, UsersRepository, RequestsRepository {
 
 	private final Map<User, Password> users = new ConcurrentHashMap<>();
 	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
-	private final Map<User, LinkedHashSet<User>> friendsMap = new ConcurrentHashMap<>();
+	private final Map<User, Set<User>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(User user, Password password) {
@@ -26,12 +25,12 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 	}
 
 	@Override
-	public Password getPassword(User username) {
-		return users.get(username);
+	public Optional<Password> getPassword(User username) {
+		return ofNullable(users.get(username));
 	}
 
 	@Override
-	public void addRequest(User user, Set<User> list) {
+	public void addRequests(User user, Set<User> list) {
 		requestsMap.put(user, list);
 	}
 
@@ -41,12 +40,12 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 	}
 
 	@Override
-	public void addAsFriends(User user, LinkedHashSet<User> list) {
+	public void addFriends(User user, LinkedHashSet<User> list) {
 		friendsMap.put(user, list);
 	}
 
 	@Override
-	public LinkedHashSet<User> getFriends(User user) {
+	public Set<User> getFriends(User user) {
 		return friendsMap.containsKey(user) ? friendsMap.get(user) : new LinkedHashSet<>();
 	}
 }

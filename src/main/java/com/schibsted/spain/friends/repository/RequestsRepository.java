@@ -6,7 +6,7 @@ import java.util.Set;
 
 public interface RequestsRepository {
 
-	void addRequest(User user, Set<User> list);
+	void addRequests(User user, Set<User> list);
 
 	Set<User> getFriendShipRequests(User user);
 }

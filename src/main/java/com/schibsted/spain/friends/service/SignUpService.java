@@ -16,9 +16,11 @@ public class SignUpService {
 	private final FriendsRepository friendsRepository;
 	private final RequestsRepository requestsRepository;
 
-	public SignUpService(UsersRepository usersRepository,
-						 FriendsRepository friendsRepository,
-						 RequestsRepository requestsRepository) {
+	public SignUpService(
+			UsersRepository usersRepository,
+			FriendsRepository friendsRepository,
+			RequestsRepository requestsRepository
+	) {
 		this.usersRepository = usersRepository;
 		this.friendsRepository = friendsRepository;
 		this.requestsRepository = requestsRepository;
@@ -27,8 +29,8 @@ public class SignUpService {
 	public synchronized void saveUser(User user, Password password) {
 		checkIfUserExists(user);
 		usersRepository.save(user, password);
-		friendsRepository.addAsFriends(user, new LinkedHashSet<>());
-		requestsRepository.addRequest(user, new HashSet<>());
+		friendsRepository.addFriends(user, new LinkedHashSet<>());
+		requestsRepository.addRequests(user, new HashSet<>());
 	}
 
 	private void checkIfUserExists(User user) {

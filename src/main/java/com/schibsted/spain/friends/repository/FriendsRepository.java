@@ -3,10 +3,11 @@ package com.schibsted.spain.friends.repository;
 import com.schibsted.spain.friends.model.User;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 public interface FriendsRepository {
 
-	void addAsFriends(User user, LinkedHashSet<User> list);
+	void addFriends(User user, LinkedHashSet<User> list);
 
-	LinkedHashSet<User> getFriends(User user);
+	Set<User> getFriends(User user);
 }

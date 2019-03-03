@@ -18,6 +18,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Optional.of;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -44,7 +45,7 @@ public class ListFriendShipServiceTest {
 	public void setUp() {
 		friendShipService = new FriendShipService(usersRepository, friendsRepository, requestsRepository);
 		when(usersRepository.userExists(pepe)).thenReturn(true);
-		when(usersRepository.getPassword(pepe)).thenReturn(pepePassword);
+		when(usersRepository.getPassword(pepe)).thenReturn(of(pepePassword));
 	}
 
 	@Test(expected = NotFoundException.class)

@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Set;
 
+import static java.util.Optional.of;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
@@ -43,7 +44,7 @@ public class DeclineFriendShipServiceTest {
 		when(usersRepository.userExists(notExisting)).thenReturn(false);
 		when(usersRepository.userExists(juan)).thenReturn(true);
 		when(usersRepository.userExists(pepe)).thenReturn(true);
-		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.getPassword(pepe)).thenReturn(of(password));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -79,7 +80,7 @@ public class DeclineFriendShipServiceTest {
 		juanRequests.remove(pepe);
 		pepeRequests.remove(juan);
 
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
-		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
 	}
 }
