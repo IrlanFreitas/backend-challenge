@@ -16,9 +16,11 @@ public class SignUpService {
 	private final FriendsRepository friendsRepository;
 	private final RequestsRepository requestsRepository;
 
-	public SignUpService(UsersRepository usersRepository,
-						 FriendsRepository friendsRepository,
-						 RequestsRepository requestsRepository) {
+	public SignUpService(
+			UsersRepository usersRepository,
+			FriendsRepository friendsRepository,
+			RequestsRepository requestsRepository
+	) {
 		this.usersRepository = usersRepository;
 		this.friendsRepository = friendsRepository;
 		this.requestsRepository = requestsRepository;
