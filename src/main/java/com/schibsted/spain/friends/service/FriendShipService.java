@@ -152,9 +152,16 @@ public class FriendShipService {
 	}
 
 	private void checkLogin(User user, Password password) {
-		if (!password.equals(usersRepository.getPassword(user))) {
+		if (!passwordCorrect(user, password)) {
 			throw new BadRequestException("Wrong password.");
 		}
+	}
+
+	private boolean passwordCorrect(User user, Password password) {
+		return usersRepository
+				.getPassword(user)
+				.map(password::equals)
+				.orElse(false);
 	}
 
 	private void checkIfUsersExist(User user) {

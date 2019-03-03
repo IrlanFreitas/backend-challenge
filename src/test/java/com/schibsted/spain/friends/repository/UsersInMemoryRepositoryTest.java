@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.util.Sets.newHashSet;
@@ -40,14 +41,14 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnNullWhenThereIsNoUser() {
-		assertNull(usersRepository.getPassword(new User("userUser")));
+		assertEquals(Optional.empty(), usersRepository.getPassword(new User("userUser")));
 	}
 
 	@Test
 	public void shouldReturnPasswordTrueWhenUserIsSaved() {
-		final Password actual = usersRepository.getPassword(user);
+		final Optional<Password> actual = usersRepository.getPassword(user);
 
-		assertEquals(password, actual);
+		assertEquals(Optional.of(password), actual);
 	}
 
 	@Test

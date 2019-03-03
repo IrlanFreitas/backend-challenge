@@ -3,11 +3,10 @@ package com.schibsted.spain.friends.repository;
 import com.schibsted.spain.friends.model.Password;
 import com.schibsted.spain.friends.model.User;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Optional.ofNullable;
 
 public class UsersInMemoryRepository implements FriendsRepository, UsersRepository, RequestsRepository {
 
@@ -26,8 +25,8 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 	}
 
 	@Override
-	public Password getPassword(User username) {
-		return users.get(username);
+	public Optional<Password> getPassword(User username) {
+		return ofNullable(users.get(username));
 	}
 
 	@Override

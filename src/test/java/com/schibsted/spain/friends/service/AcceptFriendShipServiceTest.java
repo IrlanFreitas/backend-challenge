@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static java.util.Collections.emptySet;
+import static java.util.Optional.of;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
@@ -46,7 +47,7 @@ public class AcceptFriendShipServiceTest {
 		when(usersRepository.userExists(notExisting)).thenReturn(false);
 		when(usersRepository.userExists(juan)).thenReturn(true);
 		when(usersRepository.userExists(pepe)).thenReturn(true);
-		when(usersRepository.getPassword(pepe)).thenReturn(password);
+		when(usersRepository.getPassword(pepe)).thenReturn(of(password));
 	}
 
 	@Test(expected = NotFoundException.class)
