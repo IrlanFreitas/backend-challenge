@@ -27,8 +27,8 @@ public class SignUpService {
 	public synchronized void saveUser(User user, Password password) {
 		checkIfUserExists(user);
 		usersRepository.save(user, password);
-		friendsRepository.addAsFriends(user, new LinkedHashSet<>());
-		requestsRepository.addRequest(user, new HashSet<>());
+		friendsRepository.addFriends(user, new LinkedHashSet<>());
+		requestsRepository.addRequests(user, new HashSet<>());
 	}
 
 	private void checkIfUserExists(User user) {
