@@ -94,7 +94,7 @@ public class RequestFriendShipServiceTest {
 
 		friendShipService.request(pepe, pepePassword, juan);
 
-		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
 	}
 }

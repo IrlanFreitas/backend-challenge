@@ -79,7 +79,7 @@ public class DeclineFriendShipServiceTest {
 		juanRequests.remove(pepe);
 		pepeRequests.remove(juan);
 
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
-		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
 	}
 }

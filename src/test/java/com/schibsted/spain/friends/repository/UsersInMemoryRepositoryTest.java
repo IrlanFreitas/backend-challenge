@@ -24,8 +24,8 @@ public class UsersInMemoryRepositoryTest {
 	@Before
 	public void setUp() {
 		usersRepository.save(user, password);
-		usersRepository.addRequest(user, userFriendRequests);
-		usersRepository.addAsFriends(user, userFriends);
+		usersRepository.addRequests(user, userFriendRequests);
+		usersRepository.addFriends(user, userFriends);
 	}
 
 	@Test
@@ -60,17 +60,17 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnRequestSet() {
-		final Set<User> expected = userFriendRequests;
 		final Set<User> actual = usersRepository.getFriendShipRequests(user);
 
-		assertEquals(expected, actual);
+		assertEquals(userFriendRequests, actual);
 	}
 
 	@Test
 	public void shouldReturnEmptyFriends() {
-		final LinkedHashSet<User> expected = newLinkedHashSet();
+		final Set<User> expected = newLinkedHashSet();
 		final Set<User> actual = usersRepository.getFriends(new User("userUser"));
 
+		assertEquals(expected.getClass(), actual.getClass());
 		assertEquals(expected, actual);
 	}
 
@@ -79,20 +79,21 @@ public class UsersInMemoryRepositoryTest {
 		final LinkedHashSet expected = userFriends;
 		final Set<User> actual = usersRepository.getFriends(user);
 
+		assertEquals(expected.getClass(), actual.getClass());
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void shouldReturnUpdatedFriends() {
-		final LinkedHashSet<User> userFriends =
+		final LinkedHashSet<User> expected =
 				newLinkedHashSet(
 						new User("friendOne"),
 						new User("friendTwo"),
 						new User("friend3")
 				);
-		usersRepository.addAsFriends(user, userFriends);
 
-		final Set<User> expected = userFriends;
+		usersRepository.addFriends(user, expected);
+
 		final Set<User> actual = usersRepository.getFriends(user);
 
 		assertEquals(expected, actual);
@@ -100,16 +101,15 @@ public class UsersInMemoryRepositoryTest {
 
 	@Test
 	public void shouldReturnUpdatedFriendsRequests() {
-		final Set<User> userFriendRequests =
+		final Set<User> expected =
 				newSet(
 						new User("userUser"),
 						new User("userTwo"),
 						new User("userThree")
-
 				);
-		usersRepository.addRequest(user, userFriendRequests);
 
-		final Set<User> expected = userFriendRequests;
+		usersRepository.addRequests(user, expected);
+
 		final Set<User> actual = usersRepository.getFriendShipRequests(user);
 
 		assertEquals(expected, actual);

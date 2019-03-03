@@ -126,10 +126,10 @@ public class AcceptFriendShipServiceTest {
 		juanRequests.remove(pepe);
 		pepeRequests.remove(juan);
 
-		verify(friendsRepository, times(1)).addAsFriends(juan, juanFriends);
-		verify(friendsRepository, times(1)).addAsFriends(pepe, pepeFriends);
+		verify(friendsRepository, times(1)).addFriends(juan, juanFriends);
+		verify(friendsRepository, times(1)).addFriends(pepe, pepeFriends);
 
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
-		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
 	}
 }

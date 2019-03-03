@@ -13,7 +13,7 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 
 	private final Map<User, Password> users = new ConcurrentHashMap<>();
 	private final Map<User, Set<User>> requestsMap = new ConcurrentHashMap<>();
-	private final Map<User, LinkedHashSet<User>> friendsMap = new ConcurrentHashMap<>();
+	private final Map<User, Set<User>> friendsMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(User user, Password password) {
@@ -31,7 +31,7 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 	}
 
 	@Override
-	public void addRequest(User user, Set<User> list) {
+	public void addRequests(User user, Set<User> list) {
 		requestsMap.put(user, list);
 	}
 
@@ -41,12 +41,12 @@ public class UsersInMemoryRepository implements FriendsRepository, UsersReposito
 	}
 
 	@Override
-	public void addAsFriends(User user, LinkedHashSet<User> list) {
+	public void addFriends(User user, LinkedHashSet<User> list) {
 		friendsMap.put(user, list);
 	}
 
 	@Override
-	public LinkedHashSet<User> getFriends(User user) {
+	public Set<User> getFriends(User user) {
 		return friendsMap.containsKey(user) ? friendsMap.get(user) : new LinkedHashSet<>();
 	}
 }
