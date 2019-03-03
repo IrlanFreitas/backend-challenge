@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static java.util.Optional.of;
 import static org.assertj.core.util.Sets.newLinkedHashSet;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
@@ -42,7 +43,7 @@ public class RequestFriendShipServiceTest {
 		when(usersRepository.userExists(notExisting)).thenReturn(false);
 		when(usersRepository.userExists(juan)).thenReturn(true);
 		when(usersRepository.userExists(pepe)).thenReturn(true);
-		when(usersRepository.getPassword(pepe)).thenReturn(pepePassword);
+		when(usersRepository.getPassword(pepe)).thenReturn(of(pepePassword));
 	}
 
 	@Test(expected = NotFoundException.class)
@@ -91,7 +92,7 @@ public class RequestFriendShipServiceTest {
 
 		friendShipService.request(pepe, pepePassword, juan);
 
-		verify(requestsRepository, times(1)).addRequest(pepe, pepeRequests);
-		verify(requestsRepository, times(1)).addRequest(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
 	}
 }

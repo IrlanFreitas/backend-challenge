@@ -28,7 +28,7 @@ public class SignUpServiceTest {
 
 	@Mock
 	private UsersInMemoryRepository requestRepository;
-	
+
 	@Before
 	public void setUp() {
 		signUpService = new SignUpService(usersRepository, friendShipRepository, requestRepository);
@@ -53,7 +53,7 @@ public class SignUpServiceTest {
 		signUpService.saveUser(user, password);
 
 		verify(usersRepository, times(1)).save(user, password);
-		verify(requestRepository, times(1)).addRequest(user, new HashSet<>());
-		verify(friendShipRepository, times(1)).addAsFriends(user, new LinkedHashSet<>());
+		verify(requestRepository, times(1)).addRequests(user, new HashSet<>());
+		verify(friendShipRepository, times(1)).addFriends(user, new LinkedHashSet<>());
 	}
 }
