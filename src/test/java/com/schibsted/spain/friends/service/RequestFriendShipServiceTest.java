@@ -69,30 +69,23 @@ public class RequestFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldThrowExpectedWhenUsersAreInRequest() {
-		final var pepeRequests = newSet(juan);
-
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(newSet(juan));
 
 		friendShipService.request(pepe, pepePassword, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenRequestAreFriends() {
-		final var pepeFriends = newLinkedHashSet(juan);
-
-		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
+		when(friendsRepository.getFriends(pepe)).thenReturn(newLinkedHashSet(juan));
 
 		friendShipService.request(pepe, pepePassword, juan);
 	}
 
 	@Test
 	public void shouldWorksWithNoRequestsReturn() {
-		final var pepeRequests = newSet(juan);
-		final var juanRequests = newSet(pepe);
-
 		friendShipService.request(pepe, pepePassword, juan);
 
-		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
-		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
+		verify(requestsRepository, times(1)).addRequests(pepe, newSet(juan));
+		verify(requestsRepository, times(1)).addRequests(juan, newSet(pepe));
 	}
 }

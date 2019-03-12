@@ -72,19 +72,15 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriends() {
-		final LinkedHashSet<User> friends = newLinkedHashSet(pepe);
-
-		when(friendsRepository.getFriends(juan)).thenReturn(friends);
+		when(friendsRepository.getFriends(juan)).thenReturn(newLinkedHashSet(pepe));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test(expected = BadRequestException.class)
 	public void shouldFailWhenAreFriendsTo() {
-		final var juanFriends = newLinkedHashSet(pepe);
-
 		when(friendsRepository.getFriends(pepe)).thenReturn(new LinkedHashSet<>());
-		when(friendsRepository.getFriends(juan)).thenReturn(juanFriends);
+		when(friendsRepository.getFriends(juan)).thenReturn(newLinkedHashSet(pepe));
 
 		friendShipService.accept(pepe, password, juan);
 	}
@@ -98,38 +94,27 @@ public class AcceptFriendShipServiceTest {
 
 	@Test(expected = NotFoundException.class)
 	public void shouldFailWhenThereIsNoRequestTo() {
-		final var pepeRequest = newSet(juan);
-
 		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(emptySet());
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequest);
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(newSet(juan));
 
 		friendShipService.accept(pepe, password, juan);
 	}
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final var juanFriends = newLinkedHashSet(new User("Margarita"));
-		final var juanRequests = newSet(pepe);
-		final var pepeFriends = new LinkedHashSet<User>();
-		final var pepeRequests = newSet(juan);
 
-		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(juanRequests);
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
-
-		when(friendsRepository.getFriends(juan)).thenReturn(juanFriends);
-		when(friendsRepository.getFriends(pepe)).thenReturn(pepeFriends);
+		when(friendsRepository.getFriends(juan)).thenReturn(newLinkedHashSet(new User("Margarita")));
+		when(friendsRepository.getFriends(pepe)).thenReturn(newLinkedHashSet());
+		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(newSet(pepe));
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(newSet(juan));
 
 		friendShipService.accept(pepe, password, juan);
 
-		juanFriends.add(pepe);
-		pepeFriends.add(juan);
-		juanRequests.remove(pepe);
-		pepeRequests.remove(juan);
+		final var juanFriendsUpdated = newLinkedHashSet(new User("Margarita"), pepe);
 
-		verify(friendsRepository, times(1)).addFriends(juan, juanFriends);
-		verify(friendsRepository, times(1)).addFriends(pepe, pepeFriends);
-
-		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
-		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
+		verify(friendsRepository, times(1)).addFriends(juan, juanFriendsUpdated);
+		verify(friendsRepository, times(1)).addFriends(pepe, newLinkedHashSet(juan));
+		verify(requestsRepository, times(1)).addRequests(juan, emptySet());
+		verify(requestsRepository, times(1)).addRequests(pepe, emptySet());
 	}
 }

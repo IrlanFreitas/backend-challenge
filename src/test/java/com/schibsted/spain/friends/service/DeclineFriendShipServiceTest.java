@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static java.util.Collections.emptySet;
 import static java.util.Optional.of;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.util.collections.Sets.newSet;
@@ -67,18 +68,12 @@ public class DeclineFriendShipServiceTest {
 
 	@Test
 	public void shouldCallMethodAddAsFriend() {
-		final var juanRequests = newSet(pepe);
-		final var pepeRequests = newSet(juan);
-
-		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(juanRequests);
-		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(pepeRequests);
+		when(requestsRepository.getFriendShipRequests(juan)).thenReturn(newSet(pepe));
+		when(requestsRepository.getFriendShipRequests(pepe)).thenReturn(newSet(juan));
 
 		friendShipService.decline(pepe, password, juan);
 
-		juanRequests.remove(pepe);
-		pepeRequests.remove(juan);
-
-		verify(requestsRepository, times(1)).addRequests(juan, juanRequests);
-		verify(requestsRepository, times(1)).addRequests(pepe, pepeRequests);
+		verify(requestsRepository, times(1)).addRequests(juan, emptySet());
+		verify(requestsRepository, times(1)).addRequests(pepe, emptySet());
 	}
 }
