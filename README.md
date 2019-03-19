@@ -1,6 +1,8 @@
 Challenge is very nice, its a good example for improve and show object oriented design, clean code, SOLID and testing/TDD.
-
 There is a short explanation of my decisions and thoughts about the code.
+
+PD.
+I've left opened a PR from develop to master that we should merge to update to java 11 and spring boot 2.1, there is no so manny changes in code, just local variables type inference (var)
 
 # 📝 Test
 
